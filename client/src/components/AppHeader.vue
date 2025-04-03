@@ -22,15 +22,16 @@
                 <button class="py-2 hover:underline cursor-pointer" v-for="(item, index) in categories" :key="index">{{
                     item.name }}</button>
 
-                <RouterLink to="/authorization"
+                <button @click="$router.push('/authorization')"
                     class="flex items-center justify-center px-6 h-12 rounded-full border-2 border-primary-500 bg-primary-500 text-white font-bold cursor-pointer transition-all duration-300 hover:bg-white hover:text-primary-500 shadow-md hover:shadow-lg">
                     Авторизоваться
-                </RouterLink>
+                </button>
             </div>
         </div>
     </div>
 </template>
 <script>
+import router from '@/router';
 import { RouterLink, RouterView } from 'vue-router'
 export default {
     data() {
