@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen flex items-center justify-center p-4 bg-gray-50">
         <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-2xl">
-            <h1 class="text-center font-bold text-3xl mb-8 text-primary-500">Registration now</h1>
+            <h1 class="text-center font-bold text-3xl mb-8 text-primary-500">Регистрация</h1>
 
             <div class="space-y-6">
                 <div v-for="(fieldName, index) in colums" :key="index">
@@ -26,8 +26,9 @@
                     </div>
                     <div class="ml-3 text-sm">
                         <label class="font-medium text-gray-700">
-                            I agree to the <span class="text-primary-500 cursor-pointer hover:underline">Privacy
-                                Policy</span>
+                            Я принимаю <span class="text-primary-500 cursor-pointer hover:underline">Политику
+                                конфиденциальности</span>
+
                         </label>
                         <p v-if="errors.agreeToPolicy" class="mt-1 text-sm text-red-600">{{ errors.agreeToPolicy }}</p>
                     </div>
@@ -35,19 +36,16 @@
 
                 <button @click="submitForm"
                     class="w-full h-12 rounded-full border-2 border-primary-500 bg-primary-500 text-white font-bold cursor-pointer transition-all duration-300 hover:bg-white hover:text-primary-500 mt-6 shadow-md hover:shadow-lg">
-                    Sign Up
+                    Зарегистрироваться
                 </button>
 
                 <div class="text-gray-600 my-0">
-                    Already have an account?
+                    Уже есть аккаунт?
                 </div>
-                <button
-                    class="w-full h-12 rounded-full border-2 border-primary-500 bg-white text-primary-500 font-bold cursor-pointer transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md hover:shadow-lg">
-                    Log In
-                </button>
-                <button class="w-full cursor-pointer text-gray-700 hover:text-primary-500 transition-colors">
-                    Forgot password?
-                </button>
+                <RouterLink to="/authorization"
+                    class="flex items-center justify-center w-full h-12 rounded-full border-2 border-primary-500 bg-white text-primary-500 font-bold cursor-pointer transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md hover:shadow-lg">
+                    Авторизоваться
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -84,10 +82,10 @@ export default {
         },
         getFieldLabel(fieldName) {
             const labels = {
-                username: 'Username',
+                username: 'Имя пользователя',
                 email: 'Email',
-                password: 'Password',
-                passwordRepeat: 'Repeat Password'
+                password: 'Пароль',
+                passwordRepeat: 'Повторите пароль'
             }
             return labels[fieldName] || fieldName
         },
