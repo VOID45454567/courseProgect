@@ -1,17 +1,25 @@
 <template>
     <div>
         <AppHeader />
-
-        <router-view></router-view>
+        <AppHeroSection></AppHeroSection>
+        <AppBenefitSection />
+        <!-- <AppVacancyItem></AppVacancyItem> -->
+        <!-- <router-view></router-view> -->
     </div>
 </template>
 
 <script>
+import AppHeroSection from '@/components/AppHeroSection.vue';
 import AppHeader from '../components/AppHeader.vue';
+import AppVacancyItem from '../components/AppVacancyItem.vue';
 import { RouterLink, RouterView } from 'vue-router'
+import AppBenefitSection from '@/components/AppBenefitSection.vue';
 export default {
     components: {
-        AppHeader
+        AppHeader,
+        AppVacancyItem,
+        AppHeroSection,
+        AppBenefitSection
     }
 }
 </script>

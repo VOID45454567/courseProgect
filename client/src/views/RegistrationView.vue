@@ -18,6 +18,29 @@
                     <p v-if="errors[fieldName]" class="mt-1 text-sm text-red-600">{{ errors[fieldName] }}</p>
                 </div>
 
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Выберите роль</label>
+                    <div class="flex gap-3">
+                        <button @click="selectRole('employer')" :class="[
+                            'w-1/2 py-3 rounded-xl border-2 font-bold transition-all duration-300 cursor-pointer',
+                            formData.role === 'employer'
+                                ? 'bg-primary-500 text-white border-primary-500 shadow-md'
+                                : 'border-primary-500 text-primary-500 hover:bg-primary-50'
+                        ]">
+                            Работодатель
+                        </button>
+                        <button @click="selectRole('candidate')" :class="[
+                            'w-1/2 py-3 rounded-xl border-2 font-bold transition-all duration-300 cursor-pointer',
+                            formData.role === 'candidate'
+                                ? 'bg-primary-500 text-white border-primary-500 shadow-md'
+                                : 'border-primary-500 text-primary-500 hover:bg-primary-50'
+                        ]">
+                            Соискатель
+                        </button>
+                    </div>
+                    <p v-if="errors.role" class="mt-1 text-sm text-red-600">{{ errors.role }}</p>
+                </div>
+
                 <div class="flex items-start">
                     <div class="flex items-center h-5">
                         <input type="checkbox" v-model="formData.agreeToPolicy" @change="validatePolicy()"
@@ -28,30 +51,24 @@
                         <label class="font-medium text-gray-700">
                             Я принимаю <span class="text-primary-500 cursor-pointer hover:underline">Политику
                                 конфиденциальности</span>
-
                         </label>
                         <p v-if="errors.agreeToPolicy" class="mt-1 text-sm text-red-600">{{ errors.agreeToPolicy }}</p>
                     </div>
                 </div>
 
-                <button @click="submitForm"
-                    class="w-full h-12 rounded-full border-2 border-primary-500 bg-primary-500 text-white font-bold cursor-pointer transition-all duration-300 hover:bg-white hover:text-primary-500 mt-6 shadow-md hover:shadow-lg">
-                    Зарегистрироваться
-                </button>
-
+                <AppButton :text="'Зарегистрироваться'" class="active w-full" @click="submitForm" />
                 <div class="text-gray-600 my-0">
                     Уже есть аккаунт?
                 </div>
-                <RouterLink to="/authorization"
-                    class="flex items-center justify-center w-full h-12 rounded-full border-2 border-primary-500 bg-white text-primary-500 font-bold cursor-pointer transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md hover:shadow-lg">
-                    Авторизоваться
-                </RouterLink>
+                <AppButton :text="'Войти'" class="w-full unactive" @click="$router.push('/authorization')" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import AppButton from '@/components/AppButton.vue';
+
 export default {
     data() {
         return {
@@ -61,6 +78,7 @@ export default {
                 email: '',
                 password: '',
                 passwordRepeat: '',
+                role: null,
                 agreeToPolicy: false
             },
             errors: {
@@ -68,12 +86,30 @@ export default {
                 email: '',
                 password: '',
                 passwordRepeat: '',
+                role: '',
                 agreeToPolicy: ''
             },
             submitted: false
         }
     },
+    components: {
+        AppButton
+    },
     methods: {
+        selectRole(role) {
+            this.formData.role = role;
+            if (this.submitted) {
+                this.validateRole();
+            }
+        },
+        validateRole() {
+            if (!this.formData.role) {
+                this.errors.role = 'Пожалуйста, выберите роль';
+                return false;
+            }
+            this.errors.role = '';
+            return true;
+        },
         getImageUrl(name) {
             return new URL(`../assets/icons/${name}.png`, import.meta.url).href
         },
@@ -93,17 +129,17 @@ export default {
             if (!this.submitted) return
 
             if (!this.formData[fieldName]) {
-                this.errors[fieldName] = 'This field is required'
+                this.errors[fieldName] = 'Это поле обязательно для заполнения'
                 return false
             }
 
             if (fieldName === 'email' && !this.validateEmail(this.formData.email)) {
-                this.errors.email = 'Please enter a valid email'
+                this.errors.email = 'Пожалуйста, введите корректный email'
                 return false
             }
 
             if (fieldName === 'passwordRepeat' && this.formData.password !== this.formData.passwordRepeat) {
-                this.errors.passwordRepeat = 'Passwords do not match'
+                this.errors.passwordRepeat = 'Пароли не совпадают'
                 return false
             }
 
@@ -114,7 +150,7 @@ export default {
             if (!this.submitted) return
 
             if (!this.formData.agreeToPolicy) {
-                this.errors.agreeToPolicy = 'You must accept the Privacy Policy'
+                this.errors.agreeToPolicy = 'Вы должны принять Политику конфиденциальности'
                 return false
             }
 
@@ -135,6 +171,10 @@ export default {
                 }
             })
 
+            if (!this.validateRole()) {
+                isValid = false
+            }
+
             if (!this.validatePolicy()) {
                 isValid = false
             }
@@ -146,13 +186,8 @@ export default {
                 return
             }
 
-            console.log('Form submitted:', {
-                username: this.formData.username,
-                email: this.formData.email,
-                password: this.formData.password
-            })
-
-            alert('Registration successful!')
+            console.log('Form submitted:', this.formData)
+            alert('Регистрация успешна!')
         }
     }
 }

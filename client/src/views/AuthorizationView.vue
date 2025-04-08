@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen flex items-center justify-center p-4 bg-gray-50">
         <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-2xl">
-            <h1 class="text-center font-bold text-3xl mb-8 text-primary-500">Sign up</h1>
+            <h1 class="text-center font-bold text-3xl mb-8 text-primary-500">Авторизация</h1>
 
             <div class="space-y-6">
                 <div v-for="(fieldName, index) in colums" :key="index">
@@ -17,18 +17,13 @@
                     </div>
                     <p v-if="errors[fieldName]" class="mt-1 text-sm text-red-600">{{ errors[fieldName] }}</p>
                 </div>
-                <button @click="submitForm"
-                    class="w-full h-12 rounded-full border-2 border-primary-500 bg-primary-500 text-white font-bold cursor-pointer transition-all duration-300 hover:bg-white hover:text-primary-500 mt-6 shadow-md hover:shadow-lg">
-                    Авторизоваться
-                </button>
+                <AppButton :text="'Авторизоваться'" class="active w-full" @click="submitForm" />
 
                 <div class="text-gray-600 my-0">
                     нет аккаунта?
                 </div>
-                <RouterLink to="/registration"
-                    class="flex items-center justify-center w-full h-12 rounded-full border-2 border-primary-500 bg-white text-primary-500 font-bold cursor-pointer transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md hover:shadow-lg">
-                    Зарегистрироваться
-                </RouterLink>
+                <AppButton :text="'Зарегистрироваться'" class="unactive w-full"
+                    @click="$router.push('/registration')" />
                 <button class="w-full cursor-pointer text-gray-700 hover:text-primary-500 transition-colors">
                     Забыли пароль?
                 </button>
@@ -37,6 +32,7 @@
     </div>
 </template>
 <script>
+import AppButton from '@/components/AppButton.vue'
 import { RouterLink, RouterView } from 'vue-router'
 export default {
     data() {
@@ -52,6 +48,9 @@ export default {
             },
             submitted: false
         }
+    },
+    components: {
+        AppButton
     },
     methods: {
         getImageUrl(name) {
@@ -71,12 +70,12 @@ export default {
             if (!this.submitted) return
 
             if (!this.formData[fieldName]) {
-                this.errors[fieldName] = 'This field is required'
+                this.errors[fieldName] = 'Это поле обязательно для заполнения'
                 return false
             }
 
             if (fieldName === 'email' && !this.validateEmail(this.formData.email)) {
-                this.errors.email = 'Please enter a valid email'
+                this.errors.email = 'Введите корректный email'
                 return false
             }
 
