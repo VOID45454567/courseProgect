@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-5 w-7/12 mx-auto bg-gray-50 shadow-md rounded-3xl">
+    <div class="mt-5 w-9/12 mx-auto bg-gray-50 shadow-md rounded-3xl">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl text-primary-500 font-bold text-center mb-12">Почему выбирают нас?</h2>
 
