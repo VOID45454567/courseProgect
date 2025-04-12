@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-5 w-9/12 mx-auto bg-gray-50 shadow-md rounded-3xl">
+    <div class="mt-5 w-9/12 mx-auto">
         <div class="container mx-auto p-4 text-center">
             <h1 class="text-4xl md:text-5xl font-bold text-primary-500 mb-6">
                 {{ role === 'employer' ? textForEmployer.title : textForApplicant.title }}
