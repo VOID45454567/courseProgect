@@ -7,8 +7,7 @@
         <AppHowItWorks />
         <AppContactForm />
         <AppCallToAction />
-        <!-- <AppVacancyItem></AppVacancyItem> -->
-        <!-- <router-view></router-view> -->
+        <AppFooter />
     </div>
 </template>
 
@@ -22,6 +21,7 @@ import AppStatsSelection from '@/components/AppStatsSelection.vue'
 import AppHowItWorks from '@/components/AppHowItWorks.vue'
 import AppContactForm from '@/components/AppContactForm.vue'
 import AppCallToAction from '@/components/AppCallToAction.vue'
+import AppFooter from '@/components/AppFooter.vue'
 export default {
     components: {
         AppHeader,
@@ -31,7 +31,8 @@ export default {
         AppStatsSelection,
         AppHowItWorks,
         AppContactForm,
-        AppCallToAction
+        AppCallToAction,
+        AppFooter
 
     }
 }
