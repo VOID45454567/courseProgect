@@ -29,7 +29,8 @@
 </template>
 <script>
 import { RouterLink, RouterView } from 'vue-router'
-import AppButton from './AppButton.vue';
+import AppButton from '@/components/AppButton.vue'
+
 export default {
     components: {
         AppButton

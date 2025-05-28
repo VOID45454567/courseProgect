@@ -12,8 +12,7 @@
     </div>
 </template>
 <script>
-import AppButton from './AppButton.vue';
-
+import AppButton from '@/components/AppButton.vue'
 export default {
     data() {
         return {
