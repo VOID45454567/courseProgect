@@ -36,6 +36,7 @@ class UserRepository {
       return { user: request.rows[0], token: token };
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
   async getUserByEmail(email) {

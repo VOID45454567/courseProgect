@@ -4,8 +4,20 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
+async function initApp() {
+  const token = localStorage.getItem('token')
+  console.log(token)
+  if (token) {
+    try {
+      await store.dispatch('fetchUser')
+    } catch (error) {
+      store.commit('clearAuth')
+      console.error('Ошибка при проверке аутентификации', error)
+    }
+  }
+}
 const app = createApp(App)
 app.use(router)
 app.use(store)
 app.mount('#app')
+initApp()
