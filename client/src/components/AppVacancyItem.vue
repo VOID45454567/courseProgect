@@ -3,7 +3,8 @@
         class="w-full md:w-4/12 border-2 border-gray-200 mx-auto p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white">
         <div class="mb-4">
             <h1 class="text-2xl font-bold text-gray-800 hover:text-primary-500 transition-colors cursor-pointer">
-                Frontend Developer (Vue.js)</h1>
+                Frontend Developer (Vue.js)
+            </h1>
             <p class="my-2 text-2xl font-semibold text-primary-600">50 000 – 100 000 ₽/мес</p>
         </div>
 
@@ -15,13 +16,6 @@
             <span class="bg-primary-500/10 text-primary-600 px-3 py-1 rounded-full text-sm font-medium">Удаленная
                 работа</span>
         </div>
-
-        <div class="mb-5">
-            <p class="text-gray-600 line-clamp-3">Мы ищем Vue.js разработчика для участия в создании современных
-                веб-приложений. Требуется опыт работы с Vue 3, Composition API, Pinia/Vuex.</p>
-        </div>
-
-
         <div class="flex items-center gap-3 mb-6">
             <div>
                 <p class="font-medium text-gray-800">Tech Innovations Inc.</p>
@@ -47,8 +41,6 @@
     </div>
 </template>
 <script>
-export default {
-
-}
+export default {};
 </script>
 <style></style>

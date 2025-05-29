@@ -31,6 +31,7 @@ const store = createStore({
   actions: {
     async login({ commit }, userData) {
       const user = await api.login(userData)
+      localStorage.setItem('token', user.data.token)
       commit('setUser', user.data.user)
       commit('setToken', user.data.token)
     },
@@ -50,8 +51,8 @@ const store = createStore({
       } else {
         try {
           const response = await api.getCurrentUser(state.token)
-          commit('setUser', response.data.user)
-          return response.data.user
+          commit('setUser', response.data)
+          return response.data
         } catch (error) {
           commit('cleanAuth')
           console.log(error)

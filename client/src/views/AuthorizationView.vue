@@ -5,23 +5,27 @@
 
             <div class="space-y-6">
                 <div v-for="(fieldName, index) in colums" :key="index">
-                    <label class="block text-gray-700 font-medium">{{ getFieldLabel(fieldName) }}</label>
+                    <label class="block text-gray-700 font-medium">{{
+                        getFieldLabel(fieldName)
+                        }}</label>
                     <div class="relative">
                         <input :type="getInputType(fieldName)" v-model="formData[fieldName]"
                             @blur="validateField(fieldName)" :class="[
                                 'w-full h-12 pl-12 border-2 rounded-full focus:outline-none focus:ring-4 transition-all',
-                                errors[fieldName] ? 'border-red-500 focus:ring-red-200' : 'border-primary-500 focus:ring-primary-300'
-                            ]">
+                                errors[fieldName]
+                                    ? 'border-red-500 focus:ring-red-200'
+                                    : 'border-primary-500 focus:ring-primary-300',
+                            ]" />
                         <img :src="getImageUrl(fieldName)"
-                            class="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6">
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6" />
                     </div>
-                    <p v-if="errors[fieldName]" class="mt-1 text-sm text-red-600">{{ errors[fieldName] }}</p>
+                    <p v-if="errors[fieldName]" class="mt-1 text-sm text-red-600">
+                        {{ errors[fieldName] }}
+                    </p>
                 </div>
                 <AppButton :text="'Авторизоваться'" class="active w-full" @click="submitForm" />
 
-                <div class="text-gray-600 my-0">
-                    нет аккаунта?
-                </div>
+                <div class="text-gray-600 my-0">нет аккаунта?</div>
                 <AppButton :text="'Зарегистрироваться'" class="unactive w-full"
                     @click="$router.push('/registration')" />
                 <button class="w-full cursor-pointer text-gray-700 hover:text-primary-500 transition-colors">
@@ -32,89 +36,84 @@
     </div>
 </template>
 <script>
-import AppButton from '@/components/AppButton.vue'
-import { RouterLink, RouterView } from 'vue-router'
+import AppButton from "@/components/AppButton.vue";
+import { RouterLink, RouterView } from "vue-router";
 export default {
     data() {
         return {
-            colums: ['email', 'password',],
+            colums: ["email", "password"],
             formData: {
-                email: '',
-                password: '',
+                email: "",
+                password: "",
             },
             errors: {
-                email: '',
-                password: '',
+                email: "",
+                password: "",
             },
-            submitted: false
-        }
+            submitted: false,
+        };
     },
     components: {
-        AppButton
+        AppButton,
     },
     methods: {
         getImageUrl(name) {
-            return new URL(`../assets/icons/${name}.png`, import.meta.url).href
+            return new URL(`../assets/icons/${name}.png`, import.meta.url).href;
         },
         getInputType(fieldName) {
-            return fieldName.toLowerCase().includes('password') ? 'password' : 'text'
+            return fieldName.toLowerCase().includes("password") ? "password" : "text";
         },
         getFieldLabel(fieldName) {
             const labels = {
-                email: 'Email',
-                password: 'Пароль',
-            }
-            return labels[fieldName] || fieldName
+                email: "Email",
+                password: "Пароль",
+            };
+            return labels[fieldName] || fieldName;
         },
         validateField(fieldName) {
-            if (!this.submitted) return
+            if (!this.submitted) return;
 
             if (!this.formData[fieldName]) {
-                this.errors[fieldName] = 'Это поле обязательно для заполнения'
-                return false
+                this.errors[fieldName] = "Это поле обязательно для заполнения";
+                return false;
             }
 
-            if (fieldName === 'email' && !this.validateEmail(this.formData.email)) {
-                this.errors.email = 'Введите корректный email'
-                return false
+            if (fieldName === "email" && !this.validateEmail(this.formData.email)) {
+                this.errors.email = "Введите корректный email";
+                return false;
             }
 
-            this.errors[fieldName] = ''
-            return true
+            this.errors[fieldName] = "";
+            return true;
         },
         validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-            return re.test(email)
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
         },
         validateForm() {
-            this.submitted = true
-            let isValid = true
+            this.submitted = true;
+            let isValid = true;
 
-            this.colums.forEach(field => {
+            this.colums.forEach((field) => {
                 if (!this.validateField(field)) {
-                    isValid = false
+                    isValid = false;
                 }
-            })
+            });
 
-            if (!this.validatePolicy()) {
-                isValid = false
-            }
-
-            return isValid
+            return isValid;
         },
         submitForm() {
             if (!this.validateForm()) {
-                return
+                return;
             }
 
-            console.log('Form submitted:', {
-                username: this.formData.username,
+            console.log("Form submitted:", {
                 email: this.formData.email,
-                password: this.formData.password
-            })
-
-            alert('Registration successful!')
-        }
-    }
-}
+                password: this.formData.password,
+            });
+            this.$store.dispatch("login", this.formData);
+            this.$router.push("/");
+        },
+    },
+};
 </script>

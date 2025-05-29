@@ -38,7 +38,6 @@ class authService {
   async getCurrentUser(token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      console.log("decoded: " + Object.keys(decoded));
       const user = await userRepository.getUserByID(decoded.id);
       console.log("user: " + user);
       return user;

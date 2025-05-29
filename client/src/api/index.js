@@ -7,7 +7,7 @@ class api {
     return user
   }
   async register(userData) {
-    const user = await axios.post(`${apiUrl}/auth/register`, userData)
+    const user = await axios.post(`${apiUrl}/auth/register/`, userData)
     return user
   }
   async getCurrentUser(token) {
