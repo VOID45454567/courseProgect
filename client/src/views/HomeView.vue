@@ -27,7 +27,7 @@ export default {
         AppCallToAction,
     },
     async created() {
-        await this.$store.dispatch("fetchUser");
+        await this.$store.dispatch("auth/fetchUser");
     },
 };
 </script>

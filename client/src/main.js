@@ -6,7 +6,7 @@ import router from './router'
 import store from './store'
 async function initApp() {
   try {
-    await store.dispatch('fetchUser')
+    await store.dispatch('auth/fetchUser')
   } catch (error) {
     store.commit('clearAuth')
     console.error('Ошибка при проверке аутентификации', error)

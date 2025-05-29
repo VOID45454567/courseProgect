@@ -207,7 +207,7 @@ export default {
                 email: this.formData.email,
                 password: this.formData.password,
             };
-            this.$store.dispatch("register", userData);
+            this.$store.dispatch("auth/register", userData);
             this.$router.push("/");
         },
     },

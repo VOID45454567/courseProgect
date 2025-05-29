@@ -11,17 +11,17 @@ import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 export default {
   async created() {
-    this.$store.dispatch("fetchUser");
+    this.$store.dispatch("auth/fetchUser");
     this.restoreAuth();
   },
   methods: {
     async restoreAuth() {
-      if (this.hasAutorization && !this.$store.state.auth.user) {
+      if (this.hasAutorization && !this.$store.state.auth.currentUser) {
         try {
-          await this.$store.dispatch("fetchUser");
+          await this.$store.dispatch("auth/fetchUser");
         } catch (error) {
           console.error("Ошибка восстановления сессии:", error);
-          this.$store.commit("auth/CLEAR_AUTH");
+          this.$store.commit("auth/cleanAuth");
         }
       }
     },

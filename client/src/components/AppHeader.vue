@@ -19,7 +19,8 @@
                 <button class="py-2 hover:underline cursor-pointer" v-for="(item, index) in categories" :key="index">
                     {{ item.name }}
                 </button>
-                <p v-if="currentUser" class="text-primary-500">
+                <p v-if="currentUser" @click="this.$router.push('/profile')"
+                    class="text-primary-500 font-bold hover:cursor-pointer">
                     {{ currentUser.name }}
                 </p>
                 <AppButton v-else :text="'авторизоваться'" class="w-4/12 active" @click="$router.push('/login')" />
