@@ -1,15 +1,12 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto">
-      <!-- Заголовок -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Личный кабинет</h1>
       </div>
 
-      <!-- Основной блок -->
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
         <div class="flex flex-col md:flex-row gap-8">
-          <!-- Блок с аватаром -->
           <div class="w-full md:w-1/3 flex flex-col items-center">
             <div class="relative mb-4">
               <img
@@ -57,10 +54,8 @@
             </button>
           </div>
 
-          <!-- Основная информация -->
           <div class="w-full md:w-2/3">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Имя -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Имя</label>
                 <input
@@ -70,7 +65,6 @@
                 />
               </div>
 
-              <!-- Фамилия -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1"
                   >Фамилия</label
@@ -81,8 +75,17 @@
                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Отчество</label
+                >
+                <input
+                  type="text"
+                  v-model="userData.midname"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
 
-              <!-- Email -->
               <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input
@@ -92,7 +95,6 @@
                 />
               </div>
 
-              <!-- Телефон -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1"
                   >Телефон</label
@@ -104,7 +106,6 @@
                 />
               </div>
 
-              <!-- Город -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Город</label>
                 <select
@@ -118,7 +119,6 @@
                 </select>
               </div>
 
-              <!-- Опыт работы (упрощенный) -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1"
                   >Опыт работы (лет)</label
@@ -132,7 +132,6 @@
                 />
               </div>
 
-              <!-- О себе -->
               <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-1">О себе</label>
                 <textarea
@@ -146,7 +145,6 @@
         </div>
       </div>
 
-      <!-- Блок с компаниями -->
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Компании, в которых работал</h2>
         <div
@@ -189,7 +187,6 @@
         </button>
       </div>
 
-      <!-- Блок с навыками -->
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Навыки</h2>
         <div class="flex flex-wrap gap-2 mb-4">
@@ -236,7 +233,6 @@
         </div>
       </div>
 
-      <!-- Кнопка сохранения -->
       <div class="flex justify-end">
         <button
           @click="saveProfile"
@@ -253,34 +249,70 @@
 export default {
   data() {
     return {
-      avatarUrl: null,
       newSkill: "",
       userData: {
-        name: "Иван",
-        surname: "Иванов",
-        email: "ivan@example.com",
-        phone: "+7 (999) 123-45-67",
-        city: "moscow",
-        about: "Frontend разработчик с 3-летним опытом работы с Vue.js и React.",
-        experienceYears: 3,
-        companies: ["Tech Innovations Inc.", "Web Solutions"],
-        skills: ["Vue.js", "JavaScript", "HTML/CSS", "TypeScript"],
+        name: "",
+        surname: "",
+        midname: "",
+        email: "",
+        phone: "",
+        city: "",
+        about: "",
+        experienceYears: 0,
+        companies: [],
+        skills: [],
+        avatar: null,
       },
+      avatarFile: null,
     };
   },
-  methods: {
-    handleAvatarUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.avatarUrl = e.target.result;
-        };
-        reader.readAsDataURL(file);
+  computed: {
+    currentUser() {
+      return this.$store.state.user.currentUser || {};
+    },
+    avatarUrl() {
+      if (this.userData.avatar) {
+        return this.userData.avatar;
       }
+      return this.currentUser.avatar || "https://via.placeholder.com/150";
+    },
+  },
+  created() {
+    this.initializeUserData();
+  },
+  methods: {
+    initializeUserData() {
+      const user = this.currentUser;
+      this.userData = {
+        name: user.name || "",
+        surname: user.surname || "",
+        midname: user.midname || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        city: user.city || "moscow",
+        about: user.about || "",
+        experienceYears: user.experienceYears || 0,
+        companies: user.companies ? [...user.companies] : [],
+        skills: user.skills ? [...user.skills] : [],
+        avatar: user.avatar || null,
+      };
+    },
+    async handleAvatarUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      this.avatarFile = file;
+
+      // Преобразование в base64
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.userData.avatar = e.target.result;
+      };
+      reader.readAsDataURL(file);
     },
     removeAvatar() {
-      this.avatarUrl = null;
+      this.userData.avatar = null;
+      this.avatarFile = null;
     },
     addCompany() {
       this.userData.companies.push("");
@@ -297,15 +329,40 @@ export default {
     removeSkill(index) {
       this.userData.skills.splice(index, 1);
     },
-    saveProfile() {
-      console.log("Profile saved:", this.userData);
-      // Здесь обычно отправка данных на сервер
-      alert("Изменения сохранены!");
+    async saveProfile() {
+      try {
+        const formData = new FormData();
+
+        Object.keys(this.userData).forEach((key) => {
+          if (key !== "avatar" && key !== "companies" && key !== "skills") {
+            formData.append(key, this.userData[key]);
+          }
+        });
+
+        formData.append("companies", JSON.stringify(this.userData.companies));
+        formData.append("skills", JSON.stringify(this.userData.skills));
+
+        if (this.avatarFile) {
+          formData.append("avatar", this.avatarFile);
+        } else if (this.userData.avatar === null) {
+          formData.append("remove_avatar", "true");
+        }
+
+        await this.$store.dispatch("user/updateUser", formData);
+        this.$notify({
+          type: "success",
+          title: "Успех",
+          text: "Профиль успешно обновлен",
+        });
+      } catch (error) {
+        console.error("Ошибка при сохранении профиля:", error);
+        this.$notify({
+          type: "error",
+          title: "Ошибка",
+          text: "Не удалось сохранить профиль",
+        });
+      }
     },
   },
 };
 </script>
-
-<style>
-/* Дополнительные стили при необходимости */
-</style>

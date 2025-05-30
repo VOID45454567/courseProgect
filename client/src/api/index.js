@@ -18,5 +18,13 @@ class api {
     })
     return user
   }
+  async updateUser(id, data) {
+    try {
+      const updatedUser = await axios.put(`${apiUrl}/users/${id}`, data)
+      return updatedUser
+    } catch (error) {
+      return error
+    }
+  }
 }
 export default new api()
