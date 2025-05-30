@@ -20,9 +20,11 @@ class api {
   }
   async updateUser(id, data) {
     try {
+      console.log(data);
       const updatedUser = await axios.put(`${apiUrl}/users/${id}`, data)
       return updatedUser
     } catch (error) {
+      console.log(error);
       return error
     }
   }

@@ -128,7 +128,7 @@ export default {
         if (response.error) {
           this.login = true;
         }
-        // this.$router.push("/");
+        this.$router.push("/profile");
       } catch (error) {
         console.log(error);
       }

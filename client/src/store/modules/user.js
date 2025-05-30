@@ -3,9 +3,10 @@ import api from '@/api'
 export default {
   namespaced: true,
   actions: {
-    async updateUser({ commit }, userId, dataToUpdate) {
+    async updateUser({ commit }, userData) {
       try {
-        const updatedUser = api.updateUser(userId, dataToUpdate)
+        console.log(userData);
+        const updatedUser = await api.updateUser(userData.id, userData.dataToUpdate)
         console.log(updatedUser);
       } catch (error) {
         return error

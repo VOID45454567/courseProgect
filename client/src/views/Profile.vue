@@ -10,7 +10,7 @@
           <div class="w-full md:w-1/3 flex flex-col items-center">
             <div class="relative mb-4">
               <img
-                :src="avatarUrl || 'https://via.placeholder.com/150'"
+                :src="avatarUrl"
                 class="w-40 h-40 rounded-full object-cover border-4 border-primary-100"
               />
               <label
@@ -101,7 +101,7 @@
                 >
                 <input
                   type="tel"
-                  v-model="userData.phone"
+                  v-model="userData.phone_number"
                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
@@ -125,7 +125,7 @@
                 >
                 <input
                   type="number"
-                  v-model="userData.experienceYears"
+                  v-model="userData.experience"
                   min="0"
                   max="50"
                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
@@ -255,10 +255,10 @@ export default {
         surname: "",
         midname: "",
         email: "",
-        phone: "",
+        phone_number: "",
         city: "",
         about: "",
-        experienceYears: 0,
+        experience: 0,
         companies: [],
         skills: [],
         avatar: null,
@@ -268,30 +268,31 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.state.user.currentUser || {};
+      return this.$store.getters["auth/currentUser"];
     },
     avatarUrl() {
       if (this.userData.avatar) {
         return this.userData.avatar;
       }
-      return this.currentUser.avatar || "https://via.placeholder.com/150";
+      return this.currentUser.avatar || null;
     },
   },
-  created() {
-    this.initializeUserData();
+  async created() {
+    const user = await this.currentUser;
+    await this.initializeUserData(user);
+    // console.log(user);
   },
   methods: {
-    initializeUserData() {
-      const user = this.currentUser;
+    initializeUserData(user) {
       this.userData = {
         name: user.name || "",
         surname: user.surname || "",
         midname: user.midname || "",
         email: user.email || "",
-        phone: user.phone || "",
-        city: user.city || "moscow",
+        phone_number: user.phone_number || "",
+        city: user.city || "",
         about: user.about || "",
-        experienceYears: user.experienceYears || 0,
+        experience: user.experience || 0,
         companies: user.companies ? [...user.companies] : [],
         skills: user.skills ? [...user.skills] : [],
         avatar: user.avatar || null,
@@ -347,20 +348,14 @@ export default {
         } else if (this.userData.avatar === null) {
           formData.append("remove_avatar", "true");
         }
-
-        await this.$store.dispatch("user/updateUser", formData);
-        this.$notify({
-          type: "success",
-          title: "Успех",
-          text: "Профиль успешно обновлен",
-        });
+        console.log(this.userData);
+        const data = {
+          id: this.currentUser.id,
+          dataToUpdate: this.userData,
+        };
+        await this.$store.dispatch("user/updateUser", data);
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
-        this.$notify({
-          type: "error",
-          title: "Ошибка",
-          text: "Не удалось сохранить профиль",
-        });
       }
     },
   },
