@@ -23,7 +23,6 @@ class UserRepository {
         "INSERT INTO users (name, surname, midname, role, email, password) values($1, $2, $3, $4, $5, $6) RETURNING*",
         [name, surname, midname, role, email, passwordHash]
       );
-      console.log(request.rows[0]);
 
       const token = jwtConfig.createToken({
         id: request.rows[0].id,

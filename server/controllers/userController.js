@@ -18,15 +18,16 @@ class UserController {
       console.log(error);
     }
   }
-  async updateUser(req, res) {
+   async updateUser(req, res) {
     try {
       const id = req.params.id;
-      // console.log(req);
-      // console.log(id);
-      const updatedUser = await userService.updateUser(id, req.body);
+      const data = req.body;
+      
+      const updatedUser = await userService.updateUser(id, data);
       res.json(updatedUser);
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: error.message });
     }
   }
   async deleteUser(req, res) {

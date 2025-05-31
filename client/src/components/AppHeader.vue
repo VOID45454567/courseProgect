@@ -2,8 +2,12 @@
   <div class="w-full border-b-2 border-gray-300 py-4">
     <div class="w-5/6 mx-auto flex items-center justify-between">
       <div class="flex items-center shrink-0">
-        <img src="" alt="" width="60px" height="60px" />
-        <h1 class="text-4xl font-bold ml-2">Logo</h1>
+        <h1
+          class="text-3xl font-bold text-primary-500 cursor-pointer"
+          @click="this.$router.push('/')"
+        >
+          HRRecruit
+        </h1>
       </div>
       <div class="flex flex-row justify-between gap-5 shrink-0 items-center w-6/12">
         <router-link v-for="(item, index) in categories" :key="index" :to="item.link"

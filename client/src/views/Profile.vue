@@ -10,7 +10,7 @@
           <div class="w-full md:w-1/3 flex flex-col items-center">
             <div class="relative mb-4">
               <img
-                :src="avatarUrl"
+                :src="avatarPreviewUrl || avatarUrl"
                 class="w-40 h-40 rounded-full object-cover border-4 border-primary-100"
               />
               <label
@@ -263,6 +263,7 @@ export default {
         skills: [],
         avatar: null,
       },
+      avatarPreviewUrl: null,
       avatarFile: null,
       isLoading: false,
     };
@@ -273,7 +274,7 @@ export default {
     },
     avatarUrl() {
       if (this.userData.avatar) {
-        return this.userData.avatar;
+        return `../uploads/avatars/${this.userData.avatar}`;
       }
       return this.currentUser.avatar || null;
     },
@@ -305,10 +306,11 @@ export default {
 
       this.avatarFile = file;
 
-      // Преобразование в base64
+      this.userData.avatar = file.name;
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.userData.avatar = e.target.result;
+        this.avatarPreviewUrl = e.target.result;
       };
       reader.readAsDataURL(file);
     },
@@ -341,23 +343,20 @@ export default {
             formData.append(key, this.userData[key]);
           }
         });
-
+        if (this.avatarFile) {
+          formData.append("avatar", this.avatarFile);
+        }
         formData.append("companies", JSON.stringify(this.userData.companies));
         formData.append("skills", JSON.stringify(this.userData.skills));
 
-        if (this.avatarFile) {
-          formData.append("avatar", this.avatarFile);
-        } else if (this.userData.avatar === null) {
-          formData.append("remove_avatar", "true");
-        }
-        console.log(this.userData);
         const data = {
           id: this.currentUser.id,
           dataToUpdate: this.userData,
         };
+        console.log(data);
         await this.$store.dispatch("user/updateUser", data);
         this.isLoading = false;
-        this.$router.push("/");
+        // this.$router.push("/");
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
       }

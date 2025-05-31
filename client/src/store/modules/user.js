@@ -1,4 +1,3 @@
-// user.js
 import api from '@/api'
 
 export default {
@@ -6,8 +5,8 @@ export default {
   actions: {
     async updateUser({ commit }, userData) {
       try {
+        console.log(userData);
         const response = await api.auth.updateUser(userData.id, userData.dataToUpdate)
-        
         commit('setUser', response.data.user)
         localStorage.removeItem('token')
         localStorage.setItem('token', response.data.newToken)

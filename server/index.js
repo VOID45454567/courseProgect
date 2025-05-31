@@ -4,15 +4,13 @@ import cors from "cors";
 import userRouter from "./routes/userRouter.js";
 import authRouter from "./routes/authRouter.js";
 import vacancyRouter from "./routes/vacancyRouter.js";
+import path from 'path'
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use('../../uploads/avatars/', express.static(path.join(process.cwd(), 'public', 'uploads')));
 const port = process.env.PORT;
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
