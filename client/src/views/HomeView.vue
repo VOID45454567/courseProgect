@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <AppHeroSection></AppHeroSection>
-        <AppBenefitSection />
-        <AppStatsSelection />
-        <AppHowItWorks />
-        <AppContactForm />
-        <AppCallToAction />
-    </div>
+  <div>
+    <AppHeroSection :user="currentUser"></AppHeroSection>
+    <AppBenefitSection />
+    <AppStatsSelection />
+    <AppHowItWorks />
+    <AppContactForm />
+    <AppCallToAction />
+  </div>
 </template>
 
 <script>
@@ -18,16 +18,25 @@ import AppHowItWorks from "@/components/Home/AppHowItWorks.vue";
 import AppContactForm from "@/components/Home/AppContactForm.vue";
 import AppCallToAction from "@/components/Home/AppCallToAction.vue";
 export default {
-    components: {
-        AppHeroSection,
-        AppBenefitSection,
-        AppStatsSelection,
-        AppHowItWorks,
-        AppContactForm,
-        AppCallToAction,
+  components: {
+    AppHeroSection,
+    AppBenefitSection,
+    AppStatsSelection,
+    AppHowItWorks,
+    AppContactForm,
+    AppCallToAction,
+  },
+  async created() {
+    await this.$store.dispatch("auth/fetchUser");
+    console.log(this.$store.auth.state.currentUser);
+  },
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/currentUser"];
     },
-    async created() {
-        await this.$store.dispatch("auth/fetchUser");
+    hasAutorization() {
+      return this.$store.getters["auth/isAuthenticated"];
     },
+  },
 };
 </script>

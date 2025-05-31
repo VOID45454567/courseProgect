@@ -238,7 +238,7 @@
           @click="saveProfile"
           class="px-6 py-3 bg-primary-500 text-white font-bold rounded-lg hover:bg-primary-600 transition-colors shadow-md hover:shadow-lg"
         >
-          Сохранить изменения
+          {{ isLoading ? "Изменение" : "Сохранить изменения" }}
         </button>
       </div>
     </div>
@@ -264,6 +264,7 @@ export default {
         avatar: null,
       },
       avatarFile: null,
+      isLoading: false,
     };
   },
   computed: {
@@ -332,6 +333,7 @@ export default {
     },
     async saveProfile() {
       try {
+        this.isLoading = true;
         const formData = new FormData();
 
         Object.keys(this.userData).forEach((key) => {
@@ -354,6 +356,8 @@ export default {
           dataToUpdate: this.userData,
         };
         await this.$store.dispatch("user/updateUser", data);
+        this.isLoading = false;
+        this.$router.push("/");
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
       }

@@ -1,3 +1,4 @@
+// user.js
 import api from '@/api'
 
 export default {
@@ -5,11 +6,16 @@ export default {
   actions: {
     async updateUser({ commit }, userData) {
       try {
-        console.log(userData);
-        const updatedUser = await api.updateUser(userData.id, userData.dataToUpdate)
-        console.log(updatedUser);
+        const response = await api.auth.updateUser(userData.id, userData.dataToUpdate)
+        
+        commit('setUser', response.data.user)
+        localStorage.removeItem('token')
+        localStorage.setItem('token', response.data.newToken)
+        
+        return response.data
       } catch (error) {
-        return error
+        console.error('Update user error:', error)
+        throw error
       }
     },
   },

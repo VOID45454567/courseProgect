@@ -6,10 +6,8 @@
         <h1 class="text-3xl font-bold text-gray-900">Создание вакансии</h1>
       </div>
 
-      <!-- Основная форма -->
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
         <div class="space-y-6">
-          <!-- Название вакансии -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Название вакансии*</label
@@ -28,7 +26,6 @@
             <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name }}</p>
           </div>
 
-          <!-- Зарплата и валюта -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Зарплата</label>
@@ -60,7 +57,6 @@
             </div>
           </div>
 
-          <!-- Опыт работы -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Требуемый опыт*</label
@@ -83,8 +79,6 @@
               {{ errors.experience }}
             </p>
           </div>
-
-          <!-- Формат работы -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Формат работы*</label
@@ -106,8 +100,6 @@
               {{ errors.work_format }}
             </p>
           </div>
-
-          <!-- Город -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Город*</label>
             <input
@@ -122,8 +114,6 @@
             />
             <p v-if="errors.city" class="mt-1 text-sm text-red-600">{{ errors.city }}</p>
           </div>
-
-          <!-- Описание вакансии -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Описание вакансии*</label
@@ -142,8 +132,6 @@
               {{ errors.description }}
             </p>
           </div>
-
-          <!-- Навыки -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Требуемые навыки*</label
@@ -165,25 +153,23 @@
         </div>
       </div>
 
-      <!-- Кнопки действий -->
       <div class="flex justify-between">
-        <button
-          @click="cancel"
-          class="px-6 py-3 border border-gray-300 text-gray-700 font-bold rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          Отменить
-        </button>
-
-        <AppButton text="'авторизоваться'" class="w-4/12 active" @click="submitForm" />
+        <AppButton
+          :text="'Создать вакансию'"
+          :class="'w-4/12 active'"
+          @click="submitForm"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import AppButton from "../AppButton.vue";
-
+import AppButton from "@/components/AppButton.vue";
 export default {
+  components: {
+    AppButton,
+  },
   data() {
     return {
       formData: {
@@ -195,7 +181,7 @@ export default {
         city: "",
         description: "",
         required_skills: "",
-        created_at: new Date().toISOString().split("T")[0],
+        created_at: new Date(),
       },
       errors: {
         name: "",
@@ -237,7 +223,7 @@ export default {
 
       return isValid;
     },
-    components: [AppButton],
+
     submitForm() {
       if (this.validateForm()) {
         console.log("Форма вакансии отправлена:", this.formData);

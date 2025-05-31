@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import store from '@/store'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,13 +25,12 @@ const router = createRouter({
       component: () => import('../views/AuthorizationView.vue'),
     },
     {
-      path: '/resumes',
-      name: 'resumes',
+      path: '/search',
+      name: 'search',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/searchCards.vue'),
-      alias: '/vacanses',
     },
     {
       path: '/profile',
@@ -53,7 +51,14 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/CreateCard.vue'),
     },
+    {
+      path: '/single',
+      name: 'single',
+      component: () => import('../views/SingleCard.vue')
+    }
   ],
+  linkActiveClass: 'currentSection',
+  linkExactActiveClass: 'exact-currentSection',
 })
 
 // router.beforeEach((to, from, next) => {

@@ -5,15 +5,17 @@
         <img src="" alt="" width="60px" height="60px" />
         <h1 class="text-4xl font-bold ml-2">Logo</h1>
       </div>
-
       <div class="flex flex-row justify-between gap-5 shrink-0 items-center w-6/12">
-        <button
-          class="py-2 hover:underline cursor-pointer"
-          v-for="(item, index) in categories"
-          :key="index"
+        <router-link v-for="(item, index) in categories" :key="index" :to="item.link"
+          ><button
+            class="hover: cursor-pointer"
+            :key="index"
+            @click="this.$router.push(item.link)"
+          >
+            {{ item.name }}
+          </button></router-link
         >
-          {{ item.name }}
-        </button>
+
         <p
           v-if="currentUser"
           @click="this.$router.push('/profile')"
@@ -42,12 +44,8 @@ export default {
     return {
       categories: [
         {
-          name: "Вакансии",
-          link: "/vacancies",
-        },
-        {
           name: "Резюме",
-          link: "/resumes",
+          link: "/search",
         },
         {
           name: "Избранное",

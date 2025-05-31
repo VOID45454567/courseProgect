@@ -1,6 +1,7 @@
 import pool from "../config/dbConnect.js";
 import bcrypt from "bcrypt";
 import jwtConfig from "../config/jwt.js";
+import vacancyRepository from "./vacancyRepository.js";
 class UserRepository {
   async createUser(userData) {
     try {
@@ -46,14 +47,15 @@ class UserRepository {
     return request.rows[0];
   }
   async getUserByID(id) {
-    const request = await pool.query("Select * from users where id = $1", [id]);
-    return request.rows[0];
+    const user = await pool.query("Select * from users where id = $1", [id]);
+    return user.rows[0];
   }
   async getAll() {
     const request = await pool.query("select * from users");
     return request.rows[0];
   }
   async deleteUser(id) {
+    await vacancyRepository.deleteAllUserVacances(id)
     const request = await pool.query("delete from users where id = $1", [id]);
     return request.rows[0];
   }
