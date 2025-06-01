@@ -1,10 +1,11 @@
 import api from "../index.js";
 import { apiUrl } from "..";
+import axios from "axios";
 
 class vacancy {
     async createVacancy(data){
         try {
-            const request = await api.post(`${apiUrl}/vacances`, data);
+            const request = await axios.post(`${apiUrl}/vacances`, data);
             return request.data;
         } catch (error) {
             console.log(error);
@@ -13,7 +14,7 @@ class vacancy {
     }
     async getOne(id){
         try {
-            const request = await api.get(`${apiUrl}/vacances/${id}`);
+            const request = await axios.get(`${apiUrl}/vacances/${id}`);
             return request.data;
         } catch (error) {
             console.log(error);
@@ -22,7 +23,7 @@ class vacancy {
     }
     async getAll(){
         try {
-            const request = await api.get(`${apiUrl}/vacances`);
+            const request = await axios.get(`${apiUrl}/vacances`);
             return request.data;
         } catch (error) {
             console.log(error);
@@ -31,7 +32,7 @@ class vacancy {
     }
     async update(data){
         try {
-            const request = await api.put(`${apiUrl}/vacances/${data.id}`, data);
+            const request = await axios.put(`${apiUrl}/vacances/${data.id}`, data);
             return request.data;
         } catch (error) {
             console.log(error);
@@ -40,10 +41,17 @@ class vacancy {
     }
     async delete(id){
         try {
-            const request = await api.delete(`${apiUrl}/vacances/${id}`);
+            const request = await axios.delete(`${apiUrl}/vacances/${id}`);
             return request.data;
         } catch (error) {
             console.log(error);
+        }
+    }
+    async getAllUserVacances(idUser){
+        try {
+            const request = await axios.get()
+        } catch (error) {
+            
         }
     }
 }

@@ -232,7 +232,7 @@
           </button>
         </div>
       </div>
-
+      <MyVacances></MyVacances>
       <div class="flex justify-end">
         <button
           @click="saveProfile"
@@ -246,7 +246,12 @@
 </template>
 
 <script>
+import MyVacances from "@/components/Profile/myVacances/MyVacances.vue";
+
 export default {
+  components: {
+    MyVacances,
+  },
   data() {
     return {
       newSkill: "",

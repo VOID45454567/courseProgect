@@ -61,20 +61,14 @@
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Требуемый опыт*</label
             >
-            <select
-              v-model="formData.experience"
-              @blur="validateField('experience')"
+            <input
               :class="[
                 'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                errors.experience ? 'border-red-500' : 'border-gray-300',
+                errors.name ? 'border-red-500' : 'border-gray-300',
               ]"
-            >
-              <option value="" disabled>Выберите опыт</option>
-              <option value="no-exp">Без опыта</option>
-              <option value="1-3">1-3 года</option>
-              <option value="3-6">3-6 лет</option>
-              <option value="6+">Более 6 лет</option>
-            </select>
+              type="number"
+              v-model="formData.experience"
+            />
             <p v-if="errors.experience" class="mt-1 text-sm text-red-600">
               {{ errors.experience }}
             </p>
@@ -83,19 +77,39 @@
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Формат работы*</label
             >
-            <select
-              v-model="formData.work_format"
-              @blur="validateField('work_format')"
-              :class="[
-                'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                errors.work_format ? 'border-red-500' : 'border-gray-300',
-              ]"
-            >
-              <option value="" disabled>Выберите формат работы</option>
-              <option value="office">Офис</option>
-              <option value="remote">Удалённо</option>
-              <option value="hybrid">Гибридный</option>
-            </select>
+            <div class="flex flex-wrap gap-2 mb-2">
+              <span
+                v-for="(format, index) in formData.work_format"
+                :key="index"
+                class="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm flex items-center"
+              >
+                {{ format }}
+                <button
+                  @click="removeWorkFormat(index)"
+                  class="ml-1 text-primary-600 hover:text-primary-800"
+                >
+                  &times;
+                </button>
+              </span>
+            </div>
+            <div class="flex">
+              <select
+                v-model="selectedWorkFormat"
+                @change="addWorkFormat"
+                class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500"
+              >
+                <option value="" disabled selected>Выберите формат работы</option>
+                <option value="office">Офис</option>
+                <option value="remote">Удалённо</option>
+                <option value="hybrid">Гибридный</option>
+              </select>
+              <button
+                @click="addWorkFormat"
+                class="px-4 py-2 bg-primary-500 text-white rounded-r-lg hover:bg-primary-600 transition-colors"
+              >
+                Добавить
+              </button>
+            </div>
             <p v-if="errors.work_format" class="mt-1 text-sm text-red-600">
               {{ errors.work_format }}
             </p>
@@ -136,16 +150,36 @@
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >Требуемые навыки*</label
             >
-            <input
-              type="text"
-              v-model="formData.required_skills"
-              @blur="validateField('required_skills')"
-              :class="[
-                'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                errors.required_skills ? 'border-red-500' : 'border-gray-300',
-              ]"
-              placeholder="Перечислите навыки через запятую"
-            />
+            <div class="flex flex-wrap gap-2 mb-2">
+              <span
+                v-for="(skill, index) in formData.required_skills"
+                :key="index"
+                class="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm flex items-center"
+              >
+                {{ skill }}
+                <button
+                  @click="removeSkill(index)"
+                  class="ml-1 text-primary-600 hover:text-primary-800"
+                >
+                  &times;
+                </button>
+              </span>
+            </div>
+            <div class="flex">
+              <input
+                type="text"
+                v-model="newSkill"
+                @keyup.enter="addSkill"
+                placeholder="Введите навык и нажмите Enter"
+                class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500"
+              />
+              <button
+                @click="addSkill"
+                class="px-4 py-2 bg-primary-500 text-white rounded-r-lg hover:bg-primary-600 transition-colors"
+              >
+                Добавить
+              </button>
+            </div>
             <p v-if="errors.required_skills" class="mt-1 text-sm text-red-600">
               {{ errors.required_skills }}
             </p>
@@ -172,16 +206,19 @@ export default {
   },
   data() {
     return {
+      selectedWorkFormat: "",
+      newSkill: "",
       formData: {
         name: "",
         salary: "",
         currency: "",
         experience: "",
-        work_format: "",
+        work_format: [],
         city: "",
         description: "",
-        required_skills: "",
-        created_at: new Date(),
+        required_skills: [],
+        id_user: null,
+        created_at: Date.now(),
       },
       errors: {
         name: "",
@@ -195,8 +232,53 @@ export default {
     };
   },
   methods: {
+    addWorkFormat() {
+      if (
+        this.selectedWorkFormat &&
+        !this.formData.work_format.includes(this.selectedWorkFormat)
+      ) {
+        this.formData.work_format.push(this.selectedWorkFormat);
+        this.selectedWorkFormat = "";
+        this.errors.work_format = "";
+      }
+    },
+
+    // Удаление формата работы
+    removeWorkFormat(index) {
+      this.formData.work_format.splice(index, 1);
+    },
+
+    // Добавление навыка
+    addSkill() {
+      if (
+        this.newSkill.trim() &&
+        !this.formData.required_skills.includes(this.newSkill.trim())
+      ) {
+        this.formData.required_skills.push(this.newSkill.trim());
+        this.newSkill = "";
+        this.errors.required_skills = "";
+      }
+    },
+
+    // Удаление навыка
+    removeSkill(index) {
+      this.formData.required_skills.splice(index, 1);
+    },
+
     validateField(fieldName) {
-      if (!this.formData[fieldName]) {
+      if (fieldName === "work_format" && this.formData.work_format.length === 0) {
+        this.errors.work_format = "Выберите хотя бы один формат работы";
+        return false;
+      }
+      if (fieldName === "required_skills" && this.formData.required_skills.length === 0) {
+        this.errors.required_skills = "Добавьте хотя бы один навык";
+        return false;
+      }
+      if (
+        !this.formData[fieldName] &&
+        fieldName !== "work_format" &&
+        fieldName !== "required_skills"
+      ) {
         this.errors[fieldName] = "Это поле обязательно для заполнения";
         return false;
       }
@@ -220,20 +302,29 @@ export default {
           isValid = false;
         }
       });
-
       return isValid;
     },
-
-    submitForm() {
+    getCurrentUserId() {
+      this.formData.id_user = this.currentUser.id;
+    },
+    async submitForm() {
       if (this.validateForm()) {
         console.log("Форма вакансии отправлена:", this.formData);
-        // Здесь будет логика отправки формы
-        // this.$router.push("/vacancies");
+        await this.$store.dispatch("vacancy/createVacancy", this.formData);
+        this.$router.push("/profile");
       }
     },
     cancel() {
       this.$router.back();
     },
+  },
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/currentUser"];
+    },
+  },
+  async created() {
+    this.getCurrentUserId();
   },
 };
 </script>

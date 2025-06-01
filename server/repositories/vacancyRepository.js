@@ -10,9 +10,10 @@ class vacancyRepository {
       city,
       description,
       required_skills,
-      idUser,
+      id_user,
       created_at,
     } = data;
+    // console.log(data);
     const query =
       "INSERT INTO vacances (name, salary, currency, experience, work_format, city, description, required_skills, id_user, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING*";
     try {
@@ -25,10 +26,10 @@ class vacancyRepository {
         city,
         description,
         required_skills,
-        idUser,
+        id_user,
         created_at,
       ]);
-      console.log(newVacancy);
+      // console.log(newVacancy);
       return newVacancy;
     } catch (error) {
       console.log(error);
