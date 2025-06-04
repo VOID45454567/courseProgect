@@ -91,7 +91,7 @@
         <AppButton
           :text="'Войти'"
           class="w-full unactive"
-          @click="$router.push('/authorization')"
+          @click="$router.push('/login')"
         />
       </div>
     </div>

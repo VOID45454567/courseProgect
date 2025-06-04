@@ -33,6 +33,12 @@
 import VacancyItem from "./vacancyItem.vue";
 
 export default {
+  props: {
+    userID: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       vacances: [],
@@ -40,6 +46,15 @@ export default {
   },
   components: {
     VacancyItem,
+  },
+  async created() {
+    this.vacances = await this.getMyVacances;
+  },
+  computed: {
+    async getMyVacances() {
+      console.log(this.userID);
+      await this.$store.dispatch("vacancy/fetchUserVacances", this.userID);
+    },
   },
 };
 </script>

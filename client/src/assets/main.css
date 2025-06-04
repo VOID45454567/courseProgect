@@ -1,29 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
-@theme{
-    --color-primary-50: #F0EFFF;
-    --color-primary-100: #E0E0FF;
-    --color-primary-200: #C6C2FF;
-    --color-primary-300: #A9A3FF;
-    --color-primary-400: #8178FF;
-    --color-primary-500: #4A3AFF;
-    --color-primary-600: #3D2EE6;
-    --color-primary-700: #3528CC;
-    --color-primary-800: #2B20B3;
-    --color-primary-900: #1F1799;
+@theme {
+  --color-primary-50: #f0efff;
+  --color-primary-100: #e0e0ff;
+  --color-primary-200: #c6c2ff;
+  --color-primary-300: #a9a3ff;
+  --color-primary-400: #8178ff;
+  --color-primary-500: #4a3aff;
+  --color-primary-600: #3d2ee6;
+  --color-primary-700: #3528cc;
+  --color-primary-800: #2b20b3;
+  --color-primary-900: #1f1799;
 }
 * {
-    font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
-.active{
-    @apply h-12 rounded-full border-2 border-primary-500 bg-primary-500 text-white font-bold cursor-pointer transition-all duration-300 hover:bg-white hover:text-primary-500 shadow-md hover:shadow-lg
+.active {
+  @apply h-12 rounded-full border-2 border-primary-500 bg-primary-500 text-white font-bold cursor-pointer transition-all duration-300 hover:bg-white hover:text-primary-500 shadow-md hover:shadow-lg;
 }
-.unactive{
-    @apply h-12 rounded-full border-2 border-primary-500 bg-white text-primary-500 font-bold cursor-pointer transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md hover:shadow-lg
+.unactive {
+  @apply h-12 rounded-full border-2 border-primary-500 bg-white text-primary-500 font-bold cursor-pointer transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md hover:shadow-lg;
 }
-.currentSection{
-    @apply text-primary-500 border-b-2
+.active-red {
+  @apply h-12 rounded-full border-2 border-red-500 bg-white text-red-500 font-bold cursor-pointer transition-all duration-300 hover:bg-red-500 hover:text-white shadow-md hover:shadow-lg;
 }
-.exact-currentSection{
-    @apply text-primary-500
+.currentSection {
+  @apply text-primary-500 border-b-2;
+}
+.exact-currentSection {
+  @apply text-primary-500;
 }

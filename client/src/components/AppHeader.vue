@@ -10,7 +10,7 @@
         </h1>
       </div>
       <div class="flex flex-row justify-between gap-5 shrink-0 items-center w-6/12">
-        <router-link v-for="(item, index) in categories" :key="index" :to="item.link"
+        <!-- <router-link v-for="(item, index) in categories" :key="index" :to="item.link"
           ><button
             class="hover: cursor-pointer"
             :key="index"
@@ -18,7 +18,7 @@
           >
             {{ item.name }}
           </button></router-link
-        >
+        > -->
 
         <p
           v-if="currentUser"

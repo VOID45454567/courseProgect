@@ -27,7 +27,6 @@ class authService {
         return { error: "Invalid password" };
       }
       const token = jwtConfig.createToken(user);
-      console.log("user", user);
       console.log("token", token);
       return { user, token };
     } catch (error) {
@@ -39,7 +38,6 @@ class authService {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       const user = await userRepository.getUserByID(decoded.id);
-      console.log("user: " + user);
       return user;
     } catch (error) {
       console.error("Token verification failed:", error);

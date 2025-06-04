@@ -1,4 +1,4 @@
-import api from "@/api/index.js"
+import api from '@/api/index.js'
 
 export default {
   namespaced: true,
@@ -32,23 +32,23 @@ export default {
   actions: {
     async login({ commit }, userData) {
       try {
-      const user = await api.auth.login(userData)
-      localStorage.setItem('token', user.data.token)
-      commit('setUser', user.data.user)
-      commit('setToken', user.data.token)  
+        const user = await api.auth.login(userData)
+
+        localStorage.setItem('token', user.data.token)
+        commit('setUser', user.data.user)
+        commit('setToken', user.data.token)
       } catch (error) {
+        console.log(error)
         return {
-          error: error.response.data.message
+          message : 'error'
         }
       }
-      
     },
     logout({ commit }) {
       commit('cleanAuth')
     },
     async register({ commit }, userData) {
       const user = await api.auth.register(userData)
-      console.log(user)
       localStorage.setItem('token', user.data.token)
       commit('setToken', user.data.token)
       commit('setUser', user.data.user)

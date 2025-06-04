@@ -45,5 +45,15 @@ class vacancyService {
         
     }
   }
+  async getByUserId(id){
+    try {
+      console.log(id);
+      
+      const vacances = await vacancyRepository.getAllUserVacances(id)
+      return vacances      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new vacancyService()

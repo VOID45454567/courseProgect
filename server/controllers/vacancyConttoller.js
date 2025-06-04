@@ -50,5 +50,16 @@ class vacancyController {
         
     }
   }
+  async getByid(req, res){
+    try {
+      console.log('req '+ req.params.id);
+      const id = req.params.id
+      const vacances = await vacancyService.getByUserId(id)
+      console.log(vacances);
+      res.json(vacances)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new vacancyController()

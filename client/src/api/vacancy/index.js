@@ -1,4 +1,3 @@
-import api from "../index.js";
 import { apiUrl } from "..";
 import axios from "axios";
 
@@ -48,10 +47,13 @@ class vacancy {
         }
     }
     async getAllUserVacances(idUser){
-        try {
-            const request = await axios.get()
-        } catch (error) {
+        try {            
+            const request = await axios.get(`${apiUrl}/vacances/user/${idUser}`)
+            console.log("request " + request);
             
+            return request
+        } catch (error) {
+            console.log(error);
         }
     }
 }

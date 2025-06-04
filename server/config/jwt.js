@@ -7,5 +7,11 @@ class jwtConfig {
         })
         return token
     }
+    updateToken(payload){
+        const newToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+            expiresIn: '7d'
+        })
+        return newToken
+    }
 }
 export default new jwtConfig()

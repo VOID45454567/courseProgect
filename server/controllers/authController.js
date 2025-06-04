@@ -33,7 +33,9 @@ class authController {
         return res.status(401).json({ message: "Not authorized" });
       }
       const userData = await authService.getCurrentUser(token);
-      console.log("userData: " + userData);
+      if (userData.error) {
+        return error
+      }
       res.json(userData);
     } catch (error) {
       console.error("Get me error:", error);

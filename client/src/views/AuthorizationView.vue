@@ -51,7 +51,6 @@
 </template>
 <script>
 import AppButton from "@/components/AppButton.vue";
-import { RouterLink, RouterView } from "vue-router";
 export default {
   data() {
     return {
@@ -123,9 +122,8 @@ export default {
         return;
       }
       try {
-        const response = await this.$store.dispatch("auth/login", this.formData);
-        console.log(response);
-        if (response.error) {
+        const responce = await this.$store.dispatch("auth/login", this.formData);
+        if (responce) {
           this.login = true;
         } else {
           this.$router.push("/profile");

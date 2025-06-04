@@ -114,12 +114,14 @@
                 >
                   <option value="moscow">Москва</option>
                   <option value="spb">Санкт-Петербург</option>
-                  <option value="remote">Удалённо</option>
+                  <option value="remote" v-if="currentUser.role === 'searcher'">
+                    Удалённо
+                  </option>
                   <option value="other">Другой</option>
                 </select>
               </div>
 
-              <div>
+              <div v-if="currentUser.role === 'searcher'">
                 <label class="block text-sm font-medium text-gray-700 mb-1"
                   >Опыт работы (лет)</label
                 >
@@ -145,7 +147,10 @@
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+      <div
+        class="bg-white rounded-xl shadow-sm p-6 mb-8"
+        v-if="currentUser.role === 'searcher'"
+      >
         <h2 class="text-xl font-bold text-gray-800 mb-4">Компании, в которых работал</h2>
         <div
           v-for="(company, index) in userData.companies"
@@ -187,7 +192,10 @@
         </button>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+      <div
+        class="bg-white rounded-xl shadow-sm p-6 mb-8"
+        v-if="currentUser.role === 'searcher'"
+      >
         <h2 class="text-xl font-bold text-gray-800 mb-4">Навыки</h2>
         <div class="flex flex-wrap gap-2 mb-4">
           <span
@@ -232,25 +240,32 @@
           </button>
         </div>
       </div>
-      <MyVacances></MyVacances>
-      <div class="flex justify-end">
-        <button
+      <MyVacances :userID="currentUser.id"></MyVacances>
+      <div class="flex justify-end gap-10">
+        <AppButton
           @click="saveProfile"
-          class="px-6 py-3 bg-primary-500 text-white font-bold rounded-lg hover:bg-primary-600 transition-colors shadow-md hover:shadow-lg"
+          :text="isLoading ? 'Изменение' : 'Сохранить изменения'"
+          class="w-4/12 active"
         >
-          {{ isLoading ? "Изменение" : "Сохранить изменения" }}
-        </button>
+        </AppButton>
+        <AppButton
+          @click="handleLogout"
+          class="w-3/12 active-red"
+          text="Выйти с аккаунта"
+        ></AppButton>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AppButton from "@/components/AppButton.vue";
 import MyVacances from "@/components/Profile/myVacances/MyVacances.vue";
 
 export default {
   components: {
     MyVacances,
+    AppButton,
   },
   data() {
     return {
@@ -287,7 +302,7 @@ export default {
   async created() {
     const user = await this.currentUser;
     await this.initializeUserData(user);
-    // console.log(user);
+    console.log(user);
   },
   methods: {
     initializeUserData(user) {
@@ -304,6 +319,10 @@ export default {
         skills: user.skills ? [...user.skills] : [],
         avatar: user.avatar || null,
       };
+    },
+    async handleLogout() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
     },
     async handleAvatarUpload(event) {
       const file = event.target.files[0];

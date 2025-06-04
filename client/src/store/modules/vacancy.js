@@ -2,11 +2,6 @@ import api from "@/api"
 
 export default {
     namespaced: true,
-    state(){
-        return {
-            vacances: null
-        }
-    },
     actions: {
         async createVacancy({commit, dispatch}, data) {
             try {
@@ -16,10 +11,12 @@ export default {
                 console.log(error);
             }
         },
-        async fetchUserVacances({commit, dispatch}){
+        async fetchUserVacances({commit, dispatch}, id){
             try {
-                // const vacances = await api.vacancy
+                const vacances = await api.vacancy.getAllUserVacances(id)                
+                console.log(vacances);
             } catch (error) {
+                console.log(error);
                 
             }
         }

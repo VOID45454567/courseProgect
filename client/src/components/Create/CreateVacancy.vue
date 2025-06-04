@@ -99,9 +99,9 @@
                 class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500"
               >
                 <option value="" disabled selected>Выберите формат работы</option>
-                <option value="office">Офис</option>
-                <option value="remote">Удалённо</option>
-                <option value="hybrid">Гибридный</option>
+                <option value="Офис">Офис</option>
+                <option value="Удаленно">Удалённо</option>
+                <option value="Гибрид">Гибридный</option>
               </select>
               <button
                 @click="addWorkFormat"
@@ -304,8 +304,9 @@ export default {
       });
       return isValid;
     },
-    getCurrentUserId() {
-      this.formData.id_user = this.currentUser.id;
+    async getCurrentUserId() {
+      this.formData.id_user = await this.currentUser.id;
+      console.log(this.currentUser);
     },
     async submitForm() {
       if (this.validateForm()) {
@@ -324,7 +325,7 @@ export default {
     },
   },
   async created() {
-    this.getCurrentUserId();
+    await this.getCurrentUserId();
   },
 };
 </script>

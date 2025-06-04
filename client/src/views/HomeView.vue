@@ -11,7 +11,6 @@
 
 <script>
 import AppHeroSection from "@/components/Home/AppHeroSection.vue";
-import { RouterLink, RouterView } from "vue-router";
 import AppBenefitSection from "@/components/Home/AppBenefitSection.vue";
 import AppStatsSelection from "@/components/Home/AppStatsSelection.vue";
 import AppHowItWorks from "@/components/Home/AppHowItWorks.vue";
@@ -28,7 +27,9 @@ export default {
   },
   async created() {
     await this.$store.dispatch("auth/fetchUser");
-    console.log(this.$store.auth.state.currentUser);
+    if (!this.currentUser && !this.hasAutorization) {
+      this.$router.push("/login");
+    }
   },
   computed: {
     currentUser() {
