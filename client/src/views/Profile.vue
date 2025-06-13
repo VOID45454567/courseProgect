@@ -240,7 +240,7 @@
           </button>
         </div>
       </div>
-      <MyVacances :userID="currentUser.id"></MyVacances>
+      <MyVacances></MyVacances>
       <div class="flex justify-end gap-10">
         <AppButton
           @click="saveProfile"
@@ -300,12 +300,12 @@ export default {
     },
   },
   async created() {
-    const user = await this.currentUser;
+    const user = this.currentUser;
     await this.initializeUserData(user);
-    console.log(user);
+    console.log(user.id);
   },
   methods: {
-    initializeUserData(user) {
+    async initializeUserData(user) {
       this.userData = {
         name: user.name || "",
         surname: user.surname || "",
@@ -380,7 +380,7 @@ export default {
         console.log(data);
         await this.$store.dispatch("user/updateUser", data);
         this.isLoading = false;
-        // this.$router.push("/");
+        this.$router.push("/");
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
       }

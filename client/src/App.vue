@@ -13,6 +13,9 @@ export default {
   async created() {
     this.$store.dispatch("auth/fetchUser");
     this.restoreAuth();
+    if (!this.currentUser && !this.hasAutorization) {
+      this.$router.push("/login");
+    }
   },
   methods: {
     async restoreAuth() {
@@ -24,6 +27,14 @@ export default {
           this.$store.commit("auth/cleanAuth");
         }
       }
+    },
+  },
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/currentUser"];
+    },
+    hasAutorization() {
+      return this.$store.getters["auth/isAuthenticated"];
     },
   },
   components: {

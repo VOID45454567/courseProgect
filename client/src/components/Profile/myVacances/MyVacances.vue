@@ -2,11 +2,27 @@
   <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
     <h2 class="text-xl font-bold text-gray-800 mb-4">Мои вакансии</h2>
 
-    <div class="space-y-4">
-      <!-- <VacancyItem></VacancyItem> -->
+    <div v-if="loading" class="flex justify-center py-8">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"
+      ></div>
+    </div>
+
+    <div v-else class="space-y-4">
+      <template v-if="vacancies.length > 0">
+        <AppVacancyItem
+          v-for="(vacancy, index) in vacancies"
+          :key="vacancy.id || index"
+          :vacancy="vacancy"
+        />
+      </template>
+      <div v-else class="text-center py-8 text-gray-500">
+        У вас пока нет созданных вакансий
+      </div>
+
       <button
         class="w-full mt-4 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-primary-500 hover:text-primary-500 transition-colors"
-        @click="this.$router.push('/create')"
+        @click="$router.push('/create')"
       >
         <div class="flex items-center justify-center gap-2">
           <svg
@@ -29,33 +45,56 @@
     </div>
   </div>
 </template>
+
 <script>
-import VacancyItem from "./vacancyItem.vue";
+import AppVacancyItem from "@/components/AppVacancyItem.vue";
 
 export default {
-  props: {
-    userID: {
-      type: Number,
-      required: true,
-    },
-  },
   data() {
     return {
-      vacances: [],
+      loading: true,
+      vacancies: [],
     };
   },
   components: {
-    VacancyItem,
+    AppVacancyItem,
   },
   async created() {
-    this.vacances = await this.getMyVacances;
+    await this.loadCurrentUser();
+    await this.fetchVacancies();
   },
-  computed: {
-    async getMyVacances() {
-      console.log(this.userID);
-      await this.$store.dispatch("vacancy/fetchUserVacances", this.userID);
+  methods: {
+    async loadCurrentUser() {
+      try {
+        this.currentUser = this.$store.getters["auth/currentUser"];
+
+        if (!this.currentUser) {
+          await this.$store.dispatch("auth/fetchCurrentUser");
+          this.currentUser = this.$store.getters["auth/currentUser"];
+        }
+      } catch (error) {
+        console.error("Ошибка при загрузке пользователя:", error);
+      }
+    },
+    async fetchVacancies() {
+      this.loading = true;
+      try {
+        if (!this.currentUser || !this.currentUser.id) {
+          throw new Error("User ID is not available");
+        }
+
+        const response = await this.$store.dispatch(
+          "vacancy/fetchUserVacancies",
+          this.currentUser.id
+        );
+        this.vacancies = response;
+      } catch (error) {
+        console.error("Ошибка при загрузке вакансий:", error);
+        this.error = "Не удалось загрузить вакансии";
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };
 </script>
-<style></style>

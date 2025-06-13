@@ -6,7 +6,7 @@ export default {
     async updateUser({ commit }, userData) {
       try {
         const response = await api.auth.updateUser(userData.id, userData.dataToUpdate)
-        commit('setUser', response.data.user)
+        commit('setUser', response.data.user, { root: true })
         localStorage.removeItem('token')
         localStorage.setItem('token', response.data.newToken)
         

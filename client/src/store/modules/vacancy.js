@@ -11,10 +11,10 @@ export default {
                 console.log(error);
             }
         },
-        async fetchUserVacances({commit, dispatch}, id){
+        async fetchUserVacancies({commit, dispatch}, id){
             try {
                 const vacances = await api.vacancy.getAllUserVacances(id)                
-                console.log(vacances);
+                return vacances
             } catch (error) {
                 console.log(error);
                 

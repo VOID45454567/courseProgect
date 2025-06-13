@@ -49,9 +49,8 @@ class vacancy {
     async getAllUserVacances(idUser){
         try {            
             const request = await axios.get(`${apiUrl}/vacances/user/${idUser}`)
-            console.log("request " + request);
             
-            return request
+            return request.data
         } catch (error) {
             console.log(error);
         }
