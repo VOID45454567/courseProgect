@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto">
-      <!-- Заголовок -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Создание резюме</h1>
       </div>
@@ -69,7 +68,6 @@
         </div>
       </div>
 
-      <!-- Кнопки действий -->
       <div class="flex justify-between">
         <button
           @click="cancel"
@@ -125,26 +123,14 @@ export default {
         return false;
       }
 
-      // Дополнительная валидация для email
-      if (fieldName === "email" && !this.validateEmail(this.formData.email)) {
-        this.errors.email = "Введите корректный email";
-        return false;
-      }
-
       this.errors[fieldName] = "";
       return true;
-    },
-
-    validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
     },
 
     validateForm() {
       const requiredFields = [
         "surname",
         "name",
-        "email",
         "phone",
         "city",
         "birth_date",
@@ -167,7 +153,6 @@ export default {
       if (this.validateForm()) {
         console.log("Форма резюме отправлена:", this.formData);
         // Здесь будет логика сохранения резюме
-        // this.$router.push('/my-resumes');
       }
     },
 

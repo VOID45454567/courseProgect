@@ -6,8 +6,8 @@ class authMiddleware {
     if (decoded.role === "admin") {
       next();
     } else {
-      res.status(403).json({ error: "Forbidden" });
+      res.status(403).json({ error: "Доступ запрещенн" });
     }
   }
 }
-export default new authMiddleware()
+export default new authMiddleware();

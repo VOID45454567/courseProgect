@@ -1,6 +1,6 @@
 <template>
-  <CreateVacancy></CreateVacancy>
-  <!-- <CreateResume></CreateResume> -->
+  <!-- <CreateVacancy></CreateVacancy> -->
+  <CreateResume></CreateResume>
 </template>
 
 <script>
