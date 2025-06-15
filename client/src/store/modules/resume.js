@@ -8,10 +8,8 @@ export default {
             return resume
         },
         async fetchUserResume({commit, dispatch}, id){
-            
             const resume = await api.resume.fetchUserResume(id)
             console.log(resume);
-            
             return resume
         }
     }

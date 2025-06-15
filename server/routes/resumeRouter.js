@@ -3,10 +3,10 @@ import resumeController from '../controllers/resumeController.js';
 
 const resumeRouter = new express.Router();
 
-resumeRouter.post('/resumes', resumeController.create)
-resumeRouter.get('/resumes', resumeController.getByUserId)
-resumeRouter.delete('/resumes', resumeController.delete)
-resumeRouter.put('/resumes', resumeController.update)
+resumeRouter.post('/', resumeController.create)
+resumeRouter.get('/:id', resumeController.getByUserId)
+resumeRouter.delete('/:id', resumeController.delete)
+resumeRouter.put('/:id', resumeController.update)
 
 export default resumeRouter
 

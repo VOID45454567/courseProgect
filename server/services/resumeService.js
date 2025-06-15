@@ -14,7 +14,7 @@ class ResumeService {
         const resume = await resumeRepository.getByUserId(user_id)
         return resume;
     } catch (error) {
-        console.log(error);
+        console.log("error" + error);
     }
   }
 //   async getAll() {

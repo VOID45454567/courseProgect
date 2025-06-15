@@ -15,7 +15,7 @@ const port = process.env.PORT;
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/vacances", vacancyRouter);
-app.use('/api', resumeRouter)
+app.use('/api/resumes', resumeRouter)
 try {
   app.listen(port, () => {
     console.log(`Server started on port ${port}`);

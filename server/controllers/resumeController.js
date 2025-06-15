@@ -12,11 +12,10 @@ class ResumeController {
     }
   }
   async getByUserId(req, res) {
-    console.log(req.body);
-    
     try {
-      const user_id = req.body.user_id;
-      console.log(req);
+      console.log(req.params);
+      
+      const user_id = req.params.id;
       
       const resume = await resumeService.getOne(user_id);
       if (!resume) {
@@ -24,7 +23,7 @@ class ResumeController {
       }
       return res.status(200).json(resume);
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error });
     }
   }
   async update(req, res) {
