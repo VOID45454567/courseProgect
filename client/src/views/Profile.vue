@@ -240,7 +240,10 @@
           </button>
         </div>
       </div>
-      <MyVacances></MyVacances>
+      <MyVacances v-if="currentUser.role === 'employer'"></MyVacances>
+      <div v-if="currentUser.role === 'searcher'">
+        <h1 v-if="!getUserResume">Резюме нету</h1>
+      </div>
       <div class="flex justify-end gap-10">
         <AppButton
           @click="saveProfile"
@@ -261,11 +264,13 @@
 <script>
 import AppButton from "@/components/AppButton.vue";
 import MyVacances from "@/components/Profile/myVacances/MyVacances.vue";
+import Resume from "@/components/SingleCardPage/Resume.vue";
 
 export default {
   components: {
     MyVacances,
     AppButton,
+    Resume,
   },
   data() {
     return {
@@ -303,6 +308,7 @@ export default {
     const user = this.currentUser;
     await this.initializeUserData(user);
     console.log(user.id);
+    this.getUserResume();
   },
   methods: {
     async initializeUserData(user) {
@@ -323,6 +329,19 @@ export default {
     async handleLogout() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
+    },
+    async getUserResume() {
+      if (this.currentUser.role === "searcher") {
+        const resume = await this.$store.dispatch(
+          "resume/fetchUserResume",
+          this.currentUser.id
+        );
+        if (resume) {
+          return resume;
+        } else {
+          return null;
+        }
+      }
     },
     async handleAvatarUpload(event) {
       const file = event.target.files[0];

@@ -56,17 +56,17 @@ class vacancyRepository {
       console.log(error);
     }
   }
-  async deleteAllUserVacances(idUser) {
-    try {
-      const deletedVacances = await pool.query(
-        "DELETE FROM vacancy WHERE user_id = $1",
-        idUser
-      );
-      //   return deletedVacances
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async deleteAllUserVacances(idUser) {
+  //   try {
+  //     const deletedVacances = await pool.query(
+  //       "DELETE FROM vacancy WHERE user_id = $1",
+  //       idUser
+  //     );
+  //        return deletedVacances
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   async getOne(id) {
     try {
       const vacancy = await pool.query(

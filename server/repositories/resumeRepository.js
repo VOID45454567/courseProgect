@@ -4,23 +4,25 @@ class ResumeRepository {
     const { preferedVacancy, preferedSalary, preferedCurrency, about } = data;
     try {
       const newResume = await pool.query(
-        "INSERT INTO resumes (preferedVacancy, preferedSalary, preferedCurrency, about, user_id) VALUES ($1,$2,$3,$4,$5)",
+        "INSERT INTO resumes (preferedVacancy, preferedSalary, preferedCurrency, about, user_id) VALUES ($1,$2,$3,$4,$5) RETURNING *",
         [preferedVacancy, preferedSalary, preferedCurrency, about, user_id]
       );
+      // console.log(newResume);
+      
       return newResume.rows[0];
     } catch (error) {
       console.log(error);
     }
   }
-  async getById(id) {
-    const resume = await pool.query("SELECT * FROM resumes WHERE id = $1", [
+  async getByUserId(id) {
+    const resume = await pool.query("SELECT * FROM resumes WHERE user_id = $1", [
       id,
     ]);
     return resume.rows[0];
   }
   async deleteResume(id) {
     const deletedResume = await pool.query(
-      "DELETE FROM resumes WHERE id = $1",
+      "DELETE FROM resumes WHERE user_id = $1",
       [id]
     );
     return deletedResume;
@@ -55,7 +57,7 @@ class ResumeRepository {
     }
   }
   ы;
-  async udapteResume(id, data) {
+  async udapteResume(user_id, data) {
     try {
       const updates = [];
       const values = [];
@@ -78,7 +80,7 @@ class ResumeRepository {
       const query = {
         text: `UPDATE resumes 
              SET ${updates.join(", ")} 
-             WHERE id = $${paramIndex} 
+             WHERE user_id = $${paramIndex} 
              RETURNING *`,
         values: values,
       };

@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto">
-      <!-- Заголовок и кнопка назад -->
       <div class="flex justify-between items-center mb-8">
         <button
           @click="$router.back()"
@@ -27,7 +26,6 @@
 
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
         <div class="space-y-6">
-          <!-- Мини-карточка пользователя -->
           <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
             <div class="flex-shrink-0">
               <div
@@ -47,7 +45,6 @@
             </div>
           </div>
 
-          <!-- Основная информация -->
           <div>
             <h2 class="text-2xl font-bold text-gray-900 mb-2">
               {{ resume.desired_position }}
@@ -186,7 +183,6 @@ export default {
       return new Date(dateString).toLocaleDateString("ru-RU", options);
     },
     inviteToInterview() {
-      // Логика приглашения на собеседование
       console.log("Приглашение отправлено");
     },
   },
