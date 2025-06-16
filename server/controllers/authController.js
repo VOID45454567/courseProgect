@@ -5,10 +5,11 @@ class authController {
     try {
       const userData = req.body;
       const newUser = await authService.register(userData);
-      if (newUser.error) {
-        res.status(409).json({ message: newUser.error });
+      if (!newUser.error) {
+        res.json(newUser);
+      } else {
+        res.status(409).json("Email уже существует");
       }
-      res.json(newUser);
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +35,7 @@ class authController {
       }
       const userData = await authService.getCurrentUser(token);
       if (userData.error) {
-        return error
+        return error;
       }
       res.json(userData);
     } catch (error) {

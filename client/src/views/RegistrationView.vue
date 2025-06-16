@@ -220,7 +220,7 @@ export default {
 
       return isValid;
     },
-    submitForm() {
+    async submitForm() {
       if (!this.validateForm()) {
         return;
       }
@@ -232,8 +232,12 @@ export default {
         email: this.formData.email,
         password: this.formData.password,
       };
-      this.$store.dispatch("auth/register", userData);
-      this.$router.push("/profile");
+      const user = await this.$store.dispatch("auth/register", userData);
+      if (user.message) {
+        this.errors.email = message;
+      } else {
+        this.$router.push("/profile");
+      }
     },
   },
 };

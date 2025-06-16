@@ -13,7 +13,7 @@ class authService {
       }
       return user;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
   async login(userData) {
@@ -36,6 +36,8 @@ class authService {
   }
   async getCurrentUser(token) {
     try {
+      // console.log(token);
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       const user = await userRepository.getUserByID(decoded.id);
       return user;

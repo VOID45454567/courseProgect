@@ -6,8 +6,13 @@ class auth {
     return user
   }
   async register(userData) {
-    const user = await axios.post(`${apiUrl}/auth/register/`, userData)
-    return user
+    try {
+      const user = await axios.post(`${apiUrl}/auth/register/`, userData)
+      return user
+    } catch (error) {
+      console.log(error)
+      return error
+    }
   }
   async getCurrentUser(token) {
     const user = await axios.get(`${apiUrl}/auth/me/`, {
@@ -22,7 +27,7 @@ class auth {
       const updatedUser = await axios.put(`${apiUrl}/users/${id}`, data)
       return updatedUser
     } catch (error) {
-      console.log(error);
+      console.log(error)
       return error
     }
   }

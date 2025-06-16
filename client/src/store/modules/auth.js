@@ -40,7 +40,7 @@ export default {
       } catch (error) {
         console.log(error)
         return {
-          message : 'error'
+          message: 'error',
         }
       }
     },
@@ -49,9 +49,17 @@ export default {
     },
     async register({ commit }, userData) {
       const user = await api.auth.register(userData)
-      localStorage.setItem('token', user.data.token)
-      commit('setToken', user.data.token)
-      commit('setUser', user.data.user)
+      console.log(user)
+
+      if (user.status === 409) {
+        return {
+          error: 'Email Уже существует',
+        }
+      } else {
+        localStorage.setItem('token', user.data.token)
+        commit('setToken', user.data.token)
+        commit('setUser', user.data.user)
+      }
     },
     async fetchUser({ commit, state }) {
       if (!state.token) {

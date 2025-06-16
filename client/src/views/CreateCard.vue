@@ -1,6 +1,6 @@
 <template>
-  <!-- <CreateVacancy></CreateVacancy> -->
-  <CreateResume></CreateResume>
+  <CreateVacancy v-if="currentUser.role === 'employer'"></CreateVacancy>
+  <CreateResume v-else></CreateResume>
 </template>
 
 <script>
@@ -11,6 +11,14 @@ export default {
   components: {
     CreateVacancy,
     CreateResume,
+  },
+  async created() {
+    await this.currentUser();
+  },
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/currentUser"];
+    },
   },
 };
 </script>

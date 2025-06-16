@@ -134,7 +134,7 @@
                 />
               </div>
 
-              <div class="md:col-span-2">
+              <div class="md:col-span-2" v-if="currentUser.role === 'searcher'">
                 <label class="block text-sm font-medium text-gray-700 mb-1">О себе</label>
                 <textarea
                   v-model="userData.about"
@@ -297,12 +297,12 @@ export default {
     currentUser() {
       return this.$store.getters["auth/currentUser"];
     },
-    avatarUrl() {
-      if (this.userData.avatar) {
-        return `../uploads/avatars/${this.userData.avatar}`;
-      }
-      return this.currentUser.avatar || null;
-    },
+    // avatarUrl() {
+    //   if (this.userData.avatar) {
+    //     return `../uploads/avatars/${this.userData.avatar}`;
+    //   }
+    //   return this.currentUser.avatar || null;
+    // },
   },
   async created() {
     const user = this.currentUser;
