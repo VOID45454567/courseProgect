@@ -11,15 +11,10 @@
       <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
         Профессиональный подбор персонала для бизнеса любого масштаба
       </p>
-      <AppButton
-        :text="
-          user.role === 'employer' || user.role === 'admin'
-            ? textForEmployer.buttonText
-            : textForApplicant.buttonText
-        "
-        class="active w-3/12"
-        @click="this.$router.push('/search')"
-      />
+      <AppButton :text="user.role === 'employer' || user.role === 'admin'
+        ? textForEmployer.buttonText
+        : textForApplicant.buttonText
+        " class="active w-3/12" @click="goToSearch" />
     </div>
   </div>
 </template>
@@ -47,5 +42,24 @@ export default {
       required: true,
     },
   },
+  methods: {
+    goToSearch() {
+      if (this.user.role === 'searcher') {
+        this.$router.push({
+          path: '/search',
+          query: {
+            type: 'vacances'
+          }
+        })
+      } else {
+        this.$router.push({
+          path: '/search',
+          query: {
+            type: 'resumes'
+          }
+        })
+      }
+    }
+  }
 };
 </script>

@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state() {
     return {
-      currentUser: null,
+      currentUser: JSON.parse(localStorage.getItem('user')) || null,
       token: localStorage.getItem('token') || null,
     }
   },
@@ -19,6 +19,7 @@ export default {
       state.token = null
       state.currentUser = null
       localStorage.removeItem('token')
+      localStorage.removeItem('user')
     },
   },
   getters: {
@@ -35,6 +36,7 @@ export default {
         const user = await api.auth.login(userData)
 
         localStorage.setItem('token', user.data.token)
+        localStorage.setItem('user', JSON.stringify(user.data.user))
         commit('setUser', user.data.user)
         commit('setToken', user.data.token)
       } catch (error) {
@@ -57,6 +59,7 @@ export default {
         }
       } else {
         localStorage.setItem('token', user.data.token)
+        localStorage.setItem('user', JSON.stringify(user.data.user))
         commit('setToken', user.data.token)
         commit('setUser', user.data.user)
       }

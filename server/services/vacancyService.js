@@ -1,59 +1,61 @@
+import userRepository from "../repositories/userRepository.js";
 import vacancyRepository from "../repositories/vacancyRepository.js";
 
 class vacancyService {
   async create(data) {
     try {
       const vacancy = await vacancyRepository.createVacancy(data);
-      return vacancy
+      return vacancy;
     } catch (error) {
       console.log(error);
     }
   }
   async getOne(id) {
     try {
-        const vacancy = await vacancyRepository.getOne(id)
-        return vacancy
+      const vacancy = await vacancyRepository.getOne(id);
+      const user = await userRepository.getUserByVacancyId(id);
+
+      return {
+        vacancy: vacancy,
+        user: user,
+      };
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
     }
   }
-  async getAll(){
+  async getAll() {
     try {
-        const vacances = await vacancyRepository.getAll()
-        return vacances
+      const vacances = await vacancyRepository.getAll();
+      return vacances;
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
     }
   }
-  async delete(id){
+  async delete(id) {
     try {
-        const deleted = await vacancyRepository.deleteVacancy(id)
-        return deleted
+      const deleted = await vacancyRepository.deleteVacancy(id);
+      return deleted;
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
     }
   }
-  async update(id, data){
+  async update(id, data) {
     try {
-        const updated = await vacancyRepository.updateVacancy(id, data)
-        return updated
+      const updated = await vacancyRepository.updateVacancy(id, data);
+      return updated;
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
     }
   }
-  async getByUserId(id){
+  async getByUserId(id) {
     try {
       console.log(id);
-      
-      const vacances = await vacancyRepository.getAllUserVacances(id)
-      return vacances      
+
+      const vacances = await vacancyRepository.getAllUserVacances(id);
+      return vacances;
     } catch (error) {
       console.log(error);
     }
   }
 }
-export default new vacancyService()
+export default new vacancyService();

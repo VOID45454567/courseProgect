@@ -12,9 +12,6 @@ export default {
     CreateVacancy,
     CreateResume,
   },
-  async created() {
-    await this.currentUser();
-  },
   computed: {
     currentUser() {
       return this.$store.getters["auth/currentUser"];

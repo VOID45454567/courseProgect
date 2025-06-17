@@ -69,11 +69,10 @@ class vacancyRepository {
   // }
   async getOne(id) {
     try {
-      const vacancy = await pool.query(
-        "SELECT * FROM vacances WHERE id = $1",
-        id
-      );
-      return vacancy;
+      const vacancy = await pool.query("SELECT * FROM vacances WHERE id = $1", [
+        id,
+      ]);
+      return vacancy.rows[0];
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +80,7 @@ class vacancyRepository {
   async getAll() {
     try {
       const vacances = await pool.query("SELECT * FROM vacances");
-      return vacances.rows[0];
+      return vacances.rows;
     } catch (error) {
       console.log(error);
     }

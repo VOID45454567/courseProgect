@@ -11,11 +11,11 @@ import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 export default {
   async created() {
-    // this.$store.dispatch("auth/fetchUser");
-    // this.restoreAuth();
-    // if (!this.currentUser && !this.hasAutorization) {
-    //   this.$router.push("/login");
-    // }
+    this.$store.dispatch("auth/fetchUser");
+    this.restoreAuth();
+    if (!this.currentUser && !this.hasAutorization) {
+      this.$router.push("/login");
+    }
   },
   methods: {
     async restoreAuth() {

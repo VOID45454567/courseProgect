@@ -45,6 +45,18 @@ class UserRepository {
     ]);
     return request.rows[0];
   }
+  async getUserByVacancyId(id) {
+    const userIdData = await pool.query(
+      "select id_user from vacances WHERE id = $1",
+      [id]
+    );
+    console.log(userIdData.rows[0].id_user);
+    const userId = userIdData.rows[0].id_user;
+    const user = await pool.query("select * from users where id = $1", [
+      userId,
+    ]);
+    return user.rows[0];
+  }
   async getUserByID(id) {
     const user = await pool.query("Select * from users where id = $1", [id]);
     return user.rows[0];
@@ -54,7 +66,7 @@ class UserRepository {
     return request.rows[0];
   }
   async deleteUser(id) {
-    await vacancyRepository.deleteAllUserVacances(id)
+    await vacancyRepository.deleteAllUserVacances(id);
     const request = await pool.query("delete from users where id = $1", [id]);
     return request.rows[0];
   }

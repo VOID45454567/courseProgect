@@ -9,42 +9,26 @@
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
         <div class="space-y-6">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Название вакансии*</label
-            >
-            <input
-              type="text"
-              v-model="formData.name"
-              @blur="validateField('name')"
-              required
-              :class="[
-                'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                errors.name ? 'border-red-500' : 'border-gray-300',
-              ]"
-              placeholder="Например: Frontend разработчик (Vue.js)"
-            />
+            <label class="block text-sm font-medium text-gray-700 mb-1">Название вакансии*</label>
+            <input type="text" v-model="formData.name" @blur="validateField('name')" required :class="[
+              'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
+              errors.name ? 'border-red-500' : 'border-gray-300',
+            ]" placeholder="Например: Frontend разработчик (Vue.js)" />
             <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name }}</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Зарплата</label>
-              <input
-                type="number"
-                v-model="formData.salary"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
-              />
+              <input type="number" v-model="formData.salary"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" />
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Валюта*</label>
-              <select
-                v-model="formData.currency"
-                @blur="validateField('currency')"
-                :class="[
-                  'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                  errors.currency ? 'border-red-500' : 'border-gray-300',
-                ]"
-              >
+              <select v-model="formData.currency" @blur="validateField('currency')" :class="[
+                'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
+                errors.currency ? 'border-red-500' : 'border-gray-300',
+              ]">
                 <option value="" disabled>Выберите валюту</option>
                 <option value="RUB">Рубли (RUB)</option>
                 <option value="USD">Доллары (USD)</option>
@@ -58,55 +42,36 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Требуемый опыт*</label
-            >
-            <input
-              :class="[
-                'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                errors.name ? 'border-red-500' : 'border-gray-300',
-              ]"
-              type="number"
-              v-model="formData.experience"
-            />
+            <label class="block text-sm font-medium text-gray-700 mb-1">Требуемый опыт*</label>
+            <input :class="[
+              'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
+              errors.name ? 'border-red-500' : 'border-gray-300',
+            ]" type="number" v-model="formData.experience" />
             <p v-if="errors.experience" class="mt-1 text-sm text-red-600">
               {{ errors.experience }}
             </p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Формат работы*</label
-            >
+            <label class="block text-sm font-medium text-gray-700 mb-1">Формат работы*</label>
             <div class="flex flex-wrap gap-2 mb-2">
-              <span
-                v-for="(format, index) in formData.work_format"
-                :key="index"
-                class="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm flex items-center"
-              >
+              <span v-for="(format, index) in formData.work_format" :key="index"
+                class="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm flex items-center">
                 {{ format }}
-                <button
-                  @click="removeWorkFormat(index)"
-                  class="ml-1 text-primary-600 hover:text-primary-800"
-                >
+                <button @click="removeWorkFormat(index)" class="ml-1 text-primary-600 hover:text-primary-800">
                   &times;
                 </button>
               </span>
             </div>
             <div class="flex">
-              <select
-                v-model="selectedWorkFormat"
-                @change="addWorkFormat"
-                class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500"
-              >
+              <select v-model="selectedWorkFormat" @change="addWorkFormat"
+                class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500">
                 <option value="" disabled selected>Выберите формат работы</option>
                 <option value="Офис">Офис</option>
                 <option value="Удаленно">Удалённо</option>
                 <option value="Гибрид">Гибридный</option>
               </select>
-              <button
-                @click="addWorkFormat"
-                class="px-4 py-2 bg-primary-500 text-white rounded-r-lg hover:bg-primary-600 transition-colors"
-              >
+              <button @click="addWorkFormat"
+                class="px-4 py-2 bg-primary-500 text-white rounded-r-lg hover:bg-primary-600 transition-colors">
                 Добавить
               </button>
             </div>
@@ -116,67 +81,38 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Город*</label>
-            <input
-              type="text"
-              v-model="formData.city"
-              @blur="validateField('city')"
-              :class="[
-                'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                errors.city ? 'border-red-500' : 'border-gray-300',
-              ]"
-              placeholder="Например: Москва"
-            />
+            <input type="text" v-model="formData.city" @blur="validateField('city')" :class="[
+              'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
+              errors.city ? 'border-red-500' : 'border-gray-300',
+            ]" placeholder="Например: Москва" />
             <p v-if="errors.city" class="mt-1 text-sm text-red-600">{{ errors.city }}</p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Описание вакансии*</label
-            >
-            <textarea
-              v-model="formData.description"
-              @blur="validateField('description')"
-              rows="6"
-              :class="[
-                'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
-                errors.description ? 'border-red-500' : 'border-gray-300',
-              ]"
-              placeholder="Опишите обязанности, требования и условия работы"
-            ></textarea>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Описание вакансии*</label>
+            <textarea v-model="formData.description" @blur="validateField('description')" rows="6" :class="[
+              'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
+              errors.description ? 'border-red-500' : 'border-gray-300',
+            ]" placeholder="Опишите обязанности, требования и условия работы"></textarea>
             <p v-if="errors.description" class="mt-1 text-sm text-red-600">
               {{ errors.description }}
             </p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Требуемые навыки*</label
-            >
+            <label class="block text-sm font-medium text-gray-700 mb-1">Требуемые навыки*</label>
             <div class="flex flex-wrap gap-2 mb-2">
-              <span
-                v-for="(skill, index) in formData.required_skills"
-                :key="index"
-                class="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm flex items-center"
-              >
+              <span v-for="(skill, index) in formData.required_skills" :key="index"
+                class="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm flex items-center">
                 {{ skill }}
-                <button
-                  @click="removeSkill(index)"
-                  class="ml-1 text-primary-600 hover:text-primary-800"
-                >
+                <button @click="removeSkill(index)" class="ml-1 text-primary-600 hover:text-primary-800">
                   &times;
                 </button>
               </span>
             </div>
             <div class="flex">
-              <input
-                type="text"
-                v-model="newSkill"
-                @keyup.enter="addSkill"
-                placeholder="Введите навык и нажмите Enter"
-                class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500"
-              />
-              <button
-                @click="addSkill"
-                class="px-4 py-2 bg-primary-500 text-white rounded-r-lg hover:bg-primary-600 transition-colors"
-              >
+              <input type="text" v-model="newSkill" @keyup.enter="addSkill" placeholder="Введите навык и нажмите Enter"
+                class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500" />
+              <button @click="addSkill"
+                class="px-4 py-2 bg-primary-500 text-white rounded-r-lg hover:bg-primary-600 transition-colors">
                 Добавить
               </button>
             </div>
@@ -188,11 +124,7 @@
       </div>
 
       <div class="flex justify-between">
-        <AppButton
-          :text="'Создать вакансию'"
-          :class="'w-4/12 active'"
-          @click="submitForm"
-        />
+        <AppButton :text="'Создать вакансию'" :class="'w-4/12 active'" @click="submitForm" />
       </div>
     </div>
   </div>

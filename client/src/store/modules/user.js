@@ -8,8 +8,10 @@ export default {
         const response = await api.auth.updateUser(userData.id, userData.dataToUpdate)
         commit('setUser', response.data.user, { root: true })
         localStorage.removeItem('token')
+        localStorage.removeItem('user')
         localStorage.setItem('token', response.data.newToken)
-        
+        localStorage.setItem('token', response.data.user)
+
         return response.data
       } catch (error) {
         console.error('Update user error:', error)

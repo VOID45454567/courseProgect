@@ -52,10 +52,11 @@ const router = createRouter({
       component: () => import('../views/CreateCard.vue'),
     },
     {
-      path: '/single',
+      path: '/single/:id',
       name: 'single',
-      component: () => import('../views/SingleCard.vue')
-    }
+      component: () => import('../views/SingleCard.vue'),
+      props: true,
+    },
   ],
   linkActiveClass: 'currentSection',
   linkExactActiveClass: 'exact-currentSection',

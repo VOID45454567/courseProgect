@@ -38,7 +38,10 @@ class authService {
     try {
       // console.log(token);
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET_KEY || "defaul-secret"
+      );
       const user = await userRepository.getUserByID(decoded.id);
       return user;
     } catch (error) {
