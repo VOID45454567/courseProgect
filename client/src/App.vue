@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     async restoreAuth() {
-      if (this.hasAutorization && !this.$store.state.auth.currentUser) {
+      if (this.hasAutorization && !this.currentUser) {
         try {
           await this.$store.dispatch("auth/fetchUser");
         } catch (error) {

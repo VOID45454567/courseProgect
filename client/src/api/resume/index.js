@@ -8,10 +8,12 @@ class resume {
   }
   async fetchUserResume(user_id) {
     try {
-      const resume = await axios.get(`${apiUrl}/resumes/${user_id}`)
+      const resume = await axios.get(`${apiUrl}/resumes/users/${user_id}`)
       return resume
     } catch (error) {
-      console.log(error)
+      return {
+        error: error,
+      }
     }
   }
 }

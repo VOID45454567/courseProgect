@@ -131,8 +131,13 @@
         </div>
       </div>
       <MyVacances v-if="currentUser.role === 'employer'"></MyVacances>
-      <div v-if="currentUser.role === 'searcher'">
-        <h1 v-if="!getUserResume">Резюме нету</h1>
+      <div class="bg-white rounded-xl shadow-sm p-6 mb-8" v-if="currentUser.role === 'searcher'">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Мое резюме</h2>
+        <!--create -->
+        <div>
+          <p>{{ message }}</p>
+          <AppButton :text="'Создать'" :class="'w-4/12 active'" @click="this.$router.push('/create')"></AppButton>
+        </div>
       </div>
       <div class="flex justify-end gap-10">
         <AppButton @click="saveProfile" :text="isLoading ? 'Изменение' : 'Сохранить изменения'" class="w-4/12 active">
@@ -173,6 +178,8 @@ export default {
       avatarPreviewUrl: null,
       avatarFile: null,
       isLoading: false,
+      userResume: null,
+      message: ''
     };
   },
   computed: {
@@ -187,24 +194,27 @@ export default {
     // },
   },
   async created() {
-    await console.log(this.currentUser.id);
-
+    await this.getUserResume(this.currentUser.id)
   },
   methods: {
     async handleLogout() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
     },
-    async getUserResume() {
+    async getUserResume(id) {
+      console.log(this.currentUser.role);
+
       if (this.currentUser.role === "searcher") {
         const resume = await this.$store.dispatch(
           "resume/fetchUserResume",
-          this.currentUser.id
+          id
         );
-        if (resume) {
-          return resume;
+        if (!resume.error) {
+          console.log(resume);
+          return this.userResume = resume
+
         } else {
-          return null;
+          return this.message = resume.error.response.data.message
         }
       }
     },

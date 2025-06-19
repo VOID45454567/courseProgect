@@ -1,8 +1,7 @@
 <template>
   <section class="w-9/12 mx-auto mt-5 bg-white">
     <div class="container mx-auto px-4" v-if="
-      isAuthenticated &&
-      (currentUser.role === 'admin' || currentUser.role === 'employer')
+      currentUser.role === 'admin' || currentUser.role === 'employer'
     ">
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold text-primary-500 mb-4">Как это работает?</h2>
@@ -41,7 +40,7 @@
                   </svg>
                   <span class="text-sm font-medium text-primary-600">{{
                     step.time
-                    }}</span>
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -49,7 +48,6 @@
         </div>
       </div>
 
-      <!-- Для соискателей -->
       <div v-if="currentUser.role === 'searcher'">
         <div class="flex items-center justify-center mb-12">
           <div class="bg-primary-100 rounded-full p-3 mr-4">
@@ -141,7 +139,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters["currentUser"];
+      return this.$store.getters["auth/currentUser"];
     },
   },
 };

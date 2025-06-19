@@ -3,7 +3,7 @@
     <div class="container mx-auto p-4 text-center">
       <h1 class="text-4xl md:text-5xl font-bold text-primary-500 mb-6">
         {{
-          user.role === "employer" || user.role === "admin"
+          currentUser.role === "employer" || currentUser.role === "admin"
             ? textForEmployer.title
             : textForApplicant.title
         }}
@@ -11,7 +11,7 @@
       <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
         Профессиональный подбор персонала для бизнеса любого масштаба
       </p>
-      <AppButton :text="user.role === 'employer' || user.role === 'admin'
+      <AppButton :text="currentUser.role === 'employer' || currentUser.role === 'admin'
         ? textForEmployer.buttonText
         : textForApplicant.buttonText
         " class="active w-3/12" @click="goToSearch" />
@@ -36,15 +36,17 @@ export default {
   components: {
     AppButton,
   },
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/currentUser"]
+    }
+  },
+  created() {
+    this.currentUser
   },
   methods: {
     goToSearch() {
-      if (this.user.role === 'searcher') {
+      if (this.currentUser.role === 'searcher') {
         this.$router.push({
           path: '/search',
           query: {

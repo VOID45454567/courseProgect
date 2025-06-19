@@ -14,12 +14,12 @@ class ResumeController {
   async getByUserId(req, res) {
     try {
       console.log(req.params);
-      
+
       const user_id = req.params.id;
-      
+
       const resume = await resumeService.getOne(user_id);
       if (!resume) {
-        res.status(404).json({nessage: 'Резюме не найденно'})
+        res.status(404).json({ message: "Резюме не найденно" });
       }
       return res.status(200).json(resume);
     } catch (error) {
