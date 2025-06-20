@@ -1,6 +1,6 @@
 <template>
   <Vacancy v-if="getCartType === 'vacancy'" :from="previousRoute" :data="card"></Vacancy>
-  <Resume v-else></Resume>
+  <Resume v-else :from="previousRoute" :data="card"></Resume>
 </template>
 <script>
 import Resume from "@/components/SingleCardPage/Resume.vue";
@@ -31,11 +31,15 @@ export default {
     },
     getCartType() {
       return this.$route.query.type
+    },
+    getUserId() {
+      return this.$store.getters['auth/currentUser'].id
     }
   },
   async created() {
     this.getCartId;
     this.getCartType
+    this.getUserId
     await this.getCartData(this.getCartType)
   },
   methods: {
@@ -44,10 +48,8 @@ export default {
         const card = await this.$store.dispatch('vacancy/fetchOneVacancy', this.getCartId)
         return this.card = card
       } else {
-        const card = await this.$store.dispatch('resume/fetchUserResume', this.getCartId)
+        const card = await this.$store.dispatch('resume/fetchUserResume', this.getUserId)
         return this.card = card
-
-
       }
     }
   }

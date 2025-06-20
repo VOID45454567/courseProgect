@@ -156,6 +156,7 @@
           </div>
         </div>
       </div>
+      <AppButton v-if="currentUser.role === 'searcher'" :text="'Откликннуться'" :class="'w-4/12 active'"></AppButton>
     </div>
   </div>
 </template>
@@ -184,7 +185,6 @@ export default {
         },
         user: {
           name: "",
-          position: "",
           email: "",
           phone: ""
         }
@@ -197,6 +197,9 @@ export default {
     },
     user() {
       return this.data.user || {};
+    },
+    currentUser() {
+      return this.$store.getters['auth/currentUser']
     }
   },
   methods: {

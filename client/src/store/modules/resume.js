@@ -7,9 +7,17 @@ export default {
       const resume = await api.resume.create(data)
       return resume
     },
-    async fetchUserResume({ commit, dispatch }, id) {
-      const resume = await api.resume.fetchUserResume(id)
+    async fetchUserResume({ commit, dispatch }, user_id) {
+      const resume = await api.resume.fetchUserResume(user_id)
+      console.log(resume)
+
       return resume
+    },
+    async fetchAllResumes({ commit, dispatch }) {
+      const resumes = await api.resume.fetchAllResumes()
+      console.log(resumes)
+
+      return resumes
     },
   },
 }

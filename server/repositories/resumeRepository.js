@@ -8,17 +8,34 @@ class ResumeRepository {
         [preferedVacancy, preferedSalary, preferedCurrency, about, user_id]
       );
       // console.log(newResume);
-      
+
       return newResume.rows[0];
     } catch (error) {
       console.log(error);
     }
   }
+  async getAll() {
+    try {
+      const resumes = await pool.query("SELECT * FROM resumes");
+      console.log(resumes.rows);
+
+      return resumes.rows;
+    } catch (error) {
+      return error;
+    }
+  }
   async getByUserId(id) {
-    const resume = await pool.query("SELECT * FROM resumes WHERE user_id = $1", [
-      id,
-    ]);
-    return resume.rows[0];
+    try {
+      const resume = await pool.query(
+        "SELECT * FROM resumes WHERE user_id = $1",
+        [parseInt(id)]
+      );
+      // console.log(resume.rows);
+
+      return resume.rows[0];
+    } catch (error) {
+      console.log(error);
+    }
   }
   async deleteResume(id) {
     const deletedResume = await pool.query(

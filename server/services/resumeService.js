@@ -13,16 +13,24 @@ class ResumeService {
   async getOne(user_id) {
     try {
       const resume = await resumeRepository.getByUserId(user_id);
-      return resume;
+      const user = await userRepository.getUserByID(user_id);
+      return {
+        resume: resume,
+        user: user,
+      };
     } catch (error) {
       console.log("error" + error);
     }
   }
-  //   async getAll() {
-  //     try {
-  //         const resumes = await resumeRepository.getAll()
-  //     } catch (error) {}
-  //   }
+  async getAll() {
+    try {
+      const resumes = await resumeRepository.getAll();
+
+      return resumes;
+    } catch (error) {
+      return error;
+    }
+  }
   async update(data, user_id) {
     try {
       const updatedResume = await resumeRepository.udapteResume(user_id, data);

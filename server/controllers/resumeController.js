@@ -13,9 +13,7 @@ class ResumeController {
   }
   async getByUserId(req, res) {
     try {
-      console.log(req.params);
-
-      const user_id = req.params.id;
+      const user_id = req.params.userId;
 
       const resume = await resumeService.getOne(user_id);
       if (!resume) {
@@ -24,6 +22,14 @@ class ResumeController {
       return res.status(200).json(resume);
     } catch (error) {
       return res.status(400).json({ message: error });
+    }
+  }
+  async getAll(req, res) {
+    try {
+      const resumes = await resumeService.getAll();
+      return res.status(200).json(resumes);
+    } catch (e) {
+      return e;
     }
   }
   async update(req, res) {

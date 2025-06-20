@@ -30,8 +30,6 @@ export default {
     async fetchAllVacances({ commit, dispatch }) {
       try {
         const vacances = await api.vacancy.getAll()
-        console.log(vacances)
-
         return vacances
       } catch (error) {
         return error

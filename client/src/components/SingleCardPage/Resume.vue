@@ -2,21 +2,12 @@
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto">
       <div class="flex justify-between items-center mb-8">
-        <button
-          @click="$router.back()"
-          class="flex items-center text-primary-500 hover:text-primary-700"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 mr-1"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
+        <button @click="$router.back()"
+          class="flex items-center text-primary-600 hover:text-primary-800 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
               d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-              clip-rule="evenodd"
-            />
+              clip-rule="evenodd" />
           </svg>
           Назад
         </button>
@@ -24,105 +15,142 @@
         <div class="w-20"></div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-        <div class="space-y-6">
-          <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
-            <div class="flex-shrink-0">
-              <div
-                class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center"
-              >
-                <span class="text-gray-500 text-xl font-bold">{{
-                  resume.user.name.charAt(0)
-                }}</span>
-              </div>
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="font-medium text-gray-900">{{ resume.user.name }}</h3>
-              <p class="text-sm text-gray-500">{{ resume.user.email }}</p>
-              <p class="text-sm text-gray-500 mt-1">
-                {{ resume.user.phone }} | {{ resume.user.city }}
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">
-              {{ resume.desired_position }}
-            </h2>
-            <div class="flex items-center">
-              <span class="text-lg font-semibold text-gray-800">
-                {{ resume.desired_salary }} {{ resume.currency }}
-              </span>
-              <span class="mx-2 text-gray-400">•</span>
-              <span class="text-gray-600">{{
-                getExperienceLabel(resume.experience)
-              }}</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-gray-800">
-                Основная информация
-              </h3>
-              <div class="space-y-3">
-                <div>
-                  <p class="text-sm text-gray-500">Формат работы</p>
-                  <p class="font-medium">{{ getWorkFormatLabel(resume.work_format) }}</p>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-500">Готовность к переезду</p>
-                  <p class="font-medium">{{ resume.ready_to_relocate ? "Да" : "Нет" }}</p>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-500">Дата обновления</p>
-                  <p class="font-medium">{{ formatDate(resume.updated_at) }}</p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 class="text-lg font-semibold mb-3 text-gray-800">Ключевые навыки</h3>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="(skill, index) in resume.skills.split(',')"
-                  :key="index"
-                  class="bg-primary-500/10 text-primary-600 px-3 py-1 rounded-full text-sm font-medium"
-                >
-                  {{ skill.trim() }}
-                </span>
+      <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-8 border border-gray-200">
+        <div class="space-y-8">
+          <div class="border-b pb-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3 text-primary-500">{{ resume.preferedvacancy || 'Не указана'
+            }}</h2>
+            <div class="flex flex-wrap items-center gap-4">
+              <h2 class="text-2xl font-bold">Требуемая зарплата:
+                {{ resume.preferedsalary || '0' }} {{ resume.preferedcurrency || 'USD' }}</h2>
+              <div v-if="user.city" class="flex items-center text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                    clip-rule="evenodd" />
+                </svg>
+                {{ user.city }}
               </div>
             </div>
           </div>
 
-          <div>
-            <h3 class="text-lg font-semibold mb-3 text-gray-800">О себе</h3>
-            <div class="prose max-w-none text-gray-700">
-              <p>{{ resume.about }}</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <div class="bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
+                  Основная информация
+                </h3>
+                <div class="space-y-4">
+                  <div>
+                    <p class="text-sm text-gray-500 mb-1">Опыт работы</p>
+                    <p class="font-medium text-gray-900 flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                          d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                          clip-rule="evenodd" />
+                        <path
+                          d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+                      </svg>
+                      {{ getExperienceLabel(user.experience) || 'Не указан' }}
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500 mb-1">Контактная информация</p>
+                    <p class="font-medium text-gray-900 flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                      </svg>
+                      {{ user.email || 'Не указан' }}
+                    </p>
+                    <p v-if="user.phone_number" class="font-medium text-gray-900 flex items-center mt-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                          d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"
+                          clip-rule="evenodd" />
+                      </svg>
+                      {{ user.phone_number }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Навыки -->
+            <div class="space-y-6">
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
+                  Ключевые навыки
+                </h3>
+                <div v-if="user.skills" class="flex flex-wrap gap-3">
+                  <span v-for="(skill, index) in user.skills.split(',')" :key="index"
+                    class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
+                      fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    {{ skill.trim() }}
+                  </span>
+                </div>
+                <p v-else class="text-gray-500">Навыки не указаны</p>
+              </div>
             </div>
           </div>
 
-          <div>
-            <h3 class="text-lg font-semibold mb-3 text-gray-800">Опыт работы</h3>
-            <div class="prose max-w-none text-gray-700">
-              <p>{{ resume.experience_description }}</p>
+          <div v-if="resume.about" class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
+              О себе
+            </h3>
+            <div class="prose max-w-none text-gray-700 space-y-4">
+              <p class="whitespace-pre-line">{{ resume.about }}</p>
             </div>
           </div>
 
-          <div>
-            <h3 class="text-lg font-semibold mb-3 text-gray-800">Образование</h3>
-            <div class="prose max-w-none text-gray-700">
-              <p>{{ resume.education }}</p>
+          <div class="bg-gray-100 p-6 rounded-lg">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
+              Создатель резюме
+            </h3>
+            <div class="flex items-center space-x-4">
+              <div class="flex-shrink-0">
+                <div
+                  class="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold">
+                  {{ getUserInitials(user) }}
+                </div>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-900">{{ getUserFullName(user) }}</h4>
+                <p class="text-sm text-gray-500 mt-1">
+                  <span v-if="user.email" class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
+                      fill="currentColor">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                    {{ user.email }}
+                  </span>
+                  <span v-if="user.phone_number" class="flex items-center mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
+                      fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    {{ user.phone_number }}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <AppButton
-        :text="'Пригласить на собеседование'"
-        :class="'w-4/12 active'"
-        @click="inviteToInterview"
-      ></AppButton>
+      <AppButton :text="isMyResume" :class="'w-full md:w-4/12 active'" @click="inviteToInterview">
+      </AppButton>
     </div>
   </div>
 </template>
@@ -134,31 +162,46 @@ export default {
   components: {
     AppButton,
   },
-  data() {
-    return {
-      resume: {
-        desired_position: "Frontend разработчик (Vue.js)",
-        desired_salary: "150000",
-        currency: "RUB",
-        experience: "3-6",
-        work_format: "hybrid",
-        ready_to_relocate: true,
-        skills: "Vue.js, JavaScript, HTML, CSS, Git, TypeScript",
-        about:
-          "Имею 5-летний опыт разработки веб-приложений на Vue.js. Участвовал в создании сложных SPA-приложений с использованием Vuex, Vue Router и Composition API. Стремлюсь к созданию качественного, поддерживаемого кода.",
-        experience_description:
-          "ООО 'ВебТех' - Frontend разработчик (2019-н.в.)\nРазработка и поддержка CRM-системы. Оптимизация производительности приложения, внедрение новых функций.\n\nООО 'ТехноСофт' - Junior Frontend Developer (2017-2019)\nРазработка интерфейсов для корпоративных клиентов.",
-        education:
-          "Высшее техническое образование, МГТУ им. Баумана, факультет Информатики и систем управления, 2017",
-        updated_at: "2023-06-20",
-        user: {
-          name: "Иванов Алексей",
-          email: "alexey.ivanov@example.com",
-          phone: "+7 (999) 123-45-67",
-          city: "Москва",
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => ({
+        resume: {
+          preferedvacancy: "",
+          preferedsalary: 0,
+          preferedcurrency: "USD",
+          about: "",
         },
-      },
-    };
+        user: {
+          name: "",
+          surname: "",
+          email: "",
+          phone_number: "",
+          city: "",
+          experience: "",
+          skills: ""
+        }
+      })
+    }
+  },
+  computed: {
+    resume() {
+      return this.data.resume || {};
+    },
+    user() {
+      return this.data.user || {};
+    },
+    currentUser() {
+      return this.$store.getters['auth/currentUser']
+    },
+    isMyResume() {
+      if (this.currentUser.id === this.user.id) {
+        return 'Редактировать'
+      } else {
+        return 'Откликнуться'
+      }
+    }
   },
   methods: {
     getExperienceLabel(experience) {
@@ -170,21 +213,17 @@ export default {
       };
       return labels[experience] || experience;
     },
-    getWorkFormatLabel(format) {
-      const labels = {
-        office: "Офис",
-        remote: "Удалённо",
-        hybrid: "Гибридный",
-      };
-      return labels[format] || format;
+    getUserInitials(user) {
+      if (!user.name && !user.surname) return 'U';
+      return `${user.name ? user.name.charAt(0).toUpperCase() : ''}${user.surname ? user.surname.charAt(0).toUpperCase() : ''}`;
     },
-    formatDate(dateString) {
-      const options = { year: "numeric", month: "long", day: "numeric" };
-      return new Date(dateString).toLocaleDateString("ru-RU", options);
+    getUserFullName(user) {
+      const parts = [];
+      if (user.surname) parts.push(user.surname);
+      if (user.name) parts.push(user.name);
+      return parts.join(' ') || 'Неизвестный пользователь';
     },
-    inviteToInterview() {
-      console.log("Приглашение отправлено");
-    },
+
   },
 };
 </script>
@@ -192,7 +231,14 @@ export default {
 <style scoped>
 .prose p {
   margin-bottom: 1em;
-  line-height: 1.6;
+  line-height: 1.8;
+}
+
+.border-b {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.whitespace-pre-line {
   white-space: pre-line;
 }
 </style>

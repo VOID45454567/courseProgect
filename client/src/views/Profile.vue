@@ -133,11 +133,17 @@
       <MyVacances v-if="currentUser.role === 'employer'"></MyVacances>
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8" v-if="currentUser.role === 'searcher'">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Мое резюме</h2>
+        <!-- already have-->
+        <div v-if="userResume !== null">
+          <AppButton :text="'Просмотр моего резюме'" :class="'w-4/12 active'" @click="goToMyResume(currentUser.id)">
+          </AppButton>
+        </div>
         <!--create -->
-        <div>
+        <div v-else>
           <p>{{ message }}</p>
           <AppButton :text="'Создать'" :class="'w-4/12 active'" @click="this.$router.push('/create')"></AppButton>
         </div>
+
       </div>
       <div class="flex justify-end gap-10">
         <AppButton @click="saveProfile" :text="isLoading ? 'Изменение' : 'Сохранить изменения'" class="w-4/12 active">
@@ -201,8 +207,16 @@ export default {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
     },
+    goToMyResume(resumeId) {
+      this.$router.push({
+        path: `/single/${resumeId}`,
+        query: {
+          type: "resume"
+        }
+      })
+    },
     async getUserResume(id) {
-      console.log(this.currentUser.role);
+      // console.log(this.currentUser.role);
 
       if (this.currentUser.role === "searcher") {
         const resume = await this.$store.dispatch(
@@ -210,8 +224,8 @@ export default {
           id
         );
         if (!resume.error) {
-          console.log(resume);
-          return this.userResume = resume
+          console.log(resume.data);
+          return this.userResume = resume.data
 
         } else {
           return this.message = resume.error.response.data.message
@@ -274,7 +288,7 @@ export default {
         console.log(data);
         await this.$store.dispatch("user/updateUser", data);
         this.isLoading = false;
-        this.$router.push("/");
+        // this.$router.push("/");
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
       }

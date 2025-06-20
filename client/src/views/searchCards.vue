@@ -31,8 +31,10 @@
       </div>
 
       <div class="flex flex-col gap-6">
-        <AppVacancyItem v-for="(item, index) in cards" :key="index" :data="item"></AppVacancyItem>
-        <!-- <AppResumeItem></AppResumeItem> -->
+        <AppVacancyItem v-if="type === 'vacances'" v-for="(item, index) in vacances" :key="index" :vacancy="item"
+          @click="goToVacancy(item.id)">
+        </AppVacancyItem>
+        <AppResumeItem v-else v-for="(item, index) in resumes" :resume="item"></AppResumeItem>
       </div>
       <!-- <div class="mt-10 flex justify-center">
                 <nav class="inline-flex rounded-md shadow-sm -space-x-px">
@@ -64,7 +66,8 @@ import AppVacancyItem from '@/components/AppVacancyItem.vue';
 export default {
   data() {
     return {
-      cards: {},
+      vacances: {},
+      resumes: {},
       searchQuery: "",
       selectedLocation: "",
       selectedExperience: "",
@@ -88,11 +91,21 @@ export default {
   methods: {
     async getCards(type) {
       if (type === 'vacances') {
-        const cards = await this.$store.dispatch('vacancy/fetchAllVacances')
-        return this.cards = cards
+        const vacances = await this.$store.dispatch('vacancy/fetchAllVacances')
+        return this.vacances = vacances
       } else {
+        const resumes = await this.$store.dispatch('resume/fetchAllResumes')
 
+        return this.resumes = resumes
       }
+    },
+    goToVacancy(id) {
+      this.$router.push({
+        path: `/single/${id}`,
+        query: {
+          type: 'vacancy'
+        }
+      })
     }
   }
 };
