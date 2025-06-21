@@ -35,5 +35,18 @@ export default {
         return error
       }
     },
+    async addResponce({ commit, dispatch }, { searcherId, vacancyId }) {
+      try {
+        const request = await api.vacancy.addResponce(searcherId, vacancyId)
+        return request
+      } catch (error) {
+        return error
+      }
+    },
+    async addToFavorite({ commit, dispatch }, { searcherId, vacancyId }) {
+      try {
+        // const request = await api.vacancy.
+      } catch (error) {}
+    },
   },
 }

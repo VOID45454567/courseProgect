@@ -85,6 +85,45 @@ class vacancyRepository {
       console.log(error);
     }
   }
+  async addResponse(id_searcher, id_vacancy) {
+    // console.log(id_searcher, id_vacancy);
+
+    try {
+      const getResponse = await pool.query(
+        "SELECT responces FROM vacances WHERE id = $1",
+        [id_vacancy]
+      );
+
+      const responces = getResponse.rows[0].responces;
+      console.log(responces);
+
+      if (responces.includes(id_searcher)) {
+        try {
+          await pool.query(
+            "UPDATE vacances SET responces = array_remove(responces, $1) WHERE id = $2",
+            [id_searcher, id_vacancy]
+          );
+          return { message: "Отклик удален" };
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        responces.push(id_searcher);
+        try {
+          await pool.query("UPDATE vacances SET responces = $1 WHERE id = $2", [
+            responces,
+            id_vacancy,
+          ]);
+          return { message: "Отклик добавлен" };
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.error("Ошибка при добавлении отклика:", error);
+      throw error;
+    }
+  }
   async updateVacancy(id, data) {
     try {
       const updates = [];

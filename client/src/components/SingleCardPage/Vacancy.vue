@@ -87,7 +87,6 @@
               </div>
             </div>
 
-            <!-- Навыки -->
             <div class="space-y-6">
               <div class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
@@ -131,7 +130,6 @@
               </div>
               <div>
                 <h4 class="font-medium text-gray-900">{{ user.name || 'Неизвестный пользователь' }}</h4>
-
                 <p class="text-sm text-gray-500 mt-1">
                   <span v-if="user.email" class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
@@ -141,14 +139,14 @@
                     </svg>
                     {{ user.email }}
                   </span>
-                  <span v-if="user.phone_number" class="flex items-center mt-1">
+                  <span v-if="user.phone" class="flex items-center mt-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
                       fill="currentColor">
                       <path fill-rule="evenodd"
                         d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"
                         clip-rule="evenodd" />
                     </svg>
-                    {{ user.phone_number ? user.phone_number : 'Телефон не указанн' }}
+                    {{ user.phone || 'Телефон не указан' }}
                   </span>
                 </p>
               </div>
@@ -156,13 +154,15 @@
           </div>
         </div>
       </div>
-      <AppButton v-if="currentUser.role === 'searcher'" :text="'Откликннуться'" :class="'w-4/12 active'"></AppButton>
+      <AppButton :text="actionButton.text" :class="'w-full md:w-4/12 active'" @click="actionButton.action" />
+      <img :src="favoriteIcon">
     </div>
   </div>
 </template>
 
 <script>
 import AppButton from "@/components/AppButton.vue";
+
 export default {
   components: {
     AppButton,
@@ -173,6 +173,7 @@ export default {
       required: true,
       default: () => ({
         vacancy: {
+          id: null,
           name: "",
           salary: 0,
           currency: "RUB",
@@ -181,9 +182,11 @@ export default {
           city: "",
           description: "",
           required_skills: [],
-          created_at: ""
+          created_at: "",
+          responses: []
         },
         user: {
+          id: null,
           name: "",
           email: "",
           phone: ""
@@ -192,6 +195,15 @@ export default {
     }
   },
   computed: {
+    favoriteIcon() {
+      return this.isFavorite ? this.favoriteActive : this.favoriteInactive;
+    },
+    isFavorite() {
+      if (!this.currentUser?.favorite || !Array.isArray(this.currentUser.favorite)) {
+        return false;
+      }
+      return this.currentUser.favorite.includes(this.vacancy.id);
+    },
     vacancy() {
       return this.data.vacancy || {};
     },
@@ -199,10 +211,82 @@ export default {
       return this.data.user || {};
     },
     currentUser() {
-      return this.$store.getters['auth/currentUser']
+      return this.$store.getters['auth/currentUser'] || {};
+    },
+    hasResponded() {
+      if (!this.currentUser?.id || !this.vacancy.responses) return false;
+      return this.vacancy.responses.includes(this.currentUser.id);
+    },
+    isOwner() {
+      return this.currentUser?.id === this.user?.id;
+    },
+    actionButton() {
+      if (this.isOwner) {
+        return {
+          text: 'Редактировать',
+          action: this.editResume
+        };
+      } else if (this.hasResponded) {
+        return {
+          text: 'Отменить отклик',
+          action: this.removeResponse
+        };
+      } else {
+        return {
+          text: 'Откликнуться',
+          action: this.addResponse
+        };
+      }
     }
   },
   methods: {
+    async addResponse() {
+      try {
+        const vacancyId = this.vacancy.id;
+        const userId = this.currentUser.id;
+
+        await this.$store.dispatch('vacancy/addResponse', { vacancyId, userId });
+
+        this.$set(this.vacancy, 'responses', [
+          ...(this.vacancy.responses || []),
+          userId
+        ]);
+
+        this.$notify({
+          type: 'success',
+          message: 'Отклик успешно добавлен'
+        });
+      } catch (error) {
+        console.error('Ошибка при добавлении отклика:', error);
+        this.$notify({
+          type: 'error',
+          message: 'Не удалось добавить отклик'
+        });
+      }
+    },
+    async removeResponse() {
+      try {
+        const vacancyId = this.vacancy.id;
+        const userId = this.currentUser.id;
+
+        await this.$store.dispatch('vacancy/removeResponse', { vacancyId, userId });
+
+        this.$set(this.vacancy, 'responses',
+          (this.vacancy.responses || []).filter(id => id !== userId)
+        );
+
+        this.$notify({
+          type: 'success',
+          message: 'Отклик успешно отменён'
+        });
+      } catch (error) {
+        console.error('Ошибка при удалении отклика:', error);
+      }
+    },
+    editVacancy() {
+      this.$router.push(`/vacancies/edit/${this.vacancy.id}`);
+    },
+
     getExperienceLabel(experience) {
       const labels = {
         "no-exp": "Без опыта",
@@ -212,6 +296,7 @@ export default {
       };
       return labels[experience] || experience;
     },
+
     getWorkFormatLabel(format) {
       const labels = {
         office: "Офис",
@@ -220,31 +305,18 @@ export default {
       };
       return labels[format] || format;
     },
+
     formatDate(dateString) {
+      if (!dateString) return 'Дата не указана';
       try {
-        const unixTimestamp = parseInt(dateString);
-
-        if (isNaN(unixTimestamp)) {
-          throw new Error('Invalid timestamp format');
-        }
-
-        const date = new Date(unixTimestamp * 1000);
-
-        if (isNaN(date.getTime())) {
-          throw new Error('Invalid date');
-        }
-
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${day}-${month}-${year}`;
-      } catch (error) {
-        console.error('Error formatting date:', error);
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'Некорректная дата';
+        return date.toLocaleDateString('ru-RU');
+      } catch {
         return 'Некорректная дата';
       }
     }
-  },
+  }
 };
 </script>
 

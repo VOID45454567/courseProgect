@@ -49,12 +49,34 @@ class vacancyService {
   }
   async getByUserId(id) {
     try {
-      console.log(id);
+      // console.log(id);
 
       const vacances = await vacancyRepository.getAllUserVacances(id);
       return vacances;
     } catch (error) {
       console.log(error);
+    }
+  }
+  async addResponce(userId, vacancyId) {
+    try {
+      const request = await vacancyRepository.addResponse(
+        userId,
+        parseInt(vacancyId)
+      );
+      return request;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async addToFavorite(userId, vacancyId) {
+    try {
+      const request = await userRepository.addToFavorite(
+        parseInt(userId),
+        parseInt(vacancyId)
+      );
+      return request;
+    } catch (error) {
+      return error;
     }
   }
 }

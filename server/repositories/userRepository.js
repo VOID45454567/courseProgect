@@ -110,5 +110,44 @@ class UserRepository {
       throw new Error(`Database operation failed: ${error.message}`);
     }
   }
+  async addToFavorite(userId, vacancyId) {
+    console.log(userId, vacancyId);
+
+    try {
+      const getFavorite = await pool.query(
+        "SELECT favorite FROM users WHERE id = $1",
+        [userId]
+      );
+
+      const favorite = getFavorite.rows[0].favorite;
+
+      if (favorite.includes(vacancyId)) {
+        try {
+          console.log(favorite);
+
+          await pool.query(
+            "UPDATE users SET favorite = array_remove(favorite, $1) WHERE id = $2",
+            [favorite, userId]
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        favorite.push(vacancyId);
+        console.log(favorite);
+
+        try {
+          await pool.query("UPDATE users SET favorite = $1 WHERE id = $2", [
+            favorite,
+            userId,
+          ]);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new UserRepository();

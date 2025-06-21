@@ -53,5 +53,15 @@ class vacancy {
       console.log(error)
     }
   }
+  async addResponce(searcherId, vacancyId) {
+    try {
+      const request = await axios.get(`${apiUrl}/vacances/${vacancyId}`, {
+        searcherId: searcherId,
+      })
+      return request
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 export default new vacancy()

@@ -19,7 +19,7 @@
         <div class="space-y-8">
           <div class="border-b pb-6">
             <h2 class="text-2xl font-bold text-gray-900 mb-3 text-primary-500">{{ resume.preferedvacancy || 'Не указана'
-            }}</h2>
+              }}</h2>
             <div class="flex flex-wrap items-center gap-4">
               <h2 class="text-2xl font-bold">Требуемая зарплата:
                 {{ resume.preferedsalary || '0' }} {{ resume.preferedcurrency || 'USD' }}</h2>
@@ -261,7 +261,6 @@ export default {
       const userId = this.currentUser.id;
       try {
         await this.$store.dispatch('resume/addResponce', { resumeId, userId });
-        // Обновляем список откликов после успешного удаления
         this.resume.responces = this.resume.responces.filter(id => id !== userId);
       } catch (error) {
         console.error('Ошибка при удалении отклика:', error);

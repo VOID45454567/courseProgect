@@ -49,13 +49,33 @@ class vacancyController {
   }
   async getAllByid(req, res) {
     try {
-      console.log("req " + req.params.id);
+      // console.log("req " + req.params.id);
       const id = req.params.id;
       const vacances = await vacancyService.getByUserId(id);
-      console.log(vacances);
+      // console.log(vacances);
       res.json(vacances);
     } catch (error) {
       console.log(error);
+    }
+  }
+  async addResponce(req, res) {
+    const userId = req.body.searcherId;
+    const vacancyId = req.params.id;
+    try {
+      const request = await vacancyService.addResponce(userId, vacancyId);
+      res.status(200).json({ message: request.message });
+    } catch (error) {
+      res.json(error);
+    }
+  }
+  async addToFavorite(req, res) {
+    const userId = req.body.searcherId;
+    const vacancyId = req.params.id;
+    try {
+      const request = await vacancyService.addToFavorite(userId, vacancyId);
+      res.json(request);
+    } catch (error) {
+      return error;
     }
   }
 }
