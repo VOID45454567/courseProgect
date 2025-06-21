@@ -25,7 +25,7 @@
     </div>
 
     <div class="flex items-center justify-between">
-      <AppButton :text="'Просмотр резюме'" :class="'w-3/12 active'" @click="goToSingle"></AppButton>
+      <AppButton :text="'Просмотр резюме'" :class="'w-3/12 active'" @click="goToSingle(resume.id)"></AppButton>
       <span class="text-red-400 text-sm">Время укажи</span>
     </div>
   </div>
@@ -47,7 +47,8 @@ export default {
       this.$router.push({
         path: '/single/' + id,
         query: {
-          type: 'resume'
+          type: 'resume',
+          userId: this.resume.user_id
         }
       })
     }

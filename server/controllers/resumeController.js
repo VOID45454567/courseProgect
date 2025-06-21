@@ -51,5 +51,21 @@ class ResumeController {
       return res.status(400).json({ message: error.message });
     }
   }
+  async addResponce(req, res) {
+    console.log("body: " + req.body);
+
+    try {
+      const employerId = req.body.userId;
+      const resumeId = req.params.id;
+      const request = await resumeService.addResponse(resumeId, employerId);
+      if (!request.success) {
+        res.status(409).json({ message: request.message });
+      } else {
+        res.status(200).json({ message: request.message });
+      }
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
 }
 export default new ResumeController();

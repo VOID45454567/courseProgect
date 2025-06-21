@@ -1,10 +1,9 @@
 <template>
-  <Vacancy v-if="getCartType === 'vacancy'" :from="previousRoute" :data="card"></Vacancy>
-  <Resume v-else :from="previousRoute" :data="card"></Resume>
+  <Vacancy v-if="getCartType === 'vacancy'" :data="card"></Vacancy>
+  <Resume v-else :data="card"></Resume>
 </template>
 <script>
 import Resume from "@/components/SingleCardPage/Resume.vue";
-
 import Vacancy from "@/components/SingleCardPage/Vacancy.vue";
 export default {
   data() {
@@ -12,14 +11,6 @@ export default {
       prevousRoute: null,
       card: {}
     }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.previousRoute = from
-    })
-  },
-  mounted() {
-    console.log('Предыдущий маршрут:', this.previousRoute.name)
   },
   components: {
     Vacancy,
@@ -32,8 +23,11 @@ export default {
     getCartType() {
       return this.$route.query.type
     },
-    getUserId() {
+    getCurrentUserId() {
       return this.$store.getters['auth/currentUser'].id
+    },
+    getCreatorId() {
+      return this.$route.query.userId
     }
   },
   async created() {
@@ -48,7 +42,7 @@ export default {
         const card = await this.$store.dispatch('vacancy/fetchOneVacancy', this.getCartId)
         return this.card = card
       } else {
-        const card = await this.$store.dispatch('resume/fetchUserResume', this.getUserId)
+        const card = await this.$store.dispatch('resume/fetchUserResume', this.getCreatorId)
         return this.card = card
       }
     }

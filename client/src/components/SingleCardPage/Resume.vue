@@ -149,7 +149,8 @@
         </div>
       </div>
 
-      <AppButton :text="isMyResume" :class="'w-full md:w-4/12 active'" @click="inviteToInterview">
+      <AppButton :text="actionButton.text" :class="'w-full md:w-4/12 active'" @click="actionButton.action"
+        v-if="showActionButton">
       </AppButton>
     </div>
   </div>
@@ -172,6 +173,7 @@ export default {
           preferedsalary: 0,
           preferedcurrency: "USD",
           about: "",
+          id: null,
         },
         user: {
           name: "",
@@ -187,19 +189,39 @@ export default {
   },
   computed: {
     resume() {
-      return this.data.resume || {};
+      return this.data.resume;
     },
     user() {
-      return this.data.user || {};
+      return this.data.user;
     },
     currentUser() {
-      return this.$store.getters['auth/currentUser']
+      return this.$store.getters['auth/currentUser'];
     },
-    isMyResume() {
-      if (this.currentUser.id === this.user.id) {
-        return 'Редактировать'
+    hasResponded() {
+      return this.resume.responces.includes(this.currentUser.id);
+    },
+    isOwner() {
+      return this.currentUser.id === this.user.id;
+    },
+    showActionButton() {
+      return !this.isOwner || this.hasResponded;
+    },
+    actionButton() {
+      if (this.isOwner) {
+        return {
+          text: 'Редактировать',
+          action: this.editResume
+        };
+      } else if (this.hasResponded) {
+        return {
+          text: 'Отменить отклик',
+          action: this.removeResponse
+        };
       } else {
-        return 'Откликнуться'
+        return {
+          text: 'Откликнуться',
+          action: this.addResponse
+        };
       }
     }
   },
@@ -223,6 +245,32 @@ export default {
       if (user.name) parts.push(user.name);
       return parts.join(' ') || 'Неизвестный пользователь';
     },
+    async addResponse() {
+      const resumeId = this.resume.id;
+      const userId = this.currentUser.id;
+      try {
+        await this.$store.dispatch('resume/addResponce', { resumeId, userId });
+        this.resume.responсes.push(userId);
+      } catch (error) {
+        console.error('Ошибка при добавлении отклика:', error);
+      }
+    },
+
+    async removeResponse() {
+      const resumeId = this.resume.id;
+      const userId = this.currentUser.id;
+      try {
+        await this.$store.dispatch('resume/addResponce', { resumeId, userId });
+        // Обновляем список откликов после успешного удаления
+        this.resume.responces = this.resume.responces.filter(id => id !== userId);
+      } catch (error) {
+        console.error('Ошибка при удалении отклика:', error);
+      }
+    },
+
+    editResume() {
+      this.$router.push(`/resumes/edit/${this.resume.id}`);
+    }
 
   },
 };

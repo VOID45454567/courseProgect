@@ -9,15 +9,25 @@ export default {
     },
     async fetchUserResume({ commit, dispatch }, user_id) {
       const resume = await api.resume.fetchUserResume(user_id)
-      console.log(resume)
 
       return resume
     },
     async fetchAllResumes({ commit, dispatch }) {
       const resumes = await api.resume.fetchAllResumes()
-      console.log(resumes)
-
       return resumes
+    },
+    async addResponce({ commit, dispatch }, data) {
+      try {
+        const request = await api.resume.addResponce(data.resumeId, data.userId)
+        // if (request.response.status) {
+        // }
+        return request
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async removeResponces({ commit, dispatch }, data) {
+      const request = await api.resume.addResponce(data.resumeId, data.userId)
     },
   },
 }

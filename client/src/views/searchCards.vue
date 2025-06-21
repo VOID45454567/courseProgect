@@ -95,6 +95,7 @@ export default {
         return this.vacances = vacances
       } else {
         const resumes = await this.$store.dispatch('resume/fetchAllResumes')
+        console.log(resumes);
 
         return this.resumes = resumes
       }

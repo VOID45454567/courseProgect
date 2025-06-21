@@ -26,5 +26,25 @@ class resume {
       return error
     }
   }
+  async addResponce(resume_id, userId) {
+    try {
+      const request = await axios.post(`${apiUrl}/resumes/${resume_id}`, {
+        userId: userId,
+      })
+      return request
+    } catch (error) {
+      return error
+    }
+  }
+  async removeResponce(resume_id, userId) {
+    try {
+      const request = await axios.post(`${apiUrl}/resumes/${resume_id}`, {
+        userId: userId,
+      })
+      return request
+    } catch (error) {
+      return error
+    }
+  }
 }
 export default new resume()

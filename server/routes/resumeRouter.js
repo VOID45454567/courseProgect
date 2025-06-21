@@ -4,6 +4,7 @@ import resumeController from "../controllers/resumeController.js";
 const resumeRouter = new express.Router();
 
 resumeRouter.post("/", resumeController.create);
+resumeRouter.post("/:id", resumeController.addResponce);
 resumeRouter.get("/users/:userId", resumeController.getByUserId);
 resumeRouter.get("/", resumeController.getAll);
 resumeRouter.delete("/:id", resumeController.delete);

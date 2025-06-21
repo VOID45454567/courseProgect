@@ -47,33 +47,42 @@ class ResumeRepository {
   async addResponse(id_employer, id_resume) {
     try {
       const getResponse = await pool.query(
-        "SELECT responses FROM resumes WHERE id = $1",
+        "SELECT responces FROM resumes WHERE id = $1",
         [id_resume]
       );
 
-      let responses = [];
-      if (getResponse.rows.length > 0 && getResponse.rows[0].responses) {
-        responses = getResponse.rows[0].responses;
-      }
+      let responses = getResponse.rows[0].responces;
+      console.log(responses);
 
-      if (!responses.includes(id_employer)) {
-        responses.push(id_employer);
-
-        await pool.query("UPDATE resumes SET responses = $1 WHERE id = $2", [
-          responses,
-          id_resume,
-        ]);
-
-        return { success: true, message: "Отклик успешно добавлен" };
+      if (responses.includes(id_employer)) {
+        try {
+          await pool.query(
+            "UPDATE resumes SET responces = array_remove(responces, $1) where id = $2",
+            [id_employer, id_resume]
+          );
+          return { success: true, message: "Отклик успешно ddeleted" };
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        return { success: false, message: "Пользователь уже оставлял отклик" };
+        console.log(id_employer);
+
+        responses.push(id_employer);
+        try {
+          await pool.query("UPDATE resumes SET responces = $1 WHERE id = $2", [
+            responses,
+            id_resume,
+          ]);
+          return { success: true, message: "Отклик успешно добавлен" };
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.error("Ошибка при добавлении отклика:", error);
       throw error;
     }
   }
-  ы;
   async udapteResume(user_id, data) {
     try {
       const updates = [];

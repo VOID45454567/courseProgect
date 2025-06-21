@@ -45,5 +45,13 @@ class ResumeService {
       return deletedResume;
     } catch (error) {}
   }
+  async addResponse(resumeId, employerId) {
+    try {
+      const request = await resumeRepository.addResponse(employerId, resumeId);
+      return request;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 export default new ResumeService();
