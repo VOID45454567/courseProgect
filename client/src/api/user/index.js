@@ -12,5 +12,17 @@ class user {
       return responses
     }
   }
+  async getAllUsers(token) {
+    try {
+      const users = await axios.get(`${apiUrl}/users/`, {
+        headers: {
+          Authorization: 'Bearer: ' + token,
+        },
+      })
+      return users
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 export default new user()

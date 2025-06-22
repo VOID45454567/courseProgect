@@ -8,7 +8,6 @@ import resumeRouter from "./routes/resumeRouter.js";
 const app = express();
 app.use(express.json());
 app.use(cors());
-// app.use('../../uploads/avatars/', express.static(path.join(process.cwd(), 'public', 'uploads')));
 const port = process.env.PORT || 3000;
 
 app.use("/api/users", userRouter);

@@ -11,33 +11,21 @@ const router = createRouter({
     {
       path: '/registration',
       name: 'registration',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/RegistrationView.vue'),
     },
     {
       path: '/login',
       name: 'login',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AuthorizationView.vue'),
     },
     {
       path: '/search',
       name: 'search',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/searchCards.vue'),
     },
     {
       path: '/profile',
       name: 'profile',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Profile.vue'),
       meta: {
         requiresAuth: true,
@@ -46,9 +34,6 @@ const router = createRouter({
     {
       path: '/create',
       name: 'create',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/CreateCard.vue'),
     },
     {
@@ -62,13 +47,14 @@ const router = createRouter({
       name: 'responses',
       component: () => import('../views/Responses.vue'),
     },
+    {
+      path: '/adminPanel',
+      name: 'adminPanel',
+      component: () => import('../views/AdminPanel.vue'),
+    },
   ],
   linkActiveClass: 'currentSection',
   linkExactActiveClass: 'exact-currentSection',
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.name !== 'login' && !store.getters.auth.isAuthenticated) next({ name: 'login' })
-//   else next()
-// })
 export default router

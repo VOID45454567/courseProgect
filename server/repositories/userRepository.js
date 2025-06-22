@@ -63,10 +63,10 @@ class UserRepository {
   }
   async getAll() {
     const request = await pool.query("select * from users");
-    return request.rows[0];
+    return request.rows;
   }
   async deleteUser(id) {
-    await vacancyRepository.deleteAllUserVacances(id);
+    // await vacancyRepository.deleteAllUserVacances(id);
     const request = await pool.query("delete from users where id = $1", [id]);
     return request.rows[0];
   }

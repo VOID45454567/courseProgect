@@ -30,5 +30,14 @@ export default {
         console.log(error)
       }
     },
+    async getAllUsers(commit, dispatch) {
+      const token = localStorage.getItem('token')
+      try {
+        const users = await api.user.getAllUsers(token)
+        return users.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 }

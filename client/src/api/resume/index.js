@@ -19,8 +19,6 @@ class resume {
   async fetchAllResumes() {
     try {
       const resumes = await axios.get(`${apiUrl}/resumes`)
-      // console.log(resumes)
-
       return resumes.data
     } catch (error) {
       return error

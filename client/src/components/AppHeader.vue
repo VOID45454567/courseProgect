@@ -49,6 +49,10 @@ export default {
           name: "О нас",
           link: "/about",
         },
+        {
+          name: 'Панель администратора',
+          link: '/adminPanel'
+        }
       ],
     };
   },

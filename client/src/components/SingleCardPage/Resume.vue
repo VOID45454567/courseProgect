@@ -18,8 +18,8 @@
       <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-8 border border-gray-200">
         <div class="space-y-8">
           <div class="border-b pb-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-3 text-primary-500">{{ resume.preferedvacancy || 'Не указана'
-              }}</h2>
+            <h2 class="text-2xl font-bold mb-3 text-primary-500">{{ resume.preferedvacancy || 'Не указана'
+            }}</h2>
             <div class="flex flex-wrap items-center gap-4">
               <h2 class="text-2xl font-bold">Требуемая зарплата:
                 {{ resume.preferedsalary || '0' }} {{ resume.preferedcurrency || 'USD' }}</h2>
