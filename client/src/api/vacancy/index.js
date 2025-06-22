@@ -21,7 +21,7 @@ class vacancy {
   async getAll() {
     try {
       const request = await axios.get(`${apiUrl}/vacances`)
-      console.log(request)
+      // console.log(request)
 
       return request.data
     } catch (error) {
@@ -55,7 +55,7 @@ class vacancy {
   }
   async addResponce(searcherId, vacancyId) {
     try {
-      const request = await axios.get(`${apiUrl}/vacances/${vacancyId}`, {
+      const request = await axios.post(`${apiUrl}/vacances/${vacancyId}`, {
         searcherId: searcherId,
       })
       return request

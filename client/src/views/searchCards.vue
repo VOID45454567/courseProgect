@@ -80,7 +80,7 @@ export default {
   },
   created() {
     this.getCards(this.type)
-    console.log(this.cards);
+    // console.log(this.cards);
 
   },
   computed: {

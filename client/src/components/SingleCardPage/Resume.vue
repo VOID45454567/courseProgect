@@ -167,25 +167,11 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => ({
-        resume: {
-          preferedvacancy: "",
-          preferedsalary: 0,
-          preferedcurrency: "USD",
-          about: "",
-          id: null,
-        },
-        user: {
-          name: "",
-          surname: "",
-          email: "",
-          phone_number: "",
-          city: "",
-          experience: "",
-          skills: ""
-        }
-      })
     }
+  },
+  created() {
+    this.resume
+    this.user
   },
   computed: {
     resume() {
@@ -201,10 +187,10 @@ export default {
       return this.resume.responces.includes(this.currentUser.id);
     },
     isOwner() {
-      return this.currentUser.id === this.user.id;
+      return this.currentUser?.id === this.user?.id;
     },
     showActionButton() {
-      return !this.isOwner || this.hasResponded;
+      return true
     },
     actionButton() {
       if (this.isOwner) {

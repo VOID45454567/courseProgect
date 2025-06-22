@@ -52,7 +52,7 @@ class ResumeController {
     }
   }
   async addResponce(req, res) {
-    console.log("body: " + req.body);
+    // console.log("body: " + req.body);
 
     try {
       const employerId = req.body.userId;
@@ -65,6 +65,15 @@ class ResumeController {
       }
     } catch (error) {
       return res.status(400).json({ message: error.message });
+    }
+  }
+  async getResponces(req, res) {
+    try {
+      const userId = req.params.id;
+      const responses = await resumeService.getResponces(userId);
+      res.json(responses);
+    } catch (error) {
+      console.log(error);
     }
   }
 }

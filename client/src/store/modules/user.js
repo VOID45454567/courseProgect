@@ -18,5 +18,17 @@ export default {
         throw error
       }
     },
+    async getMyResponses({ commit, dispatch }) {
+      const user = JSON.parse(localStorage.getItem('user'))
+      const role = user.role
+      const id = user.id
+      try {
+        const responses = await api.user.getMyResponces(id, role)
+        // console.log(responses)
+        return responses.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 }

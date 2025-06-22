@@ -53,5 +53,13 @@ class ResumeService {
       return error;
     }
   }
+  async getResponces(userId) {
+    try {
+      const responses = await resumeRepository.getResponces(userId);
+      return responses;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new ResumeService();

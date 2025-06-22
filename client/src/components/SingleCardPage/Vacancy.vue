@@ -14,7 +14,6 @@
         <h1 class="text-3xl font-bold text-gray-900">Детали вакансии</h1>
         <div class="w-20"></div>
       </div>
-
       <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-8 border border-gray-200">
         <div class="space-y-8">
           <div class="border-b pb-6">
@@ -22,7 +21,7 @@
             <div class="flex flex-wrap items-center gap-4">
               <div class="flex items-center bg-blue-50 px-3 py-1 rounded-full">
                 <span class="text-lg font-semibold text-blue-700">
-                  {{ vacancy.salary }} {{ vacancy.currency }}
+                  {{ vacancy.salary }} {{ vacancy.currency }} /мес
                 </span>
               </div>
               <div class="flex items-center text-gray-600">
@@ -154,8 +153,8 @@
           </div>
         </div>
       </div>
-      <AppButton :text="actionButton.text" :class="'w-full md:w-4/12 active'" @click="actionButton.action" />
-      <img :src="favoriteIcon">
+      <AppButton v-if="showActionButton" :text="actionButton.text" :class="'w-full md:w-4/12 active'"
+        @click="actionButton.action" />
     </div>
   </div>
 </template>
@@ -194,95 +193,107 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      localVacancy: { ...this.data.vacancy },
+      localUser: { ...this.data.user },
+      isLoading: false
+    };
+  },
   computed: {
-    favoriteIcon() {
-      return this.isFavorite ? this.favoriteActive : this.favoriteInactive;
-    },
-    isFavorite() {
-      if (!this.currentUser?.favorite || !Array.isArray(this.currentUser.favorite)) {
-        return false;
-      }
-      return this.currentUser.favorite.includes(this.vacancy.id);
-    },
     vacancy() {
-      return this.data.vacancy || {};
+      return this.localVacancy;
     },
     user() {
-      return this.data.user || {};
+      return this.localUser;
     },
     currentUser() {
       return this.$store.getters['auth/currentUser'] || {};
     },
-    hasResponded() {
-      if (!this.currentUser?.id || !this.vacancy.responses) return false;
-      return this.vacancy.responses.includes(this.currentUser.id);
-    },
     isOwner() {
       return this.currentUser?.id === this.user?.id;
+    },
+    hasResponded() {
+      return this.vacancy.responses?.includes(this.currentUser?.id) || false;
+    },
+    showActionButton() {
+      return this.currentUser?.id && (this.isOwner || this.currentUser?.role === 'searcher');
     },
     actionButton() {
       if (this.isOwner) {
         return {
-          text: 'Редактировать',
-          action: this.editResume
+          text: 'Редактировать вакансию',
+          action: this.editVacancy
         };
-      } else if (this.hasResponded) {
+      }
+      else if (this.hasResponded) {
         return {
           text: 'Отменить отклик',
-          action: this.removeResponse
+          action: this.removeResponse,
+          loading: this.isLoading
         };
       } else {
         return {
-          text: 'Откликнуться',
-          action: this.addResponse
+          text: 'Откликнуться на вакансию',
+          action: this.addResponse,
+          loading: this.isLoading
         };
       }
     }
   },
+  watch: {
+    data: {
+      handler(newData) {
+        this.localVacancy = { ...newData.vacancy };
+        this.localUser = { ...newData.user };
+      },
+      deep: true
+    }
+  },
   methods: {
     async addResponse() {
+
+      this.isLoading = true;
+      const vacancyId = this.vacancy.id;
+      const searcherId = this.currentUser.id;
+
       try {
-        const vacancyId = this.vacancy.id;
-        const userId = this.currentUser.id;
+        await this.$store.dispatch('vacancy/addResponse', { searcherId, vacancyId });
+        this.localVacancy.responses = [...(this.localVacancy.responses || []), searcherId];
 
-        await this.$store.dispatch('vacancy/addResponse', { vacancyId, userId });
-
-        this.$set(this.vacancy, 'responses', [
-          ...(this.vacancy.responses || []),
-          userId
-        ]);
-
-        this.$notify({
-          type: 'success',
-          message: 'Отклик успешно добавлен'
-        });
       } catch (error) {
         console.error('Ошибка при добавлении отклика:', error);
         this.$notify({
           type: 'error',
-          message: 'Не удалось добавить отклик'
+          title: 'Ошибка',
+          text: 'Не удалось отправить отклик'
         });
+      } finally {
+        this.isLoading = false;
       }
     },
+
     async removeResponse() {
+      this.isLoading = true;
+      const vacancyId = this.vacancy.id;
+      const searcherId = this.currentUser.id;
+
       try {
-        const vacancyId = this.vacancy.id;
-        const userId = this.currentUser.id;
-
-        await this.$store.dispatch('vacancy/removeResponse', { vacancyId, userId });
-
-        this.$set(this.vacancy, 'responses',
-          (this.vacancy.responses || []).filter(id => id !== userId)
-        );
+        await this.$store.dispatch('vacancy/removeResponse', { searcherId, vacancyId });
+        this.localVacancy.responses = this.localVacancy.responses.filter(id => id !== searcherId);
 
         this.$notify({
           type: 'success',
-          message: 'Отклик успешно отменён'
+          title: 'Успешно',
+          text: 'Отклик отменен'
         });
       } catch (error) {
         console.error('Ошибка при удалении отклика:', error);
+      } finally {
+        this.isLoading = false;
       }
     },
+
     editVacancy() {
       this.$router.push(`/vacancies/edit/${this.vacancy.id}`);
     },

@@ -5,7 +5,7 @@ const vacancyRouter = new express.Router();
 
 vacancyRouter.post("/", vacancyConttoller.create);
 vacancyRouter.post("/:id", vacancyConttoller.addResponce);
-vacancyRouter.post("/favorite/:id", vacancyConttoller.addToFavorite);
+vacancyRouter.get("/responses/:id", vacancyConttoller.getMyResponses);
 vacancyRouter.get("/", vacancyConttoller.getAll);
 vacancyRouter.get("/user/:id", vacancyConttoller.getAllByid);
 vacancyRouter.get("/:id", vacancyConttoller.getOne);

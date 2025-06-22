@@ -17,7 +17,7 @@ class ResumeRepository {
   async getAll() {
     try {
       const resumes = await pool.query("SELECT * FROM resumes");
-      console.log(resumes.rows);
+      // console.log(resumes.rows);
 
       return resumes.rows;
     } catch (error) {
@@ -52,7 +52,7 @@ class ResumeRepository {
       );
 
       let responses = getResponse.rows[0].responces;
-      console.log(responses);
+      // console.log(responses);
 
       if (responses.includes(id_employer)) {
         try {
@@ -118,6 +118,25 @@ class ResumeRepository {
       console.error("Error updating user:", error);
       throw new Error(`Database operation failed: ${error.message}`);
     }
+  }
+  async getResponces(id) {
+    const getUserResume = await pool.query(
+      "SELECT * FROM resumes WHERE user_id = $1",
+      [id]
+    );
+
+    const userResume = getUserResume.rows[0];
+    // console.log(userResume);
+    const getResponses = userResume.responces;
+    // console.log(getResponses);
+    const responses = [];
+    for (let i = 0; i < getResponses.length; i++) {
+      const user = await pool.query("SELECT * FROM users WHERE id = $1", [
+        getResponses[i],
+      ]);
+      responses.push(user.rows[0]);
+    }
+    return responses;
   }
 }
 export default new ResumeRepository();

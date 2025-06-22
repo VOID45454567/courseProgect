@@ -211,22 +211,20 @@ export default {
       this.$router.push({
         path: `/single/${resumeId}`,
         query: {
-          type: "resume"
+          type: "resume",
+          userId: this.currentUser.id
         }
       })
     },
     async getUserResume(id) {
-      // console.log(this.currentUser.role);
-
       if (this.currentUser.role === "searcher") {
         const resume = await this.$store.dispatch(
           "resume/fetchUserResume",
           id
         );
         if (!resume.error) {
-          console.log(resume.data);
-          return this.userResume = resume.data
-
+          console.log(resume.resume);
+          return this.userResume = resume.resume
         } else {
           return this.message = resume.error.response.data.message
         }

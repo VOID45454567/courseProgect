@@ -57,6 +57,11 @@ const router = createRouter({
       component: () => import('../views/SingleCard.vue'),
       props: true,
     },
+    {
+      path: '/responses',
+      name: 'responses',
+      component: () => import('../views/Responses.vue'),
+    },
   ],
   linkActiveClass: 'currentSection',
   linkExactActiveClass: 'exact-currentSection',

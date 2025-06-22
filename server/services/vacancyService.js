@@ -68,15 +68,12 @@ class vacancyService {
       console.log(error);
     }
   }
-  async addToFavorite(userId, vacancyId) {
+  async getMyResponses(userId) {
     try {
-      const request = await userRepository.addToFavorite(
-        parseInt(userId),
-        parseInt(vacancyId)
-      );
-      return request;
+      const responses = await vacancyRepository.getMyResponses(userId);
+      return responses;
     } catch (error) {
-      return error;
+      console.log(error);
     }
   }
 }

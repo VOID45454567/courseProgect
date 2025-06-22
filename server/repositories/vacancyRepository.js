@@ -86,7 +86,7 @@ class vacancyRepository {
     }
   }
   async addResponse(id_searcher, id_vacancy) {
-    // console.log(id_searcher, id_vacancy);
+    console.log(id_searcher, id_vacancy);
 
     try {
       const getResponse = await pool.query(
@@ -124,6 +124,7 @@ class vacancyRepository {
       throw error;
     }
   }
+
   async updateVacancy(id, data) {
     try {
       const updates = [];
@@ -139,7 +140,7 @@ class vacancyRepository {
       }
 
       if (updates.length === 0) {
-        throw new Error("No valid fields to update");
+        throw new Error("Нечего обновлять");
       }
 
       values.push(id);
@@ -156,8 +157,53 @@ class vacancyRepository {
       const updatedVacancy = result.rows[0];
       return updatedVacancy;
     } catch (error) {
-      console.error("Error updating user:", error);
-      throw new Error(`Database operation failed: ${error.message}`);
+      console.error("Ошибка обновления пользователя:", error);
+      throw new Error(`Ошибка в бд: ${error.message}`);
+    }
+  }
+  async getMyResponses(id) {
+    try {
+      const getMyVacancesWithResponses = await pool.query(
+        `SELECT v.id, v.name, v.responces 
+       FROM vacances v 
+       WHERE v.id_user = $1 AND cardinality(v.responces) > 0`,
+        [id]
+      );
+
+      const vacanciesWithResponses = getMyVacancesWithResponses.rows;
+
+      if (!vacanciesWithResponses.length) {
+        return [];
+      }
+
+      const allRespondersIds = vacanciesWithResponses
+        .flatMap((vacancy) => vacancy.responces)
+        .filter((id, index, self) => self.indexOf(id) === index);
+
+      const usersResult = await pool.query(
+        `SELECT id, name, surname, phone_number as phone, email 
+       FROM users 
+       WHERE id = ANY($1::int[])`,
+        [allRespondersIds]
+      );
+
+      const usersMap = usersResult.rows.reduce((acc, user) => {
+        acc[user.id] = user;
+        return acc;
+      }, {});
+
+      const result = vacanciesWithResponses.map((vacancy) => ({
+        id: vacancy.id,
+        name: vacancy.name,
+        responses: vacancy.responces
+          .filter((userId) => usersMap[userId])
+          .map((userId) => usersMap[userId]),
+      }));
+
+      return result;
+    } catch (error) {
+      console.error("Error in getMyResponses:", error);
+      throw error;
     }
   }
 }

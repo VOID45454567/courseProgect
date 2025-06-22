@@ -10,7 +10,7 @@ import { RouterLink, RouterView } from "vue-router";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 export default {
-  async created() {
+  created() {
     this.$store.dispatch("auth/fetchUser");
     this.restoreAuth();
     if (!this.currentUser && !this.hasAutorization) {

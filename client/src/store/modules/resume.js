@@ -19,15 +19,10 @@ export default {
     async addResponce({ commit, dispatch }, data) {
       try {
         const request = await api.resume.addResponce(data.resumeId, data.userId)
-        // if (request.response.status) {
-        // }
         return request
       } catch (error) {
         console.log(error)
       }
-    },
-    async removeResponces({ commit, dispatch }, data) {
-      const request = await api.resume.addResponce(data.resumeId, data.userId)
     },
   },
 }

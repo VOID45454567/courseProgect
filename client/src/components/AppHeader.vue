@@ -7,10 +7,11 @@
         </h1>
       </div>
       <div class="flex flex-row justify-between gap-5 shrink-0 items-center w-6/12">
-        <router-link v-for="(item, index) in categories" :key="index" :to="item.link"><button
-            class="hover: cursor-pointer" :key="index" @click="this.$router.push(item.link)">
-            {{ item.name }}
-          </button></router-link>
+        <router-link v-for="(item, index) in filteredCategories" :key="index" :to="getModifiedLink(item)">
+          <button class="hover: cursor-pointer">
+            {{ getModifiedName(item) }}
+          </button>
+        </router-link>
 
         <p v-if="currentUser" @click="this.$router.push('/profile')"
           class="text-primary-500 font-bold hover:cursor-pointer">
@@ -21,6 +22,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import AppButton from "@/components/AppButton.vue";
 
@@ -34,10 +36,10 @@ export default {
         {
           name: "Резюме",
           link: "/search",
-        },
-        {
-          name: "Избранное",
-          link: "/favorite",
+          alternativeName: "Вакансии",
+          queryParam: "type",
+          employerValue: "resumes",
+          candidateValue: "vacances"
         },
         {
           name: "Отклики",
@@ -54,14 +56,44 @@ export default {
     currentUser() {
       return this.$store.getters["auth/currentUser"];
     },
+    isEmployer() {
+      return this.currentUser?.role === "employer";
+    },
+    isCandidate() {
+      return this.currentUser?.role === "searcher";
+    },
+    filteredCategories() {
+      return this.categories.filter(item => {
+        return true;
+      });
+    }
   },
   methods: {
     logoLink(currentUser) {
-      if (currentUser === null || currentUser === undefined) {
-        return null
-      } else {
-        this.$router.push('/')
+      if (currentUser) {
+        this.$router.push('/');
       }
+    },
+    getModifiedName(item) {
+      if (item.alternativeName) {
+        return this.isEmployer ? item.name : item.alternativeName;
+      }
+      return item.name;
+    },
+    getModifiedLink(item) {
+      if (!item.queryParam) return item.link;
+
+      const query = {};
+      if (item.queryParam) {
+        query[item.queryParam] = this.isEmployer
+          ? item.employerValue
+          : item.candidateValue;
+      }
+
+      return {
+        path: item.link,
+        query
+      };
     }
   }
 };

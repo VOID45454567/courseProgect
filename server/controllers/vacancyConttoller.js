@@ -40,7 +40,7 @@ class vacancyController {
   async getAll(req, res) {
     try {
       const all = await vacancyService.getAll();
-      console.log(all);
+      // console.log(all);
 
       res.json(all);
     } catch (error) {
@@ -61,21 +61,22 @@ class vacancyController {
   async addResponce(req, res) {
     const userId = req.body.searcherId;
     const vacancyId = req.params.id;
+    // console.log(userId, vacancyId);
     try {
       const request = await vacancyService.addResponce(userId, vacancyId);
       res.status(200).json({ message: request.message });
     } catch (error) {
-      res.json(error);
+      console.log(error);
     }
   }
-  async addToFavorite(req, res) {
-    const userId = req.body.searcherId;
-    const vacancyId = req.params.id;
+  async getMyResponses(req, res) {
+    const userId = req.params.id;
+    console.log(userId);
     try {
-      const request = await vacancyService.addToFavorite(userId, vacancyId);
-      res.json(request);
+      const responses = await vacancyService.getMyResponses(userId);
+      res.json(responses);
     } catch (error) {
-      return error;
+      console.log(error);
     }
   }
 }

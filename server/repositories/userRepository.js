@@ -50,7 +50,7 @@ class UserRepository {
       "select id_user from vacances WHERE id = $1",
       [id]
     );
-    console.log(userIdData.rows[0].id_user);
+    // console.log(userIdData.rows[0].id_user);
     const userId = userIdData.rows[0].id_user;
     const user = await pool.query("select * from users where id = $1", [
       userId,
@@ -108,45 +108,6 @@ class UserRepository {
     } catch (error) {
       console.error("Error updating user:", error);
       throw new Error(`Database operation failed: ${error.message}`);
-    }
-  }
-  async addToFavorite(userId, vacancyId) {
-    console.log(userId, vacancyId);
-
-    try {
-      const getFavorite = await pool.query(
-        "SELECT favorite FROM users WHERE id = $1",
-        [userId]
-      );
-
-      const favorite = getFavorite.rows[0].favorite;
-
-      if (favorite.includes(vacancyId)) {
-        try {
-          console.log(favorite);
-
-          await pool.query(
-            "UPDATE users SET favorite = array_remove(favorite, $1) WHERE id = $2",
-            [favorite, userId]
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        favorite.push(vacancyId);
-        console.log(favorite);
-
-        try {
-          await pool.query("UPDATE users SET favorite = $1 WHERE id = $2", [
-            favorite,
-            userId,
-          ]);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } catch (error) {
-      console.log(error);
     }
   }
 }
