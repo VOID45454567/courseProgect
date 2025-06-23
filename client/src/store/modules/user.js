@@ -39,5 +39,13 @@ export default {
         console.log(error)
       }
     },
+    async deleteUser({ commit, dispatch }, id) {
+      const token = localStorage.getItem('token')
+      try {
+        await api.user.deleteUser(id, token)
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 }

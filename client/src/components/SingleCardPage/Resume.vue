@@ -192,7 +192,6 @@ export default {
   created() {
     this.resume
     this.user
-
   },
   computed: {
     resume() {
@@ -205,7 +204,7 @@ export default {
       return this.$store.getters['auth/currentUser'];
     },
     hasResponded() {
-      return this.resume.responces.includes(this.currentUser.id);
+      return this.resume.responces?.includes(this.currentUser.id) || false;
     },
     isOwner() {
       return this.currentUser?.id === this.user?.id;

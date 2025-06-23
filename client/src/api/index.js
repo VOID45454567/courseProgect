@@ -1,4 +1,5 @@
 import auth from './auth'
+import feedback from './feedback'
 import resume from './resume'
 import user from './user'
 import vacancy from './vacancy'
@@ -10,4 +11,5 @@ export default {
   resume: resume,
   vacancy: vacancy,
   user: user,
+  feedback: feedback,
 }

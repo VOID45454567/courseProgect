@@ -33,7 +33,6 @@ export default {
   async created() {
     this.getCartId;
     this.getCartType
-    this.getUserId
     await this.getCartData(this.getCartType)
   },
   methods: {
@@ -45,6 +44,8 @@ export default {
         return this.card = card
       } else {
         const card = await this.$store.dispatch('resume/fetchUserResume', this.getCreatorId)
+        console.log(card);
+
         return this.card = card
       }
     }

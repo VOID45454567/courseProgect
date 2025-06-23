@@ -20,18 +20,27 @@
                     {{ user.role }}
                 </span>
             </td>
-            <td class="w-48 px-6 py-4 text-sm font-medium truncate">
-                <button class="text-primary-600 hover:text-primary-900 mr-3">Редактировать</button>
-                <button class="text-red-600 hover:text-red-900">Удалить</button>
+            <td class="w-48 px-6 py-4 text-sm font-medium">
+                <button class="text-red-600 hover:text-red-900" @click="deleteUser">Удалить</button>
             </td>
         </tr>
     </tbody>
 </template>
 
 <script>
+import store from '@/store';
+
 export default {
     props: {
-        user: Object
+        user: Object,
+        onUserDeleted: Function
+    },
+    methods: {
+        async deleteUser() {
+            await store.dispatch('user/deleteUser', this.user.id)
+
+            this.onUserDeleted()
+        }
     }
 }
 </script>

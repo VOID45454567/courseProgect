@@ -193,7 +193,6 @@ export default {
   computed: {
     currentUser() {
       const user = this.$store.getters["auth/currentUser"];
-      // Инициализация массивов, если они не существуют
       if (user && !user.companies) {
         user.companies = [];
       }
@@ -222,7 +221,6 @@ export default {
   },
   async created() {
     await this.getUserResume(this.currentUser.id);
-    // Инициализация массивов при создании компонента
     if (this.currentUser && !this.currentUser.companies) {
       this.$set(this.currentUser, 'companies', []);
     }

@@ -70,7 +70,7 @@
           <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-bold text-gray-900">Список пользователей</h2>
             <div class="relative">
-              <input type="text" placeholder="Поиск пользователей..."
+              <input type="text" placeholder="Поиск пользователей..." v-model="searchText"
                 class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 w-64">
               <div class="absolute left-3 top-2.5 text-gray-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -98,7 +98,7 @@
                     Действия</th>
                 </tr>
               </thead>
-              <UserItem v-for="user in paginatedUsers" :key="user.id" :user="user" />
+              <UserItem v-for="user in paginatedUsers" :key="user.id" :user="user" @user-deleted="refreshUsers" />
             </table>
           </div>
 
@@ -144,7 +144,8 @@
           </div>
 
           <div class="space-y-4">
-            <VacancyItem v-for="(vacancy, index) in paginatedVacances" :key="index" :vacancy="vacancy"></VacancyItem>
+            <VacancyItem v-for="(vacancy, index) in paginatedVacances" :key="index" @vacancy-deleted="refreshVacances"
+              :vacancy="vacancy"></VacancyItem>
           </div>
 
           <div class="flex items-center justify-between mt-6">
@@ -189,7 +190,8 @@
           </div>
 
           <div class="space-y-4">
-            <VacancyItem v-for="(resume, index) in paginatedResumes" :key="index" :vacancy="resume"></VacancyItem>
+            <ResumeItem v-for="(resume, index) in paginatedResumes" :key="index" :resume="resume">
+            </ResumeItem>
           </div>
 
           <div class="flex items-center justify-between mt-6">
@@ -244,6 +246,7 @@ export default {
       maxVisiblePages: 5,
       resumes: [],
       vacances: [],
+      searchText: '',
       controlButtons: [
         {
           activeTab: "users",
@@ -282,6 +285,11 @@ export default {
       const end = start + this.perPage;
       return this.vacances.slice(start, end);
     },
+    paginatedResumes() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.resumes.slice(start, end);
+    },
     rangeStart() {
       return (this.currentPage - 1) * this.perPage + 1;
     },
@@ -314,12 +322,19 @@ export default {
   methods: {
     async getUsers() {
       const users = await store.dispatch('user/getAllUsers')
-      console.log(users);
+      // console.log(users);
       this.users = users
+    },
+    async refreshUsers() {
+      this.users = await store.dispatch('user/getAllUsers')
+    },
+    async refreshVacances() {
+      const vacances = await store.dispatch('vacancy/fetchAllVacances')
+      this.vacances = vacances
     },
     async getResumes() {
       const resumes = await store.dispatch('resume/fetchAllResumes')
-      console.log(resumes);
+      // console.log(resumes);
 
       this.resumes = resumes
     },
@@ -329,7 +344,7 @@ export default {
     },
     async getVacances() {
       const vacances = await store.dispatch('vacancy/fetchAllVacances')
-      console.log(vacances);
+      // console.log(vacances);
       this.vacances = vacances
     },
     goToPage(page) {

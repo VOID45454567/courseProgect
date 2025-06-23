@@ -57,6 +57,11 @@ const router = createRouter({
       name: 'updateResume',
       component: () => import('../views/updateCard.vue'),
     },
+    {
+      path: '/feedback',
+      name: 'feedback',
+      component: () => import('../views/Feedback.vue'),
+    },
   ],
   linkActiveClass: 'currentSection',
   linkExactActiveClass: 'exact-currentSection',

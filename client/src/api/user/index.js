@@ -24,5 +24,16 @@ class user {
       console.log(error)
     }
   }
+  async deleteUser(id, token) {
+    try {
+      await axios.delete(`${apiUrl}/users/${id}`, {
+        headers: {
+          Authorization: 'Bearer: ' + token,
+        },
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 export default new user()
