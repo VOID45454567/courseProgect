@@ -53,7 +53,7 @@
                         <path
                           d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                       </svg>
-                      {{ getExperienceLabel(vacancy.experience) }}
+                      {{ vacancy.experience }}
                     </p>
                   </div>
                   <div>
@@ -79,7 +79,7 @@
                           d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                           clip-rule="evenodd" />
                       </svg>
-                      {{ formatDate(vacancy.created_at) }}
+                      {{ vacancy.created_at }}
                     </p>
                   </div>
                 </div>
@@ -295,19 +295,13 @@ export default {
     },
 
     editVacancy() {
-      this.$router.push(`/vacancies/edit/${this.vacancy.id}`);
+      this.$router.push({
+        path: '/update/card/' + this.vacancy.id,
+        query: {
+          type: 'vacancy'
+        }
+      });
     },
-
-    getExperienceLabel(experience) {
-      const labels = {
-        "no-exp": "Без опыта",
-        "1-3": "1-3 года",
-        "3-6": "3-6 лет",
-        "6+": "Более 6 лет",
-      };
-      return labels[experience] || experience;
-    },
-
     getWorkFormatLabel(format) {
       const labels = {
         office: "Офис",
@@ -315,17 +309,6 @@ export default {
         hybrid: "Гибридный",
       };
       return labels[format] || format;
-    },
-
-    formatDate(dateString) {
-      if (!dateString) return 'Дата не указана';
-      try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return 'Некорректная дата';
-        return date.toLocaleDateString('ru-RU');
-      } catch {
-        return 'Некорректная дата';
-      }
     }
   }
 };

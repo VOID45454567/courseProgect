@@ -36,8 +36,6 @@ class authService {
   }
   async getCurrentUser(token) {
     try {
-      // console.log(token);
-
       const decoded = jwt.verify(
         token,
         process.env.JWT_SECRET_KEY || "defaul-secret"

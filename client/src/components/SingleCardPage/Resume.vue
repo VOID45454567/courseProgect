@@ -19,7 +19,7 @@
         <div class="space-y-8">
           <div class="border-b pb-6">
             <h2 class="text-2xl font-bold mb-3 text-primary-500">{{ resume.preferedvacancy || 'Не указана'
-            }}</h2>
+              }}</h2>
             <div class="flex flex-wrap items-center gap-4">
               <h2 class="text-2xl font-bold">Требуемая зарплата:
                 {{ resume.preferedsalary || '0' }} {{ resume.preferedcurrency || 'USD' }}</h2>
@@ -42,7 +42,7 @@
                 </h3>
                 <div class="space-y-4">
                   <div>
-                    <p class="text-sm text-gray-500 mb-1">Опыт работы</p>
+                    <p class="text-sm text-gray-500 mb-1">Опыт работы (лет)</p>
                     <p class="font-medium text-gray-900 flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -79,14 +79,13 @@
               </div>
             </div>
 
-            <!-- Навыки -->
             <div class="space-y-6">
               <div class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
                   Ключевые навыки
                 </h3>
                 <div v-if="user.skills" class="flex flex-wrap gap-3">
-                  <span v-for="(skill, index) in user.skills.split(',')" :key="index"
+                  <span v-for="(skill, index) in user.skills" :key="index"
                     class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
                       fill="currentColor">
@@ -100,6 +99,27 @@
                 <p v-else class="text-gray-500">Навыки не указаны</p>
               </div>
             </div>
+            <div class="space-y-6">
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
+                  Компании в которых работал
+                </h3>
+                <div v-if="user.companies" class="flex flex-wrap gap-3">
+                  <span v-for="(company, index) in user.companies" :key="index"
+                    class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
+                      fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    {{ company.trim() }}
+                  </span>
+                </div>
+                <p v-else class="text-gray-500">Навыки не указаны</p>
+              </div>
+            </div>
+
           </div>
 
           <div v-if="resume.about" class="bg-gray-50 p-6 rounded-lg">
@@ -172,6 +192,7 @@ export default {
   created() {
     this.resume
     this.user
+
   },
   computed: {
     resume() {
@@ -254,7 +275,12 @@ export default {
     },
 
     editResume() {
-      this.$router.push(`/resumes/edit/${this.resume.id}`);
+      this.$router.push({
+        path: '/update/card/' + this.resume.id,
+        query: {
+          type: 'resume'
+        }
+      });
     }
 
   },

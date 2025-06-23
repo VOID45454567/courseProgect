@@ -4,7 +4,7 @@ import axios from 'axios'
 class user {
   async getMyResponces(userId, userRole) {
     if (userRole === 'searcher') {
-      const responses = await axios.get(`${apiUrl}/resumes/${userId}`)
+      const responses = await axios.get(`${apiUrl}/resumes/responses/${userId}`)
       return responses
     } else {
       const responses = await axios.get(`${apiUrl}/vacances/responses/${userId}`)

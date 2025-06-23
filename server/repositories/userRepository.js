@@ -31,7 +31,6 @@ class UserRepository {
         midname,
         role,
         email,
-        passwordHash,
       });
       return { user: request.rows[0], token: token };
     } catch (error) {

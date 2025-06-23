@@ -9,24 +9,15 @@
         <div class="flex flex-col md:flex-row gap-8">
           <div class="w-full md:w-1/3 flex flex-col items-center">
             <div class="relative mb-4">
-              <img class="w-40 h-40 rounded-full object-cover border-4 border-primary-100" />
-              <label for="avatar-upload"
-                class="absolute bottom-0 right-0 bg-primary-500 text-white rounded-full p-2 cursor-pointer hover:bg-primary-600 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </label>
-              <input id="avatar-upload" type="file" accept="image/*" class="hidden" @change="handleAvatarUpload" />
+              <div
+                class="w-40 h-40 rounded-full border-4 border-primary-200 flex items-center justify-center hover:bg-primary-200 transition-colors duration-300"
+                :class="avatarColor">
+                <span class="text-5xl font-bold text-primary-600">
+                  {{ avatarInitials }}
+                </span>
+              </div>
             </div>
-            <button @click="removeAvatar" class="text-red-500 text-sm font-medium hover:text-red-700 transition-colors">
-              Удалить фото
-            </button>
           </div>
-
           <div class="w-full md:w-2/3">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -122,7 +113,7 @@
           </span>
         </div>
         <div class="flex">
-          <input type="text" v-model="newSkill" placeholder="Добавить навык"
+          <input type="text" v-model="newSkill" placeholder="Добавить навык" @keyup.enter="addSkill"
             class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-primary-500 focus:border-primary-500" />
           <button @click="addSkill"
             class="px-4 py-2 bg-primary-500 text-white font-medium rounded-r-lg hover:bg-primary-600 transition-colors">
@@ -133,19 +124,35 @@
       <MyVacances v-if="currentUser.role === 'employer'"></MyVacances>
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8" v-if="currentUser.role === 'searcher'">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Мое резюме</h2>
-        <!-- already have-->
-        <div v-if="userResume !== null">
-          <AppButton :text="'Просмотр моего резюме'" :class="'w-4/12 active'" @click="goToMyResume(currentUser.id)">
-          </AppButton>
-        </div>
-        <!--create -->
-        <div v-else>
-          <p>{{ message }}</p>
-          <AppButton :text="'Создать'" :class="'w-4/12 active'" @click="this.$router.push('/create')"></AppButton>
-        </div>
 
+        <div class="flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg"
+          :class="userResume !== null ? 'border-primary-100 bg-primary-50' : 'border-gray-200 bg-gray-50'">
+
+          <div v-if="userResume !== null" class="text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-primary-500 mb-3" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 class="text-lg font-medium text-gray-800 mb-2">Ваше резюме готово!</h3>
+            <p class="text-gray-600 mb-4">Вы можете просмотреть или обновить его в любое время</p>
+            <AppButton :text="'Просмотреть резюме'" :class="'w-full active'" @click="goToMyResume(currentUser.id)" />
+          </div>
+
+          <div v-else class="text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-3" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 class="text-lg font-medium text-gray-800 mb-2">Резюме еще не создано</h3>
+            <p class="text-gray-600 mb-4">{{ message || 'Создайте резюме, чтобы начать поиск работы' }}</p>
+            <AppButton :text="'Создать резюме + '" :class="'w-full active'" @click="$router.push('/create')"
+              icon="plus" />
+          </div>
+        </div>
       </div>
-      <div class="flex justify-end gap-10">
+      <div class="flex  justify-between gap-10">
         <AppButton @click="saveProfile" :text="isLoading ? 'Изменение' : 'Сохранить изменения'" class="w-4/12 active">
         </AppButton>
         <AppButton @click="handleLogout" class="w-3/12 active-red" text="Выйти с аккаунта"></AppButton>
@@ -168,39 +175,60 @@ export default {
   data() {
     return {
       newSkill: "",
-      // currentUser: {
-      // name: "",
-      // surname: "",
-      // midname: "",
-      // email: "",
-      // phone_number: "",
-      // city: "",
-      // about: "",
-      // experience: 0,
-      // companies: [],
-      // skills: [],
-      // avatar: null,
-      // },
-      avatarPreviewUrl: null,
       avatarFile: null,
       isLoading: false,
       userResume: null,
-      message: ''
+      message: '',
+      avatarColors: [
+        'bg-blue-100',
+        'bg-green-100',
+        'bg-purple-100',
+        'bg-yellow-100',
+        'bg-pink-100',
+        'bg-indigo-100',
+        'bg-teal-100'
+      ]
     };
   },
   computed: {
     currentUser() {
-      return this.$store.getters["auth/currentUser"];
+      const user = this.$store.getters["auth/currentUser"];
+      // Инициализация массивов, если они не существуют
+      if (user && !user.companies) {
+        user.companies = [];
+      }
+      if (user && !user.skills) {
+        user.skills = [];
+      }
+      return user;
     },
-    // avatarUrl() {
-    //   if (this.currentUser.avatar) {
-    //     return `../uploads/avatars/${this.currentUser.avatar}`;
-    //   }
-    //   return this.currentUser.avatar || null;
-    // },
+    avatarInitials() {
+      if (!this.currentUser) return '';
+
+      const firstNameLetter = this.currentUser.name ? this.currentUser.name.charAt(0).toUpperCase() : '';
+      const lastNameLetter = this.currentUser.surname ? this.currentUser.surname.charAt(0).toUpperCase() : '';
+
+      return `${firstNameLetter}${lastNameLetter}`;
+    },
+    avatarColor() {
+      if (!this.currentUser?.name) return this.avatarColors[0];
+
+      const nameHash = this.currentUser.name.split('').reduce((acc, char) => {
+        return acc + char.charCodeAt(0);
+      }, 0);
+
+      return this.avatarColors[nameHash % this.avatarColors.length];
+    }
   },
   async created() {
-    await this.getUserResume(this.currentUser.id)
+    await this.getUserResume(this.currentUser.id);
+    // Инициализация массивов при создании компонента
+    if (this.currentUser && !this.currentUser.companies) {
+      this.$set(this.currentUser, 'companies', []);
+    }
+    if (this.currentUser && !this.currentUser.skills) {
+      this.$set(this.currentUser, 'skills', []);
+    }
   },
   methods: {
     async handleLogout() {
@@ -218,50 +246,50 @@ export default {
     },
     async getUserResume(id) {
       if (this.currentUser.role === "searcher") {
-        const resume = await this.$store.dispatch(
-          "resume/fetchUserResume",
-          id
-        );
-        if (!resume.error) {
-          console.log(resume.resume);
-          return this.userResume = resume.resume
-        } else {
-          return this.message = resume.error.response.data.message
+        try {
+          const resume = await this.$store.dispatch("resume/fetchUserResume", id);
+
+          if (!resume.error) {
+            if (resume.resume) {
+              this.userResume = resume.resume;
+            }
+            return this.message = 'Вы еще не создали свое резюме'
+          } else {
+            this.message = resume.error.response?.data?.message || 'Ошибка загрузки резюме';
+          }
+        } catch (error) {
+          console.error("Ошибка при получении резюме:", error);
+          this.message = 'Ошибка загрузки резюме';
         }
       }
     },
-    // async handleAvatarUpload(event) {
-    // const file = event.target.files[0];
-    // if (!file) return;
-    // 
-    // this.avatarFile = file;
-    // 
-    // this.currentUser.avatar = file.name;
-    // 
-    // const reader = new FileReader();
-    // reader.onload = (e) => {
-    // this.avatarPreviewUrl = e.target.result;
-    // };
-    // reader.readAsDataURL(file);
-    // },
-    // removeAvatar() {
-    // this.currentUser.avatar = null;
-    // this.avatarFile = null;
-    // },
     addCompany() {
+      if (!this.currentUser.companies) {
+        this.$set(this.currentUser, 'companies', []);
+      }
       this.currentUser.companies.push("");
     },
     removeCompany(index) {
-      this.currentUser.companies.splice(index, 1);
+      if (this.currentUser.companies && this.currentUser.companies.length > index) {
+        this.currentUser.companies.splice(index, 1);
+      }
     },
     addSkill() {
-      if (this.newSkill.trim() && !this.currentUser.skills.includes(this.newSkill.trim())) {
+      if (!this.newSkill.trim()) return;
+
+      if (!this.currentUser.skills) {
+        this.$set(this.currentUser, 'skills', []);
+      }
+
+      if (!this.currentUser.skills.includes(this.newSkill.trim())) {
         this.currentUser.skills.push(this.newSkill.trim());
         this.newSkill = "";
       }
     },
     removeSkill(index) {
-      this.currentUser.skills.splice(index, 1);
+      if (this.currentUser.skills && this.currentUser.skills.length > index) {
+        this.currentUser.skills.splice(index, 1);
+      }
     },
     async saveProfile() {
       try {
@@ -273,22 +301,23 @@ export default {
             formData.append(key, this.currentUser[key]);
           }
         });
+
         if (this.avatarFile) {
           formData.append("avatar", this.avatarFile);
         }
-        formData.append("companies", JSON.stringify(this.currentUser.companies));
-        formData.append("skills", JSON.stringify(this.currentUser.skills));
+        formData.append("companies", JSON.stringify(this.currentUser.companies || []));
+        formData.append("skills", JSON.stringify(this.currentUser.skills || []));
 
         const data = {
           id: this.currentUser.id,
           dataToUpdate: this.currentUser,
         };
-        console.log(data);
+
         await this.$store.dispatch("user/updateUser", data);
         this.isLoading = false;
-        // this.$router.push("/");
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
+        this.isLoading = false;
       }
     },
   },

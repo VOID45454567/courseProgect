@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-      <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
           <div class="p-6">
@@ -173,10 +172,10 @@
         </div>
         <div v-if="activeTab === 'resumes'" class="p-6">
           <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-gray-900">Список вакансий</h2>
+            <h2 class="text-xl font-bold text-gray-900">Список резюме</h2>
             <div class="flex space-x-4">
               <div class="relative">
-                <input type="text" placeholder="Поиск вакансий..."
+                <input type="text" placeholder="Поиск резюме..."
                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 w-64">
                 <div class="absolute left-3 top-2.5 text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -190,7 +189,7 @@
           </div>
 
           <div class="space-y-4">
-            <VacancyItem v-for="(vacancy, index) in paginatedVacances" :key="index" :vacancy="vacancy"></VacancyItem>
+            <VacancyItem v-for="(resume, index) in paginatedResumes" :key="index" :vacancy="resume"></VacancyItem>
           </div>
 
           <div class="flex items-center justify-between mt-6">

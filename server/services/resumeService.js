@@ -10,6 +10,14 @@ class ResumeService {
       console.log(error);
     }
   }
+  async getById(id) {
+    try {
+      const resume = await resumeRepository.getById(id);
+      return resume;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async getOne(user_id) {
     try {
       const resume = await resumeRepository.getByUserId(user_id);
@@ -31,9 +39,12 @@ class ResumeService {
       return error;
     }
   }
-  async update(data, user_id) {
+  async update(data, resume_id) {
     try {
-      const updatedResume = await resumeRepository.udapteResume(user_id, data);
+      const updatedResume = await resumeRepository.udapteResume(
+        resume_id,
+        data
+      );
       return updatedResume;
     } catch (error) {
       console.log(error);
@@ -43,7 +54,9 @@ class ResumeService {
     try {
       const deletedResume = await resumeRepository.deleteResume(user_id);
       return deletedResume;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
   async addResponse(resumeId, employerId) {
     try {

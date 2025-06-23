@@ -51,7 +51,8 @@ export default {
         },
         {
           name: 'Панель администратора',
-          link: '/adminPanel'
+          link: '/adminPanel',
+          adminOnly: true
         }
       ],
     };
@@ -66,8 +67,15 @@ export default {
     isCandidate() {
       return this.currentUser?.role === "searcher";
     },
+    isAdmin() {
+      return this.currentUser?.role === "admin";
+    },
     filteredCategories() {
       return this.categories.filter(item => {
+        // Если пункт требует прав администратора, проверяем что пользователь авторизован и является админом
+        if (item.adminOnly) {
+          return this.currentUser && this.isAdmin;
+        }
         return true;
       });
     }

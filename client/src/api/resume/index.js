@@ -16,6 +16,14 @@ class resume {
       }
     }
   }
+  async getById(id) {
+    try {
+      const resume = await axios.get(`${apiUrl}/resumes/${id}`)
+      return resume.data
+    } catch (error) {
+      return error
+    }
+  }
   async fetchAllResumes() {
     try {
       const resumes = await axios.get(`${apiUrl}/resumes`)
@@ -42,6 +50,23 @@ class resume {
       return request
     } catch (error) {
       return error
+    }
+  }
+  async updateResume(data) {
+    try {
+      const updatedResume = await axios.put(`${apiUrl}/resumes/${data.id}`, {
+        dataToUpdate: data,
+      })
+      return updatedResume.data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async delete(id) {
+    try {
+      await axios.delete(`${apiUrl}/resumes/${id}`)
+    } catch (error) {
+      console.log(error)
     }
   }
 }

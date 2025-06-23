@@ -11,6 +11,15 @@ class ResumeController {
       return res.status(400).json({ message: error.message });
     }
   }
+  async getById(req, res) {
+    try {
+      const id = req.params.id;
+      const resume = await resumeService.getById(id);
+      res.status(200).json(resume);
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
   async getByUserId(req, res) {
     try {
       const user_id = req.params.userId;
@@ -34,9 +43,9 @@ class ResumeController {
   }
   async update(req, res) {
     try {
-      const data = req.body;
-      const { user_id } = data;
-      const newResume = await resumeService.update(data, user_id);
+      const data = req.body.dataToUpdate;
+      const resume_id = req.params.id;
+      const newResume = await resumeService.update(data, resume_id);
       return res.status(200).json(newResume);
     } catch (error) {
       return res.status(400).json({ message: error.message });
@@ -44,16 +53,14 @@ class ResumeController {
   }
   async delete(req, res) {
     try {
-      const { user_id } = req.body;
+      const user_id = req.params.id;
       await resumeService.delete(user_id);
-      return res.status(204).json({ message: "Resume deleted successfully" });
+      return res.status(204).json({ message: "Успешно удаленно" });
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }
   }
   async addResponce(req, res) {
-    // console.log("body: " + req.body);
-
     try {
       const employerId = req.body.userId;
       const resumeId = req.params.id;

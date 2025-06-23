@@ -19,19 +19,21 @@
     <div class="flex items-center gap-3 mb-6">
       <div>
         <p class="font-medium text-gray-800">
-          <!-- {{ resume.user.name }} {{ resume.surname }} -->
+          {{ resume.user?.name }} {{ resume.user?.surname }}
         </p>
       </div>
     </div>
 
     <div class="flex items-center justify-between">
       <AppButton :text="'Просмотр резюме'" :class="'w-3/12 active'" @click="goToSingle(resume.id)"></AppButton>
-      <span class="text-red-400 text-sm">Время укажи</span>
+      <span class="text-gray-500 text-sm">{{ formattedDate }}</span>
     </div>
   </div>
 </template>
+
 <script>
 import AppButton from './AppButton.vue';
+
 export default {
   props: {
     resume: {
@@ -52,7 +54,25 @@ export default {
         }
       })
     }
+  },
+  computed: {
+    formattedDate() {
+      if (!this.resume.created_at) return '';
+
+      try {
+        const date = new Date(this.resume.created_at);
+        return date.toLocaleDateString('ru-RU', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+      } catch (e) {
+        console.error('Ошибка форматирования даты:', e);
+        return this.resume.created_at;
+      }
+    }
   }
 };
 </script>
+
 <style></style>

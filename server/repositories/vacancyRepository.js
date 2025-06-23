@@ -11,10 +11,9 @@ class vacancyRepository {
       description,
       required_skills,
       id_user,
-      created_at,
     } = data;
     const query =
-      "INSERT INTO vacances (name, salary, currency, experience, work_format, city, description, required_skills, id_user, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING*";
+      "INSERT INTO vacances (name, salary, currency, experience, work_format, city, description, required_skills, id_user) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING*";
     try {
       const newVacancy = await pool.query(query, [
         name,
@@ -26,7 +25,6 @@ class vacancyRepository {
         description,
         required_skills,
         id_user,
-        created_at,
       ]);
       // console.log(newVacancy);
       return newVacancy;
@@ -56,17 +54,17 @@ class vacancyRepository {
       console.log(error);
     }
   }
-  // async deleteAllUserVacances(idUser) {
-  //   try {
-  //     const deletedVacances = await pool.query(
-  //       "DELETE FROM vacancy WHERE user_id = $1",
-  //       idUser
-  //     );
-  //        return deletedVacances
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async deleteAllUserVacances(idUser) {
+    try {
+      const deletedVacances = await pool.query(
+        "DELETE FROM vacancy WHERE user_id = $1",
+        idUser
+      );
+      return deletedVacances;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async getOne(id) {
     try {
       const vacancy = await pool.query("SELECT * FROM vacances WHERE id = $1", [
@@ -157,7 +155,7 @@ class vacancyRepository {
       const updatedVacancy = result.rows[0];
       return updatedVacancy;
     } catch (error) {
-      console.error("Ошибка обновления пользователя:", error);
+      console.error("Ошибка обновления вакансии:", error);
       throw new Error(`Ошибка в бд: ${error.message}`);
     }
   }

@@ -24,6 +24,16 @@ class ResumeRepository {
       return error;
     }
   }
+  async getById(id) {
+    try {
+      const resume = await pool.query("SELECT * FROM resumes WHERE id = $1", [
+        id,
+      ]);
+      return resume.rows[0];
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async getByUserId(id) {
     try {
       const resume = await pool.query(
@@ -52,8 +62,6 @@ class ResumeRepository {
       );
 
       let responses = getResponse.rows[0].responces;
-      // console.log(responses);
-
       if (responses.includes(id_employer)) {
         try {
           await pool.query(
@@ -83,7 +91,7 @@ class ResumeRepository {
       throw error;
     }
   }
-  async udapteResume(user_id, data) {
+  async udapteResume(resumeId, data) {
     try {
       const updates = [];
       const values = [];
@@ -101,12 +109,12 @@ class ResumeRepository {
         throw new Error("No valid fields to update");
       }
 
-      values.push(id);
+      values.push(resumeId);
 
       const query = {
         text: `UPDATE resumes 
              SET ${updates.join(", ")} 
-             WHERE user_id = $${paramIndex} 
+             WHERE id = $${paramIndex} 
              RETURNING *`,
         values: values,
       };

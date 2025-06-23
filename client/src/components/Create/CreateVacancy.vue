@@ -150,7 +150,6 @@ export default {
         description: "",
         required_skills: [],
         id_user: null,
-        created_at: Date.now(),
       },
       errors: {
         name: "",

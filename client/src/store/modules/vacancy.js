@@ -43,5 +43,20 @@ export default {
         return console.log(error)
       }
     },
+    async updateVacancy({ commit, dispatch }, data) {
+      try {
+        const updatedVacancy = await api.vacancy.update(data)
+        return updatedVacancy
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async deleteVacancy({ commit, dispatch }, id) {
+      try {
+        const responce = await api.vacancy.delete(id)
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 }

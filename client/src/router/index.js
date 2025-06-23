@@ -52,6 +52,11 @@ const router = createRouter({
       name: 'adminPanel',
       component: () => import('../views/AdminPanel.vue'),
     },
+    {
+      path: '/update/card/:id',
+      name: 'updateResume',
+      component: () => import('../views/updateCard.vue'),
+    },
   ],
   linkActiveClass: 'currentSection',
   linkExactActiveClass: 'exact-currentSection',
