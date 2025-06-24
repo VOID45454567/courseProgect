@@ -8,8 +8,7 @@ class user {
       return responses
     } else {
       const responses = await axios.get(`${apiUrl}/vacances/responses/${userId}`)
-      console.log(responses)
-      return responses
+      return responses.data
     }
   }
   async getAllUsers(token) {

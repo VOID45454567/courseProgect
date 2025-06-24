@@ -1,6 +1,6 @@
 <template>
-    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" @click="goToSingle">
-        <div class="flex justify-between items-start">
+    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+        <div class="flex justify-between items-start" @click="goToSingle">
             <div>
                 <h3 class="text-lg font-semibold text-gray-900">{{ vacancy.name }}</h3>
                 <div class="flex items-center mt-1 text-sm text-gray-500">
@@ -28,31 +28,32 @@
             </div>
         </div>
 
-        <div class="mt-3 text-sm text-gray-600 line-clamp-2">
+        <div class="mt-3 text-sm text-gray-600 line-clamp-2" @click="goToSingle">
             {{ vacancy.description || 'Описания нет' }}
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2" @click="goToSingle">
             <span v-for="(skill, index) in vacancy.required_skills" :key="index"
                 class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
                 {{ skill }}
             </span>
         </div>
         <div class="mt-4 flex justify-between items-center">
-            <p class="text-gray-500">От <span>{{ vacancy.created_at }}</span></p>
+            <p class="text-gray-500" @click="goToSingle">От <span>{{ vacancy.created_at }}</span></p>
 
             <div class="flex space-x-2">
                 <button class="px-3 py-1 bg-primary-600 text-white rounded-md text-sm hover:bg-primary-700"
-                    @click="goToEdit">
+                    @click.stop="goToEdit">
                     {{ 'Редактировать' }}
                 </button>
                 <button class="px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700"
-                    @click="deleteVacancy">
+                    @click.stop="deleteVacancy">
                     {{ 'Удалить' }}
                 </button>
             </div>
         </div>
     </div>
 </template>
+
 <script>
 import router from '@/router';
 import store from '@/store';
@@ -63,7 +64,9 @@ export default {
         onVacancyDeleted: Function
     },
     methods: {
-        goToEdit() {
+        goToEdit(e) {
+            e.preventDefault();
+            e.stopPropagation();
             router.push({
                 path: '/update/card/' + this.vacancy.id,
                 query: {
@@ -71,7 +74,11 @@ export default {
                 }
             })
         },
-        goToSingle() {
+        goToSingle(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             router.push({
                 path: '/single/' + this.vacancy.id,
                 query: {
@@ -80,9 +87,10 @@ export default {
                 }
             })
         },
-        async deleteVacancy() {
+        async deleteVacancy(e) {
+            e.preventDefault();
+            e.stopPropagation();
             await store.dispatch('vacancy/deletevacancy', this.vacancy.id)
-
             this.onVacancyDeleted()
         }
     }

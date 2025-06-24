@@ -19,7 +19,7 @@
         <div class="space-y-8">
           <div class="border-b pb-6">
             <h2 class="text-2xl font-bold mb-3 text-primary-500">{{ resume.preferedvacancy || 'Не указана'
-              }}</h2>
+            }}</h2>
             <div class="flex flex-wrap items-center gap-4">
               <h2 class="text-2xl font-bold">Требуемая зарплата:
                 {{ resume.preferedsalary || '0' }} {{ resume.preferedcurrency || 'USD' }}</h2>
@@ -84,7 +84,7 @@
                 <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
                   Ключевые навыки
                 </h3>
-                <div v-if="user.skills" class="flex flex-wrap gap-3">
+                <div v-if="user.skills.length > 0" class="flex flex-wrap gap-3">
                   <span v-for="(skill, index) in user.skills" :key="index"
                     class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
@@ -104,7 +104,7 @@
                 <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
                   Компании в которых работал
                 </h3>
-                <div v-if="user.companies" class="flex flex-wrap gap-3">
+                <div v-if="user.companies.length > 0" class="flex flex-wrap gap-3">
                   <span v-for="(company, index) in user.companies" :key="index"
                     class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
@@ -116,7 +116,7 @@
                     {{ company.trim() }}
                   </span>
                 </div>
-                <p v-else class="text-gray-500">Навыки не указаны</p>
+                <p v-else class="text-gray-500">Компании не указанны</p>
               </div>
             </div>
 
@@ -169,16 +169,13 @@
         </div>
       </div>
 
-      <AppButton :text="actionButton.text" :class="'w-full md:w-4/12 active'" @click="actionButton.action"
-        v-if="showActionButton">
-      </AppButton>
+      <AppButton v-if="showActionButton" :text="actionButton.text" :class="'w-full md:w-4/12 active'"
+        @click="actionButton.action" :loading="actionButton.loading" />
     </div>
   </div>
 </template>
-
 <script>
-import AppButton from "@/components/AppButton.vue";
-
+import AppButton from '../AppButton.vue';
 export default {
   components: {
     AppButton,

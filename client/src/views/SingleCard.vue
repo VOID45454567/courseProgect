@@ -40,7 +40,6 @@ export default {
       if (type === 'vacancy') {
         const card = await this.$store.dispatch('vacancy/fetchOneVacancy', this.getCartId)
         console.log(card);
-
         return this.card = card
       } else {
         const card = await this.$store.dispatch('resume/fetchUserResume', this.getCreatorId)

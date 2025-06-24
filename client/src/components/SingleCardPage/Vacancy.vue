@@ -214,7 +214,7 @@ export default {
       return this.currentUser?.id === this.user?.id;
     },
     hasResponded() {
-      return this.vacancy.responses?.includes(this.currentUser?.id) || false;
+      return this.vacancy.responces?.includes(this.currentUser?.id) || false;
     },
     showActionButton() {
       return this.currentUser?.id && (this.isOwner || this.currentUser?.role === 'searcher');
@@ -259,7 +259,7 @@ export default {
 
       try {
         await this.$store.dispatch('vacancy/addResponse', { searcherId, vacancyId });
-        this.localVacancy.responses = [...(this.localVacancy.responses || []), searcherId];
+        this.localVacancy.responces = [...(this.localVacancy.responces || []), searcherId];
 
       } catch (error) {
         console.error('Ошибка при добавлении отклика:', error);
@@ -279,7 +279,7 @@ export default {
       const searcherId = this.currentUser.id;
 
       try {
-        await this.$store.dispatch('vacancy/removeResponse', { searcherId, vacancyId });
+        await this.$store.dispatch('vacancy/addResponce', { searcherId, vacancyId });
         this.localVacancy.responses = this.localVacancy.responses.filter(id => id !== searcherId);
 
         this.$notify({
