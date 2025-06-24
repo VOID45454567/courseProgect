@@ -20,7 +20,13 @@ export default {
       const resume = await api.resume.getById(id)
       return resume
     },
-    async addResponce({ commit, dispatch }, data) {
+    async addResponce({ commit, dispatch }, resumeId) {
+      const user = JSON.parse(localStorage.getItem('user'))
+      const userId = user.id
+      const data = {
+        resumeId: resumeId,
+        userId: userId,
+      }
       try {
         const request = await api.resume.addResponce(data.resumeId, data.userId)
         return request

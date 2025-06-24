@@ -4,7 +4,7 @@
     <AppBenefitSection />
     <AppStatsSelection />
     <AppHowItWorks />
-    <AppContactForm />
+    <AppFeedback />
     <AppCallToAction />
   </div>
 </template>
@@ -14,15 +14,15 @@ import AppHeroSection from "@/components/Home/AppHeroSection.vue";
 import AppBenefitSection from "@/components/Home/AppBenefitSection.vue";
 import AppStatsSelection from "@/components/Home/AppStatsSelection.vue";
 import AppHowItWorks from "@/components/Home/AppHowItWorks.vue";
-import AppContactForm from "@/components/Home/AppContactForm.vue";
 import AppCallToAction from "@/components/Home/AppCallToAction.vue";
+import AppFeedback from "@/components/Home/AppFeedback.vue";
 export default {
   components: {
     AppHeroSection,
     AppBenefitSection,
     AppStatsSelection,
     AppHowItWorks,
-    AppContactForm,
+    AppFeedback,
     AppCallToAction,
   },
   async created() {

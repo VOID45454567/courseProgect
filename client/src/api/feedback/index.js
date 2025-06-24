@@ -3,7 +3,9 @@ import { apiUrl } from '..'
 
 class feedback {
   async create(data) {
-    const newFeedback = await axios.post(`${apiUrl}/feedback/`, data)
+    const newFeedback = await axios.post(`${apiUrl}/feedback/`, {
+      data: data,
+    })
     return newFeedback
   }
   async getOne(id) {

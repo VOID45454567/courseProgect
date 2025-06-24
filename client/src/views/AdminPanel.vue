@@ -64,6 +64,23 @@
           :key="index" :data="item">
         </ControlButton>
 
+
+      </div>
+      <div
+        class=" mb-5 w-full p-6 rounded-xl shadow-md border border-gray-200 transition-all duration-200 cursor-pointer bg-white hover:bg-gray-50"
+        @click="activeTab = 'feedback'">
+        <div class="text-center">
+          <div
+            class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 text-purple-600 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-gray-900">Обратная связь</h3>
+          <p class="mt-1 text-sm text-gray-500">Просмотр и управление отзывами пользователей</p>
+        </div>
       </div>
       <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
         <div v-if="activeTab === 'users'" class="p-6">
@@ -86,19 +103,13 @@
             <table class="min-w-full divide-y divide-gray-200 table-fixed">
               <thead class="bg-gray-50">
                 <tr>
-                  <th class="w-24 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID
+                  <th v-for="(item, index) in userColumns" :key="index"
+                    class="w-24 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ item
+                    }}
                   </th>
-                  <th class="w-64 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Имя
-                  </th>
-                  <th class="w-96 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email</th>
-                  <th class="w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Роль
-                  </th>
-                  <th class="w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Действия</th>
                 </tr>
               </thead>
-              <UserItem v-for="user in paginatedUsers" :key="user.id" :user="user" @user-deleted="refreshUsers" />
+              <UserItem v-for="user in searchUsers" :key="user.id" :user="user" @user-deleted="refreshUsers" />
             </table>
           </div>
 
@@ -130,7 +141,7 @@
             <h2 class="text-xl font-bold text-gray-900">Список вакансий</h2>
             <div class="flex space-x-4">
               <div class="relative">
-                <input type="text" placeholder="Поиск вакансий..."
+                <input type="text" placeholder="Поиск вакансий..." v-model="searchForVacances"
                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 w-64">
                 <div class="absolute left-3 top-2.5 text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -144,7 +155,7 @@
           </div>
 
           <div class="space-y-4">
-            <VacancyItem v-for="(vacancy, index) in paginatedVacances" :key="index" @vacancy-deleted="refreshVacances"
+            <VacancyItem v-for="(vacancy, index) in searchVacances" :key="index" @vacancy-deleted="refreshVacances"
               :vacancy="vacancy"></VacancyItem>
           </div>
 
@@ -176,7 +187,7 @@
             <h2 class="text-xl font-bold text-gray-900">Список резюме</h2>
             <div class="flex space-x-4">
               <div class="relative">
-                <input type="text" placeholder="Поиск резюме..."
+                <input type="text" placeholder="Поиск резюме..." v-model="searchForResumes"
                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 w-64">
                 <div class="absolute left-3 top-2.5 text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -190,7 +201,7 @@
           </div>
 
           <div class="space-y-4">
-            <ResumeItem v-for="(resume, index) in paginatedResumes" :key="index" :resume="resume">
+            <ResumeItem v-for="(resume, index) in searchResumes" :key="index" :resume="resume">
             </ResumeItem>
           </div>
 
@@ -217,7 +228,25 @@
             </nav>
           </div>
         </div>
+        <div v-if="activeTab === 'feedback'" class="p-10 bg-gradient-to-b from-gray-50 to-gray-100 md:p-10">
+          <div class="max-w-3xl mx-auto">
+            <header class="mb-10 text-center">
+              <h1 class="text-4xl font-bold text-[#4a3aff] mb-2">Обратная связь пользователей</h1>
+              <p class="text-gray-600">Что говорят наши клиенты о нашем продукте</p>
+            </header>
 
+            <div class="space-y-6">
+              <div v-for="feedback in feedbacks" :key="feedback.id"
+                class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border-l-4 border-[#4a3aff]">
+                <div class="flex justify-between items-start mb-3">
+                  <h2 class="text-xl font-semibold text-gray-800">{{ feedback.name }} {{ feedback.surname }}</h2>
+                  <span class="text-sm text-gray-400">{{ formatDate(feedback.created_at) }}</span>
+                </div>
+                <p class="text-gray-700 leading-relaxed">{{ feedback.feedback_text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -247,6 +276,10 @@ export default {
       resumes: [],
       vacances: [],
       searchText: '',
+      searchForVacances: '',
+      searchForResumes: '',
+      feedbacks: [],
+      userColumns: ['ID', 'Имя', 'EMAIL', 'роль', 'Действия'],
       controlButtons: [
         {
           activeTab: "users",
@@ -270,8 +303,39 @@ export default {
     this.getUsers()
     this.getResumes()
     this.getVacances()
+    this.getFeedback()
   },
   computed: {
+    searchUsers() {
+      if (!this.searchText.trim()) {
+        return this.paginatedUsers;
+      }
+
+      const searchTerm = this.searchText.toLowerCase();
+      return this.users.filter(user =>
+        user.name.toLowerCase().includes(searchTerm)
+      );
+    },
+    searchVacances() {
+      if (!this.searchForVacances.trim()) {
+        return this.paginatedVacances;
+      }
+
+      const searchTerm = this.searchForVacances.toLowerCase();
+      return this.vacances.filter(vacancy =>
+        vacancy.name.toLowerCase().includes(searchTerm)
+      );
+    },
+    searchResumes() {
+      if (!this.searchForResumes.trim()) {
+        return this.paginatedResumes;
+      }
+
+      const searchTerm = this.searchForResumes.toLowerCase();
+      return this.resumes.filter(resume =>
+        resume.preferedvacancy.toLowerCase().includes(searchTerm)
+      );
+    },
     totalPages() {
       return Math.ceil(this.users.length / this.perPage);
     },
@@ -320,9 +384,18 @@ export default {
     }
   },
   methods: {
+    formatDate(isoDate) {
+      const date = new Date(isoDate);
+      const options = {
+        day: 'numeric',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      return date.toLocaleString('ru-RU', options);
+    },
     async getUsers() {
       const users = await store.dispatch('user/getAllUsers')
-      // console.log(users);
       this.users = users
     },
     async refreshUsers() {
@@ -331,6 +404,10 @@ export default {
     async refreshVacances() {
       const vacances = await store.dispatch('vacancy/fetchAllVacances')
       this.vacances = vacances
+    },
+    async getFeedback() {
+      const feedback = await store.dispatch('feedback/getAll')
+      this.feedbacks = feedback
     },
     async getResumes() {
       const resumes = await store.dispatch('resume/fetchAllResumes')

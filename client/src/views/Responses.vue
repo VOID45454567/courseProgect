@@ -114,7 +114,7 @@
                   </p>
                   <span class="text-sm text-gray-500">{{ formatDate(responder.created_at) }}</span>
                 </div>
-                <button @click="openResume(responder.id)"
+                <button @click="openResume(vacancy.id, responder.id)"
                   class="relative bg-primary-500 hover:bg-primary-600 text-white h-10 w-10 hover:w-60 rounded-full hover:cursor-pointer transition-all duration-300 overflow-hidden group">
                   <svg xmlns="http://www.w3.org/2000/svg"
                     class="h-5 w-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:left-4 group-hover:translate-x-0 transition-all duration-300"
@@ -154,6 +154,7 @@ export default {
   async created() {
     await this.getMyResponses();
     this.checkUserAssets();
+    console.log(this.getMyResponses);
 
   },
   methods: {
@@ -161,7 +162,10 @@ export default {
       this.loading = true;
       try {
         const responses = await this.$store.dispatch('user/getMyResponses');
-        this.cards = responses || [];
+        console.log(responses);
+
+        this.cards = responses.data || [];
+
       } catch (error) {
         console.error('Ошибка при загрузке откликов:', error);
       } finally {
@@ -183,9 +187,11 @@ export default {
       this.$router.push('/create');
     },
 
-    openResume(creatorId) {
+    openResume(vacancyId, creatorId) {
+      console.log(vacancyId, creatorId);
+
       this.$router.push({
-        path: '/single',
+        path: '/single/' + vacancyId,
         query: {
           type: 'resume',
           userId: creatorId

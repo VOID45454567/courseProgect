@@ -1,9 +1,11 @@
-import feedbackService from "../services/feedbackService";
+import feedbackService from "../services/feedbackService.js";
 
 class FeedbackController {
   async create(req, res) {
     try {
       const data = req.body.data;
+      console.log(data);
+
       const newFeedback = await feedbackService.create(data);
       res.status(200).json(newFeedback);
     } catch (error) {

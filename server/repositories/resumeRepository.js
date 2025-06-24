@@ -61,7 +61,7 @@ class ResumeRepository {
         [id_resume]
       );
 
-      let responses = getResponse.rows[0].responces;
+      let responses = getResponse.rows[0].responces || [];
       if (responses.includes(id_employer)) {
         try {
           await pool.query(
@@ -136,7 +136,9 @@ class ResumeRepository {
     const userResume = getUserResume.rows[0];
     // console.log(userResume);
     const getResponses = userResume.responces;
-    // console.log(getResponses);
+    if (responses === null) {
+      return null;
+    }
     const responses = [];
     for (let i = 0; i < getResponses.length; i++) {
       const user = await pool.query("SELECT * FROM users WHERE id = $1", [

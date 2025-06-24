@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
+
 @theme {
   --color-primary-50: #f0efff;
   --color-primary-100: #e0e0ff;
@@ -12,21 +13,35 @@
   --color-primary-800: #2b20b3;
   --color-primary-900: #1f1799;
 }
+
 * {
   font-family: 'Montserrat', sans-serif;
 }
+
+body,
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+
+}
+
 .active {
   @apply h-12 rounded-full border-2 border-primary-500 bg-primary-500 text-white font-bold cursor-pointer transition-all duration-300 hover:bg-white hover:text-primary-500 shadow-md hover:shadow-lg;
 }
+
 .unactive {
   @apply h-12 rounded-full border-2 border-primary-500 bg-white text-primary-500 font-bold cursor-pointer transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md hover:shadow-lg;
 }
+
 .active-red {
   @apply h-12 rounded-full border-2 border-red-500 bg-white text-red-500 font-bold cursor-pointer transition-all duration-300 hover:bg-red-500 hover:text-white shadow-md hover:shadow-lg;
 }
+
 .currentSection {
   @apply text-primary-500 border-b-2;
 }
+
 .exact-currentSection {
   @apply text-primary-500;
 }
