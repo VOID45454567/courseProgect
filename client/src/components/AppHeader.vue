@@ -72,7 +72,6 @@ export default {
     },
     filteredCategories() {
       return this.categories.filter(item => {
-        // Если пункт требует прав администратора, проверяем что пользователь авторизован и является админом
         if (item.adminOnly) {
           return this.currentUser && this.isAdmin;
         }

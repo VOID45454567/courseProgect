@@ -62,6 +62,11 @@ const router = createRouter({
       name: 'feedback',
       component: () => import('../views/Feedback.vue'),
     },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/About.vue'),
+    },
   ],
   linkActiveClass: 'currentSection',
   linkExactActiveClass: 'exact-currentSection',

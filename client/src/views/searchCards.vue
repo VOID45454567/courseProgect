@@ -36,26 +36,7 @@
         </AppVacancyItem>
         <AppResumeItem v-else v-for="(item, index) in resumes" :resume="item"></AppResumeItem>
       </div>
-      <!-- <div class="mt-10 flex justify-center">
-                <nav class="inline-flex rounded-md shadow-sm -space-x-px">
-                    <button
-                        class="px-3 py-2 rounded-l-lg border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        Назад
-                    </button>
-                    <button v-for="page in 5" :key="page" :class="{
-                        'z-10 bg-primary-50 border-primary-500 text-primary-600':
-                            currentPage === page,
-                        'bg-white border-gray-300 text-gray-500 hover:bg-gray-50':
-                            currentPage !== page,
-                    }" class="px-4 py-2 border text-sm font-medium">
-                        {{ page }}
-                    </button>
-                    <button
-                        class="px-3 py-2 rounded-r-lg border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        Вперед
-                    </button>
-                </nav>
-            </div> -->
+
     </div>
   </div>
 </template>

@@ -6,6 +6,9 @@
     <AppHowItWorks />
     <AppFeedback />
     <AppCallToAction />
+    <hr class="w-10/12 mx-auto my-20 text-primary-500 h-10">
+    <AppPopularWays></AppPopularWays>
+    <AppQuestions></AppQuestions>
   </div>
 </template>
 
@@ -16,6 +19,8 @@ import AppStatsSelection from "@/components/Home/AppStatsSelection.vue";
 import AppHowItWorks from "@/components/Home/AppHowItWorks.vue";
 import AppCallToAction from "@/components/Home/AppCallToAction.vue";
 import AppFeedback from "@/components/Home/AppFeedback.vue";
+import AppPopularWays from "@/components/Home/AppPopularWays.vue";
+import AppQuestions from "@/components/Home/AppQuestions.vue";
 export default {
   components: {
     AppHeroSection,
@@ -24,6 +29,8 @@ export default {
     AppHowItWorks,
     AppFeedback,
     AppCallToAction,
+    AppPopularWays,
+    AppQuestions
   },
   async created() {
     await this.$store.dispatch("auth/fetchUser");
