@@ -12,7 +12,7 @@
 
     <div class="flex flex-wrap gap-2 mb-5">
       <span class="bg-primary-500/10 text-primary-600 px-3 py-1 rounded-full text-sm font-medium">Требуемый опыт: {{
-        vacancy.experience }}</span>
+        vacancy.experience }} года/лет</span>
       <span v-for="(format, index) in vacancy.workFormat" :key="index"
         class="bg-primary-500/10 text-primary-600 px-3 py-1 rounded-full text-sm font-medium">{{ format }}</span>
     </div>

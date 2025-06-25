@@ -17,53 +17,55 @@
 
         <div class="mt-4 flex justify-between items-center">
             <div class="flex flex-wrap gap-2">
-
             </div>
             <div class="flex space-x-2">
                 <button class="px-3 py-1 bg-primary-600 text-white rounded-md text-sm hover:bg-primary-700"
-                    @click="goToEdit">
-                    {{ 'Редактировать' }}
+                    @click.stop="goToEdit">
+                    Редактировать
                 </button>
                 <button class="px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700"
-                    @click="deleteVacancy">
-                    {{ 'Удалить' }}
+                    @click.stop="deleteResume">
+                    Удалить
                 </button>
             </div>
         </div>
     </div>
 </template>
+
 <script>
 import router from '@/router';
 import store from '@/store';
 
 export default {
     props: {
-        resume: Object
+        resume: Object,
+        onResumeDeleted: Function
     },
     methods: {
-        goToEdit() {
+        goToEdit(e) {
+            e.stopPropagation();
             router.push({
                 path: '/update/card/' + this.resume.id,
                 query: {
                     type: 'resume'
                 }
-            })
+            });
         },
         goToSingle() {
-            console.log(this.resume.id);
-            console.log(this.resume.user_id);
-
-
             router.push({
                 path: '/single/' + this.resume.id,
                 query: {
                     type: 'resume',
                     userId: this.resume.user_id
                 }
-            })
+            });
         },
-        async deleteVacancy() {
-            await store.dispatch('resume/deletevacancy', this.resume.id)
+        async deleteResume(e) {
+            e.stopPropagation();
+            if (confirm('Вы уверены, что хотите удалить это резюме?')) {
+                await store.dispatch('resume/deleteResumeById', this.resume.id);
+                this.onResumeDeleted()
+            }
         },
         formatDate(dateString) {
             if (!dateString) return '';

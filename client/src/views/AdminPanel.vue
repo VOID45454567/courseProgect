@@ -66,9 +66,9 @@
 
 
       </div>
-      <div
-        class=" mb-5 w-full p-6 rounded-xl shadow-md border border-gray-200 transition-all duration-200 cursor-pointer bg-white hover:bg-gray-50"
-        @click="activeTab = 'feedback'">
+      <div @click="activeTab = 'feedback'" :class="['p-6 mb-10 rounded-xl shadow-md border transition-all duration-200 flex items-center justify-center',
+        activeTab === 'feedback' ? 'bg-primary-50 border-primary-300' : 'bg-white border-gray-200 hover:bg-gray-50']">
+
         <div class="text-center">
           <div
             class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 text-purple-600 mb-3">
@@ -201,7 +201,8 @@
           </div>
 
           <div class="space-y-4">
-            <ResumeItem v-for="(resume, index) in searchResumes" :key="index" :resume="resume">
+            <ResumeItem v-for="(resume, index) in searchResumes" :key="index" :resume="resume"
+              @resume-deleted="refreshResumes">
             </ResumeItem>
           </div>
 
@@ -237,10 +238,22 @@
 
             <div class="space-y-6">
               <div v-for="feedback in feedbacks" :key="feedback.id"
-                class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border-l-4 border-[#4a3aff]">
+                class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border-l-4 border-[#4a3aff] relative">
                 <div class="flex justify-between items-start mb-3">
-                  <h2 class="text-xl font-semibold text-gray-800">{{ feedback.name }} {{ feedback.surname }}</h2>
-                  <span class="text-sm text-gray-400">{{ formatDate(feedback.created_at) }}</span>
+                  <div>
+                    <h2 class="text-xl font-semibold text-gray-800">{{ feedback.name }} {{ feedback.surname }}</h2>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-400">{{ formatDate(feedback.created_at) }}</span>
+                    <button @click.stop="deleteFeedback(feedback.id)"
+                      class="text-red-500 hover:text-red-700 transition-colors" title="Удалить отзыв">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
                 <p class="text-gray-700 leading-relaxed">{{ feedback.feedback_text }}</p>
               </div>
@@ -394,6 +407,15 @@ export default {
       };
       return date.toLocaleString('ru-RU', options);
     },
+    async deleteFeedback(id) {
+
+
+      if (confirm('Вы уверены, что хотите удалить этот отзыв?')) {
+        await this.$store.dispatch('feedback/deleteOne', id);
+        this.feedbacks = this.feedbacks.filter(f => f.id !== id);
+      }
+
+    },
     async getUsers() {
       const users = await store.dispatch('user/getAllUsers')
       this.users = users
@@ -411,9 +433,12 @@ export default {
     },
     async getResumes() {
       const resumes = await store.dispatch('resume/fetchAllResumes')
-      // console.log(resumes);
 
       this.resumes = resumes
+    },
+    async refreshResumes() {
+      this.resumes = await store.dispatch('resume/fetchAllResumes')
+
     },
     setActiveTab(value) {
       console.log(value);

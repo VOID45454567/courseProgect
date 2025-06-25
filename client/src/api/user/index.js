@@ -5,7 +5,7 @@ class user {
   async getMyResponces(userId, userRole) {
     if (userRole === 'searcher') {
       const responses = await axios.get(`${apiUrl}/resumes/responses/${userId}`)
-      return responses
+      return responses.data
     } else {
       const responses = await axios.get(`${apiUrl}/vacances/responses/${userId}`)
       return responses.data

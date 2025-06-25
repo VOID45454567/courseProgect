@@ -14,7 +14,7 @@
 <script setup>
 const stats = [
   { value: "10K+", label: "Соискателей" },
-  { value: "500+", label: "Компаний" },
+  { value: "500+", label: "Работодателей" },
   { value: "95%", label: "Успешных наймов" },
   { value: "7", label: "Дней средний срок подбора" }
 ]

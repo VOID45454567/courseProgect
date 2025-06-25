@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full border-b-2 border-gray-300 py-4">
+  <div class="w-full border-b-2 border-gray-300 py-4 no-print">
     <div class="w-5/6 mx-auto flex items-center justify-between">
       <div class="flex items-center shrink-0">
         <h1 class="text-3xl font-bold text-primary-500 cursor-pointer" @click="logoLink(currentUser)">

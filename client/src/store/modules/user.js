@@ -25,7 +25,7 @@ export default {
       try {
         const responses = await api.user.getMyResponces(id, role)
         console.log(responses)
-        return responses.data
+        return responses
       } catch (error) {
         console.log(error)
       }

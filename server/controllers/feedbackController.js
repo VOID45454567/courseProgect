@@ -29,5 +29,15 @@ class FeedbackController {
       console.log(error);
     }
   }
+  async deleteOne(req, res) {
+    console.log(req.params);
+
+    const id = req.params.id;
+    try {
+      await feedbackService.deleteOne(id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new FeedbackController();

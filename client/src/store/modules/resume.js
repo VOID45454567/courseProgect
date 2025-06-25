@@ -51,5 +51,12 @@ export default {
         console.log(error)
       }
     },
+    async deleteResumeById({ commit, dispatch }, id) {
+      try {
+        await api.resume.deleteById(id)
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 }

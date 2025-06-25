@@ -45,5 +45,14 @@ class FeedbackRepository {
       console.log(error);
     }
   }
+  async deleteOne(id) {
+    console.log(id);
+
+    try {
+      await pool.query("DELETE FROM feedback WHERE id = $1", [id]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new FeedbackRepository();

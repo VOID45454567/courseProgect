@@ -43,7 +43,7 @@
                 </h3>
                 <div class="space-y-4">
                   <div>
-                    <p class="text-sm text-gray-500 mb-1">Опыт работы</p>
+                    <p class="text-sm text-gray-500 mb-1">Опыт работы (года)</p>
                     <p class="font-medium text-gray-900 flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20"
                         fill="currentColor">

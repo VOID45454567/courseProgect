@@ -56,15 +56,16 @@
                       d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"
                       clip-rule="evenodd" />
                   </svg>
-                  {{ response.phone_number || 'Телефон не указан' }}
+                  {{ response.phone_number }}
                 </span>
-              </div>
-              <div class="flex flex-col items-end">
-                <span class="text-sm text-gray-500">{{ formatDate(response.created_at) }}</span>
-                <button @click="openResume(response.vacancy.id)"
-                  class="mt-2 text-primary-600 hover:text-primary-800 text-sm font-medium">
-                  Посмотреть вакансию
-                </button>
+                <span v-else class="flex items-center mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                      d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  {{ 'Телефон не указан' }}
+                </span>
               </div>
             </div>
           </div>
@@ -164,7 +165,7 @@ export default {
         const responses = await this.$store.dispatch('user/getMyResponses');
         console.log(responses);
 
-        this.cards = responses.data || [];
+        this.cards = responses || [];
 
       } catch (error) {
         console.error('Ошибка при загрузке откликов:', error);

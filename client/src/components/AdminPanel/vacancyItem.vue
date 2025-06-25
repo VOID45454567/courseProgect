@@ -88,10 +88,13 @@ export default {
             })
         },
         async deleteVacancy(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            await store.dispatch('vacancy/deletevacancy', this.vacancy.id)
-            this.onVacancyDeleted()
+            if (confirm('Вы точно хотите удалить вакансию?')) {
+                e.preventDefault();
+                e.stopPropagation();
+                await store.dispatch('vacancy/deleteVacancy', this.vacancy.id)
+                this.onVacancyDeleted()
+            }
+
         }
     }
 }

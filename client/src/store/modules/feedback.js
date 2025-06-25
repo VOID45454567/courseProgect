@@ -20,5 +20,10 @@ export default {
     async getAll() {
       return (await api.feedback.getAll()).data
     },
+    async deleteOne({ commit, dispatch }, id) {
+      console.log(id)
+
+      return (await api.feedback.deleteOne(id)).data
+    },
   },
 }

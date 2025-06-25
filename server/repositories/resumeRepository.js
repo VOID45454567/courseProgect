@@ -34,6 +34,13 @@ class ResumeRepository {
       console.log(error);
     }
   }
+  async deleteById(id) {
+    try {
+      await pool.query("DELETE FROM resumes WHERE id = $1", [id]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async getByUserId(id) {
     try {
       const resume = await pool.query(
@@ -134,9 +141,8 @@ class ResumeRepository {
     );
 
     const userResume = getUserResume.rows[0];
-    // console.log(userResume);
     const getResponses = userResume.responces;
-    if (responses === null) {
+    if (getResponses === null) {
       return null;
     }
     const responses = [];

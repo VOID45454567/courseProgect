@@ -58,11 +58,6 @@ const router = createRouter({
       component: () => import('../views/updateCard.vue'),
     },
     {
-      path: '/feedback',
-      name: 'feedback',
-      component: () => import('../views/Feedback.vue'),
-    },
-    {
       path: '/about',
       name: 'about',
       component: () => import('../views/About.vue'),

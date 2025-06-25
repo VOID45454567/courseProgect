@@ -74,6 +74,12 @@ class ResumeController {
       return res.status(400).json({ message: error.message });
     }
   }
+  async deleteById(req, res) {
+    try {
+      const id = req.params.id;
+      await resumeService.deleteById(id);
+    } catch (error) {}
+  }
   async getResponces(req, res) {
     try {
       const userId = req.params.id;

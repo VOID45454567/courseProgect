@@ -67,12 +67,6 @@
                 <input type="number" v-model="currentUser.experience" min="0" max="50"
                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" />
               </div>
-
-              <div class="md:col-span-2" v-if="currentUser.role === 'searcher'">
-                <label class="block text-sm font-medium text-gray-700 mb-1">О себе</label>
-                <textarea v-model="currentUser.about" rows="4"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"></textarea>
-              </div>
             </div>
           </div>
         </div>
@@ -165,6 +159,7 @@
 import AppButton from "@/components/AppButton.vue";
 import MyVacances from "@/components/Profile/myVacances/MyVacances.vue";
 import Resume from "@/components/SingleCardPage/Resume.vue";
+import router from "@/router";
 
 export default {
   components: {
@@ -313,6 +308,7 @@ export default {
 
         await this.$store.dispatch("user/updateUser", data);
         this.isLoading = false;
+        router.push('/')
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
         this.isLoading = false;

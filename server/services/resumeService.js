@@ -74,5 +74,12 @@ class ResumeService {
       console.log(error);
     }
   }
+  async deleteById(id) {
+    try {
+      await resumeRepository.deleteById(id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new ResumeService();

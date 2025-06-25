@@ -6,6 +6,13 @@
       </div>
 
       <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="mb-4">
+          <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Поиск</label>
+          <input id="search" v-model="searchQuery" type="text"
+            :placeholder="type === 'vacances' ? 'Название вакансии' : 'Желаемая должность'"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" />
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div>
             <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Локация</label>
@@ -31,10 +38,9 @@
       </div>
 
       <div class="flex flex-col gap-6">
-        <AppVacancyItem v-if="type === 'vacances'" v-for="(item, index) in vacances" :key="index" :vacancy="item"
-          @click="goToVacancy(item.id)">
-        </AppVacancyItem>
-        <AppResumeItem v-else v-for="(item, index) in resumes" :resume="item"></AppResumeItem>
+        <AppVacancyItem v-if="type === 'vacances'" v-for="(item, index) in filteredVacancies" :key="index"
+          :vacancy="item" @click="goToVacancy(item.id)" />
+        <AppResumeItem v-else v-for="(item, index) in filteredResumes" :resume="item" />
       </div>
 
     </div>
@@ -44,11 +50,12 @@
 <script>
 import AppResumeItem from "@/components/AppResumeItem.vue";
 import AppVacancyItem from '@/components/AppVacancyItem.vue';
+
 export default {
   data() {
     return {
-      vacances: {},
-      resumes: {},
+      allVacancies: [],
+      allResumes: [],
       searchQuery: "",
       selectedLocation: "",
       selectedExperience: "",
@@ -60,25 +67,61 @@ export default {
     AppVacancyItem
   },
   created() {
-    this.getCards(this.type)
-    // console.log(this.cards);
-
+    this.getCards(this.type);
   },
   computed: {
     type() {
-      return this.$route.query.type
+      return this.$route.query.type;
+    },
+    filteredVacancies() {
+      return this.allVacancies.filter(item => {
+        // Поиск по названию вакансии
+        const searchMatch = !this.searchQuery ||
+          item.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+        // Фильтр по локации
+        const locationMatch = !this.selectedLocation ||
+          (this.selectedLocation === 'remote' && item.is_remote) ||
+          item.location === this.selectedLocation;
+
+        // Фильтр по опыту
+        const experienceMatch = !this.selectedExperience ||
+          (this.selectedExperience === 'no-exp' && !item.experience) ||
+          (this.selectedExperience === '1-3' && item.experience >= 1 && item.experience <= 3) ||
+          (this.selectedExperience === '3+' && item.experience >= 3);
+
+        return searchMatch && locationMatch && experienceMatch;
+      });
+    },
+    filteredResumes() {
+      return this.allResumes.filter(item => {
+        const searchMatch = !this.searchQuery ||
+          item.preferedvacancy.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+        const locationMatch = !this.selectedLocation ||
+          (this.selectedLocation === 'remote' && item.is_remote) ||
+          item.city === this.selectedLocation;
+
+        const experienceMatch = !this.selectedExperience ||
+          (this.selectedExperience === 'no-exp' && !item.experience) ||
+          (this.selectedExperience === '1-3' && parseInt(item.experience) >= 1 && parseInt(item.experience) <= 3) ||
+          (this.selectedExperience === '3+' && parseInt(item.experience) >= 3);
+
+        return searchMatch && locationMatch && experienceMatch;
+      });
+    }
+  },
+  watch: {
+    type(newVal) {
+      this.getCards(newVal);
     }
   },
   methods: {
     async getCards(type) {
       if (type === 'vacances') {
-        const vacances = await this.$store.dispatch('vacancy/fetchAllVacances')
-        return this.vacances = vacances
+        this.allVacancies = await this.$store.dispatch('vacancy/fetchAllVacances');
       } else {
-        const resumes = await this.$store.dispatch('resume/fetchAllResumes')
-        console.log(resumes);
-
-        return this.resumes = resumes
+        this.allResumes = await this.$store.dispatch('resume/fetchAllResumes');
       }
     },
     goToVacancy(id) {
@@ -87,7 +130,7 @@ export default {
         query: {
           type: 'vacancy'
         }
-      })
+      });
     }
   }
 };

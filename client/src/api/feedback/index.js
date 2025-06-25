@@ -16,5 +16,8 @@ class feedback {
     const all = await axios.get(`${apiUrl}/feedback/`)
     return all
   }
+  async deleteOne(id) {
+    await axios.delete(`${apiUrl}/feedback/${id}`)
+  }
 }
 export default new feedback()

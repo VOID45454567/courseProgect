@@ -64,6 +64,13 @@ class resume {
   }
   async delete(id) {
     try {
+      const responce = await axios.delete(`${apiUrl}/resumes/user/${id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async deleteById(id) {
+    try {
       await axios.delete(`${apiUrl}/resumes/${id}`)
     } catch (error) {
       console.log(error)

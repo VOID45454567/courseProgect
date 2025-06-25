@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-100 font-sans">
         <section class="py-16 md:py-24 px-6 text-center">
             <h1
-                class="text-4xl md:text-5xl font-extrabold text-[#4a3aff] mb-4 tracking-tight bg-gradient-to-r from-[#4a3aff] to-purple-500 bg-clip-text text-transparent">
+                class="text-4xl md:text-5xl font-extrabold text-primary-500 mb-4 tracking-tight bg-gradient-to-r from-[#4a3aff] to-purple-500 bg-clip-text text-transparent">
                 О компании
             </h1>
             <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-700 leading-relaxed">

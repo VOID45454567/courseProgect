@@ -9,7 +9,8 @@ resumeRouter.get("/:id", resumeController.getById);
 resumeRouter.get("/responses/:id", resumeController.getResponces);
 resumeRouter.get("/users/:userId", resumeController.getByUserId);
 resumeRouter.get("/", resumeController.getAll);
-resumeRouter.delete("/:id", resumeController.delete);
+resumeRouter.delete("/user/:id", resumeController.delete);
+resumeRouter.delete("/:id", resumeController.deleteById);
 resumeRouter.put("/:id", resumeController.update);
 
 export default resumeRouter;

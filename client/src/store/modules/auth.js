@@ -63,6 +63,7 @@ export default {
         commit('setToken', user.data.token)
         commit('setUser', user.data.user)
       }
+      return user
     },
     async fetchUser({ commit, state }) {
       if (!state.token) {

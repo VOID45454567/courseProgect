@@ -25,5 +25,12 @@ class FeedbackServise {
       console.log(error);
     }
   }
+  async deleteOne(id) {
+    try {
+      await feedbackRepository.deleteOne(id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 export default new FeedbackServise();

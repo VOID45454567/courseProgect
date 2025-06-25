@@ -1,8 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto">
-      <!-- Шапка с кнопкой "Назад" -->
-      <div class="flex justify-between items-center mb-8">
+      <div class="flex justify-between items-center mb-8 no-print">
         <button @click="$router.back()"
           class="flex items-center text-primary-600 hover:text-primary-800 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -12,14 +11,21 @@
           </svg>
           Назад
         </button>
+
         <h1 class="text-3xl font-bold text-gray-900">Просмотр резюме</h1>
-        <div class="w-20"></div>
+        <button @click="exportToPDF"
+          class="flex items-center bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+          </svg>
+          Экспорт в PDF
+        </button>
       </div>
 
-      <!-- Основной контент -->
       <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-8 border border-gray-200">
         <div class="space-y-8">
-          <!-- Заголовок и зарплата -->
           <div class="border-b pb-6">
             <h2 class="text-2xl font-bold mb-3 text-primary-500">{{ data.resume.preferedvacancy || 'Не указана' }}</h2>
             <div class="flex flex-wrap items-center gap-4">
@@ -36,7 +42,6 @@
             </div>
           </div>
 
-          <!-- Основная информация -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="space-y-6">
               <div class="bg-gray-100 p-4 rounded-lg">
@@ -53,7 +58,7 @@
                         <path
                           d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                       </svg>
-                      {{ getExperienceLabel(data.user.experience) || 'Не указан' }}
+                      {{ data.user.experience || 'Не указан' }}
                     </p>
                   </div>
                   <div>
@@ -80,7 +85,6 @@
               </div>
             </div>
 
-            <!-- Ключевые навыки -->
             <div class="space-y-6">
               <div class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">Ключевые навыки</h3>
@@ -100,7 +104,6 @@
               </div>
             </div>
 
-            <!-- Компании -->
             <div class="space-y-6">
               <div class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">Компании в которых работал</h3>
@@ -121,7 +124,6 @@
             </div>
           </div>
 
-          <!-- О себе -->
           <div v-if="data.resume.about" class="bg-gray-50 p-6 rounded-lg">
             <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">О себе</h3>
             <div class="prose max-w-none text-gray-700 space-y-4">
@@ -129,8 +131,7 @@
             </div>
           </div>
 
-          <!-- Создатель резюме -->
-          <div class="bg-gray-100 p-6 rounded-lg">
+          <div class="bg-gray-100 p-6 rounded-lg no-print">
             <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">Создатель резюме</h3>
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-0">
@@ -166,8 +167,7 @@
         </div>
       </div>
 
-      <!-- Кнопка действия -->
-      <AppButton v-if="showActionButton" :text="actionButton.text" :class="'w-full md:w-4/12 active'"
+      <AppButton v-if="showActionButton" :text="actionButton.text" :class="'w-full md:w-4/12 active no-print'"
         @click="actionButton.action" :loading="actionButton.loading" />
     </div>
   </div>
@@ -175,7 +175,6 @@
 
 <script>
 import AppButton from '../AppButton.vue';
-
 export default {
   components: {
     AppButton,
@@ -223,14 +222,8 @@ export default {
     }
   },
   methods: {
-    getExperienceLabel(experience) {
-      const labels = {
-        "no-exp": "Без опыта",
-        "1-3": "1-3 года",
-        "3-6": "3-6 лет",
-        "6+": "Более 6 лет",
-      };
-      return labels[experience] || experience;
+    async exportToPDF() {
+      window.print()
     },
     getUserInitials(user) {
       if (!user.name && !user.surname) return 'U';
@@ -289,5 +282,27 @@ export default {
 
 .whitespace-pre-line {
   white-space: pre-line;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .bg-white.rounded-xl,
+  .bg-white.rounded-xl * {
+    visibility: visible;
+  }
+
+  .bg-white.rounded-xl {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+  }
 }
 </style>

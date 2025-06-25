@@ -42,7 +42,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Требуемый опыт*</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Требуемый опыт* (лет)</label>
             <input :class="[
               'w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500',
               errors.name ? 'border-red-500' : 'border-gray-300',
